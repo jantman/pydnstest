@@ -9,6 +9,8 @@ See example_dns_test.py for usage - this should be called as a module from that 
 
 By Jason Antman <jason@jasonantman.com>
 
+ToDo: flag to confirm against prod once live
+
 """
 
 import DNS
