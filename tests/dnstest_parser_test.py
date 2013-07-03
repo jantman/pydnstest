@@ -8,6 +8,8 @@ import dnstest_parser
 
 class TestParseAdd:
 
+    # looking at <http://pytest.org/latest/parametrize.html#pytest-mark-parametrize>
+
     @pytest.mark.parameterize("input,expected", [
         ("add fooHostOne value fooHostTwo", {'operation': 'add', 'hostname': 'fooHostOne', 'value': 'fooHostTwo'}),
     ])
