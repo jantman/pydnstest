@@ -11,8 +11,8 @@ class TestParseAdd:
     @pytest.mark.parameterize("input,expected", [
         ("add fooHostOne value fooHostTwo", {'operation': 'add', 'hostname': 'fooHostOne', 'value': 'fooHostTwo'}),
     ])
-    def test_parse_add(self, line, expected):
-        res = dnstest_parser.parse_line(line)
+    def test_parse_add(self, input, expected):
+        res = dnstest_parser.parse_line(input)
         res_dict = res.asDict()
         assert res_dict == expected
 
