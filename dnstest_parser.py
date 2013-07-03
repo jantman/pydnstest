@@ -11,28 +11,30 @@ Define our initial grammars:
 
 """
 
-from pyparsing import Word, alphas, alphanums, Suppress, Optional, Or
+from pyparsing import Word, alphas, alphanums, Suppress, Optional, Or, Regex, Literal
 
 # implement my grammar
 word = Word(alphas)
 value = Word(alphanums).setResultsName("value")
-hostname = word.setResultsName("hostname")
-add_op = "add"
+add_op = Literal("add").setResultsName("operation")
 val_op = Or([Suppress("value"), Suppress("address"), Suppress("target")])
 
-cmd_add = add_op + hostname + val_op + value
+fqdn = Regex("([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*")
+ipaddr = Regex("(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])")
+hostname = Regex("([a-zA-Z0-9][a-zA-Z0-9\-]{0,62}[a-zA-Z0-9])")
 
-#element = Regex("A[cglmrstu]|B[aehikr]?|C[adeflmorsu]?|D[bsy]|"
-#                "E[rsu]|F[emr]?|G[ade]|H[efgos]?|I[nr]?|Kr?|L[airu]|"
-#                "M[dgnot]|N[abdeiop]?|Os?|P[abdmortu]?|R[abefghnu]|"
-#                "S[bcegimnr]?|T[abcehilm]|Uu[bhopqst]|U|V|W|Xe|Yb?|Z[nr]")
+cmd_add = add_op + hostname.setResultsName("hostname") + val_op + value
 
 tests = []
 tests.append("add fooHostOne value fooHostTwo")
 
+def parse_line(line):
+    res = cmd_add.parseString(t, parseAll=True)
+    return res
+
 for t in tests:
     print t
-    res = cmd_add.parseString(t, parseAll=True)
-    print res.dump()
+    r = parse_line(t)
+    print r.dump()
 
 # up to slide 27 http://www.slideshare.net/Siddhi/creating-domain-specific-languages-in-python
