@@ -9,33 +9,30 @@ Define our initial grammars:
 'change (record|name|entry)? <hostname_or_fqdn> to <hostname_fqdn_or_ip>'
 '(set )?reverse( for)? (record|name|entry)? <hostname_or_fqdn> to <hostname_or_fqdn>'
 
-instr_add ::= add_op hostname val_op val
-hostname ::= word
-ipaddr ::= numeric+
-add_op ::= "add"
-val_op ::= "value"
-value ::= alphanumeric+
-word ::= alpha+
-
 """
 
-from pyparsing import Word, alphas, alphanums, Suppress
+from pyparsing import Word, alphas, alphanums, Suppress, Optional, Or
 
 # implement my grammar
 word = Word(alphas)
 value = Word(alphanums).setResultsName("value")
 hostname = word.setResultsName("hostname")
 add_op = "add"
-val_op = Suppress("value")
+val_op = Or([Suppress("value"), Suppress("address"), Suppress("target")])
 
-instr_add = add_op + hostname + val_op + value
+cmd_add = add_op + hostname + val_op + value
 
 #element = Regex("A[cglmrstu]|B[aehikr]?|C[adeflmorsu]?|D[bsy]|"
 #                "E[rsu]|F[emr]?|G[ade]|H[efgos]?|I[nr]?|Kr?|L[airu]|"
 #                "M[dgnot]|N[abdeiop]?|Os?|P[abdmortu]?|R[abefghnu]|"
 #                "S[bcegimnr]?|T[abcehilm]|Uu[bhopqst]|U|V|W|Xe|Yb?|Z[nr]")
 
-res = instr_add.parseString("add fooHostOne value fooHostTwo", parseAll=True)
-print res.dump()
+tests = []
+tests.append("add fooHostOne value fooHostTwo")
+
+for t in tests:
+    print t
+    res = cmd_add.parseString(t, parseAll=True)
+    print res.dump()
 
 # up to slide 27 http://www.slideshare.net/Siddhi/creating-domain-specific-languages-in-python
