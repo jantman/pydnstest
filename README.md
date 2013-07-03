@@ -15,7 +15,7 @@ It's recommended that you install into a virtual environment.
 * git clone
 * virtualenv2 pydnstest
 * cd pydnstest && source bin/activate
-* pip install requirements.txt
+* pip install -r requirements.txt
 
 Usage
 -----
