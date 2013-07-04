@@ -65,15 +65,7 @@ class TestLanguageParsing:
     @pytest.mark.parametrize("line", [
         "add extraword record foobar.example.com target blam",
         "add foobar value blam extraword",
-        "add 10.216.32.173",
-        "add name 10.216.32.173",
         "remove foo blam",
-        "remove record 10.23.45.67",
-        "remove 10.23.45.67",
-        "rename foobar to 10.104.92.243",
-        "rename name foobar to 192.168.0.139",
-        "rename foobar.example.com to 172.16.132.10",
-        "rename foobar.hosts.example.com to 172.16.132.10",
         "rename foobar.example.com to baz.blam.hosts.example.com EXTRAWORD"
         "change foobar",
         "change foobar to",
