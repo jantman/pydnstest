@@ -36,5 +36,10 @@ tests of the DNS checks (using two local
 ToDo
 ----
 * Move config constants from example_dns_test.py to a dot file or command-line options
+   * ConfigParse for a dotfile or ./dnstest.conf
+   * OptParse for command line options
 * Add natural language processing for input data, then remove example_dns_test.py and just run pydnstest.py
-* Add interactive mode for DNS testing
+   * parse_input_line() - iterate over file if specified on command line, or stdin
+* Add interactive mode for DNS testing - input one line and show result
+* testing for all of the above
+* actual testing of DNS to a pair of twisted DNS servers
