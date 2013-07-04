@@ -50,9 +50,17 @@ class TestLanguageParsing:
         ("change foobar.hosts.example.com to 172.16.132.10", {'operation': 'change', 'hostname': 'foobar.hosts.example.com', 'value': '172.16.132.10'}),
         ("change entry foobar.hosts.example.com to 172.16.132.10", {'operation': 'change', 'hostname': 'foobar.hosts.example.com', 'value': '172.16.132.10'}),
         ("change name foobar to foobar.hosts.example.com", {'operation': 'change', 'hostname': 'foobar', 'value': 'foobar.hosts.example.com'}),
+        ("change name foobar to foobar.example.com", {'operation': 'change', 'hostname': 'foobar', 'value': 'foobar.example.com'}),
     ])
     def test_parse_should_succeed(self, line, parsed_dict):
-        assert dnstest_parser.parse_line(line).asDict() == parsed_dict
+        foo = None
+        try:
+            foo = dnstest_parser.parse_line(line).asDict()
+        except ParseException, err:
+            print err.line
+            print " "*(err.column-1) + "^"
+            print err
+        assert foo == parsed_dict
     
     @pytest.mark.parametrize("line", [
         "add extraword record foobar.example.com target blam",
