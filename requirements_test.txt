@@ -1,3 +1,5 @@
+py==1.4.15
 pydns==2.3.6
 pyparsing==1.5.7
+pytest==2.3.5
 wsgiref==0.1.2
