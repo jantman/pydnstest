@@ -10,7 +10,7 @@ class TestParseAdd:
 
     # looking at <http://pytest.org/latest/parametrize.html#pytest-mark-parametrize>
 
-    @pytest.mark.parameterize("input,expected", [
+    @pytest.mark.parametrize("input,expected", [
         ("add fooHostOne value fooHostTwo", {'operation': 'add', 'hostname': 'fooHostOne', 'value': 'fooHostTwo'}),
     ])
     def test_parse_add(self, input, expected):
