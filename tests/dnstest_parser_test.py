@@ -78,8 +78,6 @@ class TestLanguageParsing:
         "change foobar",
         "change foobar to",
         "change foobar.hosts.example.com to",
-        "change 10.234.19.28 to foobar",
-        "change 10.234.19.28 to foobar.example.com",
     ])
     def test_parse_should_raise_exception(self, line):
         with pytest.raises(ParseException):
