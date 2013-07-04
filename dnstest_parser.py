@@ -7,7 +7,6 @@ Define our initial grammars:
 'remove (record|name|entry)? <hostname_or_fqdn>'
 'rename (record|name|entry)? <hostname_or_fqdn> to <hostname_or_fqdn>'
 'change (record|name|entry)? <hostname_or_fqdn> to <hostname_fqdn_or_ip>'
-'(set )?reverse( for)? (record|name|entry)? <hostname_or_fqdn> to <hostname_or_fqdn>'
 
 """
 
