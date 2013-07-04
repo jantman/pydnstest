@@ -25,16 +25,8 @@ hostname = Regex("([a-zA-Z0-9][a-zA-Z0-9\-]{0,62}[a-zA-Z0-9])")
 
 cmd_add = add_op + hostname.setResultsName("hostname") + val_op + value
 
-tests = []
-tests.append("add fooHostOne value fooHostTwo")
-
 def parse_line(line):
-    res = cmd_add.parseString(t, parseAll=True)
+    res = cmd_add.parseString(line, parseAll=True)
     return res
-
-for t in tests:
-    print t
-    r = parse_line(t)
-    print r.dump()
 
 # up to slide 27 http://www.slideshare.net/Siddhi/creating-domain-specific-languages-in-python
