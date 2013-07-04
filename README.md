@@ -12,14 +12,26 @@ Installation
 ------------
 It's recommended that you install into a virtual environment.
 
-* git clone
-* virtualenv2 pydnstest
-* cd pydnstest && source bin/activate
-* pip install -r requirements.txt
+* `git clone`
+* `virtualenv2 pydnstest`
+* `cd pydnstest && source bin/activate`
+* `pip install -r requirements.txt`
 
 Usage
 -----
-Right now, just edit the config constants and dictionary in example_dns_test.py and then run that file.
+To be documented when refactor is done. Will take natural language (well, a
+defined natural-language-like grammar) input either read from a file, on
+STDIN, or interactively.
+
+Testing
+-------
+Testing is done via [pytest](http://pytest.org/latest/) and currently
+encompasses testing for both the input language parsing, and actual functional
+tests of the DNS checks (using two local
+[Twisted](http://twistedmatrix.com)-based DNS servers).
+
+* `pip install -r requirements_test.txt`
+* py.test
 
 ToDo
 ----
