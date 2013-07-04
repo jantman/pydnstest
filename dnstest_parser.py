@@ -23,7 +23,7 @@ rec_op = Or([Keyword("record"), Keyword("entry"), Keyword("name")])
 val_op = Optional(Keyword("with")) + Or([Keyword("value"), Keyword("address"), Keyword("target")])
 
 fqdn = Regex("(([a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*)")
-ipaddr = Regex("(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])")
+ipaddr = Regex("((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}(1[0-9]{2}|2[0-4][0-9]|25[0-5]|[0-9]|[1-9][0-9]))")
 hostname = Regex("([a-zA-Z0-9][a-zA-Z0-9\-]{0,62}[a-zA-Z0-9])")
 hostname_or_fqdn = Or([hostname, fqdn])
 hostname_fqdn_or_ip = Or([hostname, fqdn, ipaddr])
