@@ -9,7 +9,7 @@ import os.path
 import os
 from ConfigParser import ParsingError
 
-import dnstest_config
+from dnstest_config import DnstestConfig
 
 
 class TestConfigMethods:
@@ -45,7 +45,8 @@ class TestConfigMethods:
         return True
 
     def test_find_no_config_file(self, save_user_config):
-        assert dnstest_config.find_config_file() == None
+        dc = DnstestConfig()
+        assert dc.find_config_file() == None
 
     def write_conf_file(self, path, contents):
         fh = open(path, 'w')
@@ -54,19 +55,26 @@ class TestConfigMethods:
         return
 
     def test_find_main_config_file(self, save_user_config):
+        dc = DnstestConfig()
         fpath = os.path.abspath("dnstest.ini")
         self.write_conf_file(fpath, "test_find_main_config_file")
-        assert dnstest_config.find_config_file() == fpath
+        assert dc.find_config_file() == fpath
 
     def test_find_dot_config_file(self, save_user_config):
+        dc = DnstestConfig()
         fpath = os.path.expanduser("~/.dnstest.ini")
         self.write_conf_file(fpath, "test_find_dot_config_file")
-        assert dnstest_config.find_config_file() == fpath
+        assert dc.find_config_file() == fpath
 
     def test_parse_example_config_file(self, save_user_config):
+        dc = DnstestConfig()
         fpath = os.path.abspath("dnstest.ini.example")
-        result = {'defaults': {'domain': '.example.com', 'have_reverse_dns': True}, 'servers': {'test': '1.2.3.5', 'prod': '1.2.3.4'}}
-        assert dnstest_config.get_config(fpath) == result
+        dc.load_config(fpath)
+        assert dc.server_prod == '1.2.3.4'
+        assert dc.server_test == '1.2.3.5'
+        assert dc.default_domain == '.example.com'
+        assert dc.reverse_dns == True
+
 
     def test_parse_bad_config_file(self, save_user_config):
         fpath = os.path.abspath("dnstest.ini")
@@ -76,11 +84,17 @@ blarg
 
 """
         self.write_conf_file(fpath, contents)
+        dc = DnstestConfig()
         with pytest.raises(ParsingError):
-            dnstest_config.get_config(fpath)
+            dc.load_config(fpath)
 
     def test_parse_empty_config_file(self, save_user_config):
+        dc = DnstestConfig()
         fpath = os.path.abspath("dnstest.ini")
         contents = ""
         self.write_conf_file(fpath, contents)
-        assert dnstest_config.get_config(fpath) == {}
+        dc.load_config(fpath)
+        assert dc.server_prod == ''
+        assert dc.server_test == ''
+        assert dc.default_domain == ''
+        assert dc.reverse_dns == True
