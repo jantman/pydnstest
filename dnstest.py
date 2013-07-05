@@ -14,7 +14,7 @@ ToDo: flag to confirm against prod once live
 """
 
 import DNS
-import dns_checks
+import dnstest_checks
 
 
 config = {}
