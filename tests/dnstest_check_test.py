@@ -5,7 +5,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../')
 
-import dnstest
+import dnstest_checks
 
 
 class TestDNSChecks:
@@ -16,7 +16,7 @@ class TestDNSChecks:
     input describing the change, and query nameservers to check current prod and staging status.
     """
 
-    def stub_resolve_name(query, to_server, default_domain, to_port=53):
+    def stub_resolve_name(query, to_server, to_port=53):
         """
         stub method
 
@@ -28,7 +28,7 @@ class TestDNSChecks:
         return {'status': a.header['status']}
 
     # stub
-    dnstest.resolve_name = stub_resolve_name
+    dnstest_checks.resolve_name = stub_resolve_name
 
     def stub_lookup_reverse(name, to_server, to_port=53):
         """
@@ -41,12 +41,12 @@ class TestDNSChecks:
         return {'status': a.header['status']}
 
     # stub
-    dnstest.lookup_reverse = stub_lookup_reverse
+    dnstest_checks.lookup_reverse = stub_lookup_reverse
 
     def test_dns_add(self):
         """
         Test checks for adding a record to DNS
         """
         added = {'newhostname': '1.2.3.4'}
-        foo = check_added_names(added, 'test_server_stub', 'prod_server_stub', '.example.com', False)
+        foo = dnstest_checks.check_added_names(added, 'test_server_stub', 'prod_server_stub', False)
         assert foo == None

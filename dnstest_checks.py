@@ -18,8 +18,8 @@ def check_removed_names(removed, test_server, prod_server, default_domain, have_
             name = name + default_domain
 
         # resolve with both test and prod
-        qt = resolve_name(name, test_server, default_domain)
-        qp = resolve_name(name, prod_server, default_domain)
+        qt = resolve_name(name, test_server)
+        qp = resolve_name(name, prod_server)
         if 'status' in qp:
             print "NG: %s got status %s from PROD - cannot remove a name that doesn't exist (PROD)" % (n, qp['status'])
             continue
@@ -54,8 +54,8 @@ def check_changed_names(changed, test_server, prod_server, default_domain, have_
             newname = newname + default_domain
 
         # resolve with both test and prod
-        qt = resolve_name(newname, test_server, default_domain)
-        qp = resolve_name(name, prod_server, default_domain)
+        qt = resolve_name(newname, test_server)
+        qp = resolve_name(name, prod_server)
         if 'status' in qp:
             print "NG: %s got status %s from PROD - cannot change a name that doesn't exist (PROD)" % (n, qp['status'])
             continue
@@ -100,8 +100,8 @@ def check_added_names(added, test_server, prod_server, default_domain, have_reve
             target = target + default_domain
 
         # resolve with both test and prod
-        qt = resolve_name(name, test_server, default_domain)
-        qp = resolve_name(name, prod_server, default_domain)
+        qt = resolve_name(name, test_server)
+        qp = resolve_name(name, prod_server)
         # make sure PROD returns NXDOMAIN, since it's a new record
         if 'status' in qp:
             if qp['status'] != 'NXDOMAIN':
