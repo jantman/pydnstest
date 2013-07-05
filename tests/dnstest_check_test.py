@@ -47,4 +47,4 @@ class DNScheck:
         """
         Test checks for adding a record to DNS
         """
-        
+        pass
