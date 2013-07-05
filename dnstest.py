@@ -13,7 +13,6 @@ ToDo: flag to confirm against prod once live
 
 """
 
-import DNS
 import dnstest_checks
 import dnstest_config
 
