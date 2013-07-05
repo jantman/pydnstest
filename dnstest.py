@@ -50,7 +50,7 @@ def lookup_reverse(name, to_server, to_port=53):
     return {'status': a.header['status']}
 
 
-def test_removed_names(removed, test_server, prod_server, default_domain, have_reverse):
+def check_removed_names(removed, test_server, prod_server, default_domain, have_reverse):
     """
     Run tests for removed names
     """
@@ -83,7 +83,7 @@ def test_removed_names(removed, test_server, prod_server, default_domain, have_r
     return
 
 
-def test_changed_names(changed, test_server, prod_server, default_domain, have_reverse):
+def check_changed_names(changed, test_server, prod_server, default_domain, have_reverse):
     """
     Run tests for changed names
     """
@@ -128,7 +128,7 @@ def test_changed_names(changed, test_server, prod_server, default_domain, have_r
     return
 
 
-def test_added_names(added, test_server, prod_server, default_domain, have_reverse):
+def check_added_names(added, test_server, prod_server, default_domain, have_reverse):
     """
     Run tests for added names
     """
@@ -185,9 +185,9 @@ def do_dns_tests(tests, test_server, prod_server, default_domain, have_reverse=T
     """
 
     if 'added' in tests:
-        test_added_names(tests['added'], test_server, prod_server, default_domain, have_reverse)
+        check_added_names(tests['added'], test_server, prod_server, default_domain, have_reverse)
     if 'removed' in tests:
-        test_removed_names(tests['removed'], test_server, prod_server, default_domain, have_reverse)
+        check_removed_names(tests['removed'], test_server, prod_server, default_domain, have_reverse)
     if 'changed' in tests:
-        test_changed_names(tests['changed'], test_server, prod_server, default_domain, have_reverse)
+        check_changed_names(tests['changed'], test_server, prod_server, default_domain, have_reverse)
     return
