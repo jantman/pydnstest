@@ -18,6 +18,7 @@ known_dns = {'test_server_stub': {}, 'prod_server_stub': {}}
 known_dns['test_server_stub']['newhostname.example.com'] = ['1.2.3.1', 'A']
 known_dns['prod_server_stub']['existinghostname.example.com'] = ['1.2.3.2', 'A']
 
+
 class TestDNSChecks:
     """
     Test DNS checks, using stubbed name resolution methods that return static values.
@@ -25,6 +26,8 @@ class TestDNSChecks:
     The code in this class checks the logic of dnstest.py's test_*_name methods, which take
     input describing the change, and query nameservers to check current prod and staging status.
     """
+
+    config = {'defaults': {'domain': '.example.com', 'have_reverse_dns': True}, 'servers': {'test': 'test_server_stub', 'prod': 'prod_server_stub'}}
 
     def stub_resolve_name(query, to_server, to_port=53):
         """
@@ -66,13 +69,15 @@ class TestDNSChecks:
         Test checks for adding a record to DNS
         """
         added = {'newhostname': '1.2.3.1'}
-        foo = dnstest_checks.check_added_names(added, 'test_server_stub', 'prod_server_stub', ".example.com", False)
+        foo = dnstest_checks.check_added_names(added)
         assert foo == None
 
     def test_dns_add_already_in_prod(self):
         """
         Test for adding a record that's already in prod
         """
+        global config
+        config = self.config
         added = {'existinghostname': '1.2.3.2'}
-        foo = dnstest_checks.check_added_names(added, 'test_server_stub', 'prod_server_stub', ".example.com", False)
+        foo = dnstest_checks.check_added_names(added)
         assert foo == False

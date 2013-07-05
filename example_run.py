@@ -7,18 +7,6 @@ import os.path
 import platform
 from dnstest import do_dns_tests
 
-# set your production/live  DNS server
-SERVER_PROD = "10.188.14.124"
-
-# set your test/staging DNS server
-SERVER_TEST = "10.188.8.130"
-
-# whether or not we should have reverse DNS for valid A records
-HAVE_REVERSE_DNS = True
-
-# set this to your default domain, to be appended to requests that aren't a FQDN
-DEFAULT_DOMAIN = ".example.com"
-
 tests = {}
 
 # new records that were added - A or CNAME

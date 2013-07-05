@@ -6,7 +6,7 @@ on prod and test servers.
 from dnstest_dns import resolve_name, lookup_reverse
 
 
-def check_removed_names(removed, test_server, prod_server, default_domain, have_reverse):
+def check_removed_names(removed):
     """
     Run tests for removed names
     """
@@ -15,11 +15,11 @@ def check_removed_names(removed, test_server, prod_server, default_domain, have_
         name = n
         # make sure we have a FQDN
         if name.find('.') == -1:
-            name = name + default_domain
+            name = name + config['defaults']['domain']
 
         # resolve with both test and prod
-        qt = resolve_name(name, test_server)
-        qp = resolve_name(name, prod_server)
+        qt = resolve_name(name, config['servers']['test'])
+        qp = resolve_name(name, config['servers']['prod'])
         if 'status' in qp:
             print "NG: %s got status %s from PROD - cannot remove a name that doesn't exist (PROD)" % (n, qp['status'])
             continue
@@ -29,7 +29,7 @@ def check_removed_names(removed, test_server, prod_server, default_domain, have_
             print "OK: %s removed, got status NXDOMAIN (TEST)" % (n)
             print "\tPROD value was %s (PROD)" % qp['answer']['data']
             # check for any leftover reverse lookups
-            rev = lookup_reverse(qp['answer']['data'], test_server)
+            rev = lookup_reverse(qp['answer']['data'], config['servers']['test'])
             if 'answer' in rev:
                 print "WARNING: %s appears to still have reverse DNS set to %s (TEST)" % (n, rev['answer']['data'])
         elif 'status' in qt:
@@ -39,7 +39,7 @@ def check_removed_names(removed, test_server, prod_server, default_domain, have_
     return
 
 
-def check_changed_names(changed, test_server, prod_server, default_domain, have_reverse):
+def check_changed_names(changed):
     """
     Run tests for changed names
     """
@@ -49,13 +49,13 @@ def check_changed_names(changed, test_server, prod_server, default_domain, have_
         newname = changed[n]
         # make sure we have a FQDN
         if name.find('.') == -1:
-            name = name + default_domain
+            name = name + config['defaults']['domain']
         if newname.find('.') == -1:
-            newname = newname + default_domain
+            newname = newname + config['defaults']['domain']
 
         # resolve with both test and prod
-        qt = resolve_name(newname, test_server)
-        qp = resolve_name(name, prod_server)
+        qt = resolve_name(newname, config['servers']['test'])
+        qp = resolve_name(name, config['servers']['prod'])
         if 'status' in qp:
             print "NG: %s got status %s from PROD - cannot change a name that doesn't exist (PROD)" % (n, qp['status'])
             continue
@@ -73,7 +73,7 @@ def check_changed_names(changed, test_server, prod_server, default_domain, have_
             print "OK: rename %s => %s (TEST)" % (n, changed[n])
             # check for any leftover reverse lookups
             if qt['answer']['typename'] == 'A' or qp['answer']['typename'] == 'A':
-                rev = lookup_reverse(qt['answer']['data'], test_server)
+                rev = lookup_reverse(qt['answer']['data'], config['servers']['test'])
                 if 'answer' in rev:
                     if rev['answer']['data'] == changed[n] or rev['answer']['data'] == newname:
                         print "\tok, reverse DNS is set correctly for %s (TEST)" % qt['answer']['data']
@@ -84,7 +84,7 @@ def check_changed_names(changed, test_server, prod_server, default_domain, have_
     return
 
 
-def check_added_names(added, test_server, prod_server, default_domain, have_reverse):
+def check_added_names(added):
     """
     Run tests for added names
     """
@@ -93,15 +93,15 @@ def check_added_names(added, test_server, prod_server, default_domain, have_reve
         name = n
         # make sure we have a FQDN
         if name.find('.') == -1:
-            name = name + default_domain
+            name = name + config['defaults']['domain']
 
         target = added[n]
         if target.find('.') == -1:
-            target = target + default_domain
+            target = target + config['defaults']['domain']
 
         # resolve with both test and prod
-        qt = resolve_name(name, test_server)
-        qp = resolve_name(name, prod_server)
+        qt = resolve_name(name, config['servers']['test'])
+        qp = resolve_name(name, config['servers']['prod'])
         # make sure PROD returns NXDOMAIN, since it's a new record
         if 'status' in qp:
             if qp['status'] != 'NXDOMAIN':
@@ -120,8 +120,8 @@ def check_added_names(added, test_server, prod_server, default_domain, have_reve
                 print "NG: %s resolves to %s instead of %s (TEST)" % (n, qt['answer']['data'], added[n])
                 print "\tPROD server returns NXDOMAIN for %s (PROD)" % n
             # check reverse DNS if we say to
-            if have_reverse and qt['answer']['typename'] == 'A':
-                rev = lookup_reverse(added[n], test_server)
+            if config['defaults']['have_reverse_dns'] and qt['answer']['typename'] == 'A':
+                rev = lookup_reverse(added[n], config['servers']['test'])
                 if 'status' in rev:
                     print "\tREVERSE NG: got status %s for name %s (TEST)" % (rev['status'], added[n])
                 elif rev['answer']['data'] == n or rev['answer']['data'] == name:

@@ -20,7 +20,7 @@ import dnstest_config
 config = {}
 
 
-def do_dns_tests(tests, test_server, prod_server, default_domain, have_reverse=True):
+def do_dns_tests(tests):
     """
     Run all DNS tests
 
@@ -28,11 +28,11 @@ def do_dns_tests(tests, test_server, prod_server, default_domain, have_reverse=T
     """
 
     if 'added' in tests:
-        check_added_names(tests['added'], test_server, prod_server, default_domain, have_reverse)
+        check_added_names(tests['added'])
     if 'removed' in tests:
-        check_removed_names(tests['removed'], test_server, prod_server, default_domain, have_reverse)
+        check_removed_names(tests['removed'])
     if 'changed' in tests:
-        check_changed_names(tests['changed'], test_server, prod_server, default_domain, have_reverse)
+        check_changed_names(tests['changed'])
     return
 
 if __name__ == "__main__":
