@@ -47,4 +47,6 @@ class DNScheck:
         """
         Test checks for adding a record to DNS
         """
-        pass
+        added = {'newhostname': '1.2.3.4'}
+        foo = check_added_names(added, 'test_server_stub', 'prod_server_stub', '.example.com', False)
+        assert foo == None
