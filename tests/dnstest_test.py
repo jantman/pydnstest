@@ -8,9 +8,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../')
 import dnstest
 
 
-class TestDNSrules:
+class DNScheck:
     """
-    Test DNS tests, using stubbed name resolution methods that return static values.
+    Test DNS checks, using stubbed name resolution methods that return static values.
 
     The code in this class checks the logic of dnstest.py's test_*_name methods, which take
     input describing the change, and query nameservers to check current prod and staging status.
@@ -42,3 +42,9 @@ class TestDNSrules:
 
     # stub
     dnstest.lookup_reverse = stub_lookup_reverse
+
+    def test_dns_add(self):
+        """
+        Test checks for adding a record to DNS
+        """
+        
