@@ -5,7 +5,7 @@ Sample configuration/run script for dns_test.py
 
 import os.path
 import platform
-from dns_test import do_dns_tests
+from dnstest import do_dns_tests
 
 # set your production/live  DNS server
 SERVER_PROD = "10.188.14.124"
