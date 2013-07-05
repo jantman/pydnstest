@@ -34,3 +34,15 @@ def do_dns_tests(tests, test_server, prod_server, default_domain, have_reverse=T
     if 'changed' in tests:
         check_changed_names(tests['changed'], test_server, prod_server, default_domain, have_reverse)
     return
+
+if __name__ == "__main__":
+    # read in config, set variable
+    conf_file = dnstest_config.find_config_file()
+    if conf_file is None:
+        sys.stderr.write("WARNING: no config file found. copy dnstest.conf.example to dnstest.conf or ~/.dnstest.conf.\n")
+    else:
+        config = dnstest_config.get_config(conf_file)
+
+    # check command-line arguments, overwrite config
+    print config
+    print "not implemented yet"

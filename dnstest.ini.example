@@ -1,0 +1,13 @@
+[servers]
+# set your production/live DNS server address
+prod: 1.2.3.4
+
+# set your test/staging DNS server address
+test: 1.2.3.5
+
+[defaults]
+# whether or not we should have reverse DNS for valid A records
+have_reverse_dns: True
+
+# set this to your default domain, to be appended to requests that aren't a FQDN
+domain: .example.com
