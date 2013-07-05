@@ -14,8 +14,6 @@ ToDo: flag to confirm against prod once live
 """
 
 import DNS
-import pprint
-from inspect import getmembers
 
 
 def resolve_name(query, to_server, default_domain, to_port=53):
