@@ -8,7 +8,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../')
 import dnstest
 
 
-class DNScheck:
+class TestDNSChecks:
     """
     Test DNS checks, using stubbed name resolution methods that return static values.
 
