@@ -48,3 +48,4 @@ ToDo
 * Allow overriding config file with command line options
    * OptParse for command line options
 * Figure out how to test command line options - config override
+* doctest
