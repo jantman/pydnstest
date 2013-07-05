@@ -17,6 +17,7 @@ import DNS
 import pprint
 from inspect import getmembers
 
+
 def resolve_name(query, to_server, default_domain, to_port=53):
     """
     Resolves a single name against the given server
@@ -35,17 +36,19 @@ def resolve_name(query, to_server, default_domain, to_port=53):
         return {'answer': a.answers[0]}
     return {'status': a.header['status']}
 
+
 def lookup_reverse(name, to_server, to_port=53):
     "convenience routine for doing a reverse lookup of an address"
     a = name.split('.')
     a.reverse()
-    b = '.'.join(a)+'.in-addr.arpa'
+    b = '.'.join(a) + '.in-addr.arpa'
 
     s = DNS.Request(name=b, server=to_server, qtype='PTR', port=to_port)
     a = s.req()
     if len(a.answers) > 0:
         return {'answer': a.answers[0]}
     return {'status': a.header['status']}
+
 
 def test_removed_names(removed, test_server, prod_server, default_domain, have_reverse):
     """
@@ -78,6 +81,7 @@ def test_removed_names(removed, test_server, prod_server, default_domain, have_r
         else:
             print "NG: %s returned valid answer, not removed (TEST)" % n
     return
+
 
 def test_changed_names(changed, test_server, prod_server, default_domain, have_reverse):
     """
@@ -122,6 +126,7 @@ def test_changed_names(changed, test_server, prod_server, default_domain, have_r
                 else:
                     print "\tWARNING: no reverse DNS appears to be set for %s (TEST)" % qt['answer']['data']
     return
+
 
 def test_added_names(added, test_server, prod_server, default_domain, have_reverse):
     """

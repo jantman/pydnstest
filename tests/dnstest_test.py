@@ -1,10 +1,12 @@
 # tests for dns_parser.py
 
 import pytest
-import sys, os
+import sys
+import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../')
 
 import dnstest
+
 
 class TestDNSrules:
     """
@@ -14,7 +16,7 @@ class TestDNSrules:
     input describing the change, and query nameservers to check current prod and staging status.
     """
 
-    def stub_resolve_name(query, to_server, default_domain, to_port = 53):
+    def stub_resolve_name(query, to_server, default_domain, to_port=53):
         """
         stub method
 

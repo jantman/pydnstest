@@ -1,11 +1,13 @@
 # tests for dns_parser.py
 
 import pytest
-import sys, os
+import sys
+import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../')
 
 import dnstest_parser
 from pyparsing import ParseException
+
 
 class TestLanguageParsing:
     """
@@ -58,10 +60,10 @@ class TestLanguageParsing:
             foo = dnstest_parser.parse_line(line).asDict()
         except ParseException, err:
             print err.line
-            print " "*(err.column-1) + "^"
+            print " " * (err.column - 1) + "^"
             print err
         assert foo == parsed_dict
-    
+
     @pytest.mark.parametrize("line", [
         "add extraword record foobar.example.com target blam",
         "add foobar value blam extraword",

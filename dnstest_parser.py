@@ -35,7 +35,7 @@ cmd_change = change_op + Suppress(Optional(rec_op)) + hostname_or_fqdn.setResult
 
 line_parser = Or([cmd_add, cmd_remove, cmd_rename, cmd_change])
 
+
 def parse_line(line):
     res = line_parser.parseString(line, parseAll=True)
     return res
-
