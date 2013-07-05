@@ -108,7 +108,7 @@ def check_added_names(added, test_server, prod_server, default_domain, have_reve
                 print "NG: prod server returned status %s for name %s (PROD)" % (qp['status'], n)
                 continue
         else:
-            print "NG: new name %n returned valid result from prod server (PROD)" % n
+            print "NG: new name %s returned valid result from prod server (PROD)" % n
             continue
 
         # check the answer we got back from TEST
