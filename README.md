@@ -35,11 +35,14 @@ logic (via stubbing the DNS lookup methods and returning known results).
 
 ToDo
 ----
-* Move config constants from example_dns_test.py to a dot file or command-line options
+* Refactor current DNS check methods to take a single input specifier
+* Move config constants from example_dns_test.py to a dot file
    * ConfigParse for a dotfile or ./dnstest.conf
-   * OptParse for command line options
 * Add natural language processing for input data, then remove example_dns_test.py and just run pydnstest.py
    * parse_input_line() - iterate over file if specified on command line, or stdin
 * Add interactive mode for DNS testing - input one line and show result
 * testing for all of the above
-* actual testing of DNS to a pair of twisted DNS servers
+* stub methods to allow testing dns check logic without actual DNS servers
+* Allow overriding config file with command line options
+   * OptParse for command line options
+* Figure out how to test command line options - config override
