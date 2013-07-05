@@ -5,7 +5,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../')
 
-import dnstest_parser
+from dnstest_parser import DnstestParser
 from pyparsing import ParseException
 
 
@@ -57,7 +57,8 @@ class TestLanguageParsing:
     def test_parse_should_succeed(self, line, parsed_dict):
         foo = None
         try:
-            foo = dnstest_parser.parse_line(line).asDict()
+            p = DnstestParser()
+            foo = p.parse_line(line).asDict()
         except ParseException, err:
             print err.line
             print " " * (err.column - 1) + "^"
@@ -75,4 +76,5 @@ class TestLanguageParsing:
     ])
     def test_parse_should_raise_exception(self, line):
         with pytest.raises(ParseException):
-            dnstest_parser.parse_line(line)
+            p = DnstestParser()
+            p.parse_line(line)
