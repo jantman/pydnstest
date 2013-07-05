@@ -7,6 +7,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../')
 import shutil
 import os.path
 import os
+from ConfigParser import ParsingError
 
 import dnstest_config
 
@@ -46,16 +47,40 @@ class TestConfigMethods:
     def test_find_no_config_file(self, save_user_config):
         assert dnstest_config.find_config_file() == None
 
+    def write_conf_file(self, path, contents):
+        fh = open(path, 'w')
+        fh.write(contents)
+        fh.close()
+        return
+
     def test_find_main_config_file(self, save_user_config):
         fpath = os.path.abspath("dnstest.ini")
-        fh = open(fpath, 'w')
-        fh.write("test_find_main_config_file")
-        fh.close()
+        self.write_conf_file(fpath, "test_find_main_config_file")
         assert dnstest_config.find_config_file() == fpath
 
     def test_find_dot_config_file(self, save_user_config):
         fpath = os.path.expanduser("~/.dnstest.ini")
-        fh = open(fpath, 'w')
-        fh.write("test_find_dot_config_file")
-        fh.close()
+        self.write_conf_file(fpath, "test_find_dot_config_file")
         assert dnstest_config.find_config_file() == fpath
+
+    def test_parse_example_config_file(self, save_user_config):
+        fpath = os.path.abspath("dnstest.ini.example")
+        result = {'defaults': {'domain': '.example.com', 'have_reverse_dns': True}, 'servers': {'test': '1.2.3.5', 'prod': '1.2.3.4'}}
+        assert dnstest_config.get_config(fpath) == result
+
+    def test_parse_bad_config_file(self, save_user_config):
+        fpath = os.path.abspath("dnstest.ini")
+        contents = """
+[servers]
+blarg
+
+"""
+        self.write_conf_file(fpath, contents)
+        with pytest.raises(ParsingError):
+            dnstest_config.get_config(fpath)
+
+    def test_parse_empty_config_file(self, save_user_config):
+        fpath = os.path.abspath("dnstest.ini")
+        contents = ""
+        self.write_conf_file(fpath, contents)
+        assert dnstest_config.get_config(fpath) == {}
