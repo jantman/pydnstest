@@ -26,12 +26,12 @@ STDIN, or interactively.
 Testing
 -------
 Testing is done via [pytest](http://pytest.org/latest/) and currently
-encompasses testing for both the input language parsing, and actual functional
-tests of the DNS checks (using two local
-[Twisted](http://twistedmatrix.com)-based DNS servers).
+encompasses testing for both the input language parsing, and the DNS testing
+logic (via stubbing the DNS lookup methods and returning known results). 
 
 * `pip install -r requirements_test.txt`
-* py.test
+* `py.test`
+* If you want to see code coverage, `py.test --cov *.py tests/`
 
 ToDo
 ----
