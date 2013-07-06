@@ -5,7 +5,8 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../')
 
-import dnstest_checks
+from dnstest_checks import DNStestChecks
+from dnstest_config import DnstestConfig
 
 
 # dict of known (mocked) reverse DNS values for test and prod servers
@@ -27,7 +28,20 @@ class TestDNSChecks:
     input describing the change, and query nameservers to check current prod and staging status.
     """
 
-    config = {'defaults': {'domain': '.example.com', 'have_reverse_dns': True}, 'servers': {'test': 'test_server_stub', 'prod': 'prod_server_stub'}}
+    DNS = None
+    config = None
+
+    def __init__(self):
+        self.DNS = DNStestChecks()
+        # stub
+        self.DNS.resolve_name = self.stub_resolve_name
+        # stub
+        self.DNS.lookup_reverse = self.stub_lookup_reverse
+
+        self.config = DnstestConfig()
+        self.config.server_test = "test_server_stub"
+        self.config.server_prod = "prod_server_stub"
+        self.config.default_domain = ".example.com"
 
     def stub_resolve_name(query, to_server, to_port=53):
         """
@@ -41,9 +55,6 @@ class TestDNSChecks:
             return {'answer': {'name': query, 'data': known_dns[to_server][query][0], 'typename': known_dns[to_server][query][1], 'classstr': 'IN', 'ttl': 360, 'type': 5, 'class': 1, 'rdlength': 14}}
         else:
             return {'status': 'NXDOMAIN'}
-
-    # stub
-    dnstest_checks.resolve_name = stub_resolve_name
 
     def stub_lookup_reverse(name, to_server, to_port=53):
         """
@@ -61,23 +72,19 @@ class TestDNSChecks:
         else:
             return {'status': 'NXDOMAIN'}
 
-    # stub
-    dnstest_checks.lookup_reverse = stub_lookup_reverse
 
     def test_dns_add(self):
         """
         Test checks for adding a record to DNS
         """
         added = {'newhostname': '1.2.3.1'}
-        foo = dnstest_checks.check_added_names(added)
+        foo = DNS.check_added_names(added)
         assert foo == None
 
     def test_dns_add_already_in_prod(self):
         """
         Test for adding a record that's already in prod
         """
-        global config
-        config = self.config
         added = {'existinghostname': '1.2.3.2'}
-        foo = dnstest_checks.check_added_names(added)
+        foo = DNS.check_added_names(added)
         assert foo == False
