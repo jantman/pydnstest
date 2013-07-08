@@ -34,7 +34,7 @@ class DnstestParser:
     hostname_or_fqdn = Or([hostname, fqdn])
     hostname_fqdn_or_ip = Or([hostname, fqdn, ipaddr])
 
-    cmd_add = add_op + Optional(rec_op) + hostname_or_fqdn.setResultsName("hostname") + val_op + hostname_fqdn_or_ip.setResultsName('value')
+    cmd_add = add_op + Optional(rec_op) + hostname_or_fqdn.setResultsName("hostname") + Suppress(val_op) + hostname_fqdn_or_ip.setResultsName('value')
     cmd_remove = rm_op + Optional(rec_op) + hostname_or_fqdn.setResultsName("hostname")
     cmd_rename = rename_op + Suppress(Optional(rec_op)) + hostname_or_fqdn.setResultsName("hostname") + Suppress(Keyword("to")) + hostname_or_fqdn.setResultsName('value')
     cmd_change = change_op + Suppress(Optional(rec_op)) + hostname_or_fqdn.setResultsName("hostname") + Suppress(Keyword("to")) + hostname_fqdn_or_ip.setResultsName('value')

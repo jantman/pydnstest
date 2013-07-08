@@ -8,7 +8,7 @@ import sys
 import ConfigParser
 
 
-class DnstestConfig(object):
+class DnstestConfig():
 
 
     server_prod = ""

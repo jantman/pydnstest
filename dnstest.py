@@ -13,11 +13,10 @@ ToDo: flag to confirm against prod once live
 
 """
 
-import dnstest_checks
-import dnstest_config
-
-
-config = {}
+import sys
+from dnstest_checks import DNStestChecks
+from dnstest_config import DnstestConfig
+from dnstest_parser import DnstestParser
 
 
 def do_dns_tests(tests):
@@ -37,12 +36,24 @@ def do_dns_tests(tests):
 
 if __name__ == "__main__":
     # read in config, set variable
-    conf_file = dnstest_config.find_config_file()
+    config = DnstestConfig()
+    conf_file = config.find_config_file()
     if conf_file is None:
-        sys.stderr.write("WARNING: no config file found. copy dnstest.conf.example to dnstest.conf or ~/.dnstest.conf.\n")
-    else:
-        config = dnstest_config.get_config(conf_file)
+        print "ERROR: no configuration file."
+        sys.exit(1)
+    config.load_config(conf_file)
 
-    # check command-line arguments, overwrite config
-    print config
-    print "not implemented yet"
+    parser = DnstestParser()
+    chk = DNStestChecks(config)
+
+    # if no other options, read from stdin
+    for line in sys.stdin:
+        line = line.strip()
+        if not line:
+            continue
+        if line == "" or line[:1] == "#":
+            continue
+        d = parser.parse_line(line)
+        if d['operation'] == 'add':
+            res = chk.check_added_name(d['hostname'], d['value'])
+
