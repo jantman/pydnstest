@@ -51,7 +51,7 @@ class DNStestChecks:
         return True
 
 
-    def check_changed_names(self, n, newn):
+    def check_changed_name(self, n, newn):
         """
         Run tests for changed names
         """
@@ -94,7 +94,7 @@ class DNStestChecks:
         return True
 
 
-    def check_added_names(self, n, value):
+    def check_added_name(self, n, value):
         """
         Run tests for added names
         """
