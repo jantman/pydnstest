@@ -13,7 +13,7 @@ class DnstestConfig():
 
     server_prod = ""
     server_test = ""
-    reverse_dns = True
+    have_reverse_dns = True
     default_domain = ""
 
 
@@ -27,7 +27,7 @@ class DnstestConfig():
         """
         return a dictionary of all configuration options.
         """
-        d = {'servers': {'prod': self.server_prod, 'test': self.server_test}, 'have_reverse_dns': self.reverse_dns, 'default_domain': self.default_domain}
+        d = {'servers': {'prod': self.server_prod, 'test': self.server_test}, 'have_reverse_dns': self.have_reverse_dns, 'default_domain': self.default_domain}
         return d
 
     def find_config_file(self):
@@ -69,8 +69,8 @@ class DnstestConfig():
             self.default_domain = ""
 
         try:
-            self.reverse_dns = Config.getboolean("defaults", "have_reverse_dns")
+            self.have_reverse_dns = Config.getboolean("defaults", "have_reverse_dns")
         except:
-            self.reverse_dns = True
+            self.have_reverse_dns = True
 
         return True
