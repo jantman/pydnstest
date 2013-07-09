@@ -47,7 +47,11 @@ def format_test_output(res):
     """
     Prints test output in a nice textual format
     """
-    return
+    if r['result']:
+        print "OK: %s" % r['message']
+    else:
+        print "NG: %s" % r['message']
+    # @TODO: print warnings and secondary messages
 
 
 if __name__ == "__main__":
