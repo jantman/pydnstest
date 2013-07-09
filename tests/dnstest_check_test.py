@@ -28,22 +28,23 @@ class TestDNSChecks:
     input describing the change, and query nameservers to check current prod and staging status.
     """
 
-    DNS = None
-    config = None
+    @pytest.fixture(scope="module")
+    def setup_checks(self):
+        config = DnstestConfig()
+        config.server_test = "test_server_stub"
+        config.server_prod = "prod_server_stub"
+        config.default_domain = ".example.com"
+        config.have_reverse_dns = True
 
-    def __init__(self):
-        self.DNS = DNStestChecks()
+        chk = DNStestChecks(config)
         # stub
-        self.DNS.resolve_name = self.stub_resolve_name
+        chk.DNS.resolve_name = self.stub_resolve_name
         # stub
-        self.DNS.lookup_reverse = self.stub_lookup_reverse
+        chk.DNS.lookup_reverse = self.stub_lookup_reverse
+        return chk
 
-        self.config = DnstestConfig()
-        self.config.server_test = "test_server_stub"
-        self.config.server_prod = "prod_server_stub"
-        self.config.default_domain = ".example.com"
 
-    def stub_resolve_name(query, to_server, to_port=53):
+    def stub_resolve_name(self, query, to_server, to_port=53):
         """
         stub method
 
@@ -56,7 +57,7 @@ class TestDNSChecks:
         else:
             return {'status': 'NXDOMAIN'}
 
-    def stub_lookup_reverse(name, to_server, to_port=53):
+    def stub_lookup_reverse(self, name, to_server, to_port=53):
         """
         stub method
 
@@ -64,7 +65,7 @@ class TestDNSChecks:
         but either returns one of a hard-coded group of dicts, or an error.
         """
 
-        if name in self.known_rev_dns[to_server]:
+        if name in known_rev_dns[to_server]:
             #a = name.split('.')
             #a.reverse()
             #rev_name = '.'.join(a) + '.in-addr.arpa'
@@ -73,18 +74,16 @@ class TestDNSChecks:
             return {'status': 'NXDOMAIN'}
 
 
-    def test_dns_add(self):
+    def test_dns_add(self, setup_checks):
         """
         Test checks for adding a record to DNS
         """
-        added = {'newhostname': '1.2.3.1'}
-        foo = DNS.check_added_names(added)
-        assert foo == None
+        foo = setup_checks.check_added_name('newhostname', '1.2.3.1')
+        assert foo == True
 
-    def test_dns_add_already_in_prod(self):
+    def test_dns_add_already_in_prod(self, setup_checks):
         """
         Test for adding a record that's already in prod
         """
-        added = {'existinghostname': '1.2.3.2'}
-        foo = DNS.check_added_names(added)
+        foo = setup_checks.check_added_name('existinghostname', '1.2.3.2')
         assert foo == False
