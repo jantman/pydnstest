@@ -10,7 +10,7 @@ import DNS
 class DNStestDNS:
 
 
-    def resolve_name(query, to_server, to_port=53):
+    def resolve_name(self, query, to_server, to_port=53):
         """
         Resolves a single name against the given server
         """

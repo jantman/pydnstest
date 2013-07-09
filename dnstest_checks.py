@@ -51,9 +51,9 @@ class DNStestChecks:
         return True
 
 
-    def check_changed_name(self, n, newn):
+    def check_renamed_name(self, n, newn):
         """
-        Run tests for changed names
+        Run tests for renamed names (same value, record name changes)
         """
         name = n
         newname = newn

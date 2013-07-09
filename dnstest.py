@@ -19,20 +19,36 @@ from dnstest_config import DnstestConfig
 from dnstest_parser import DnstestParser
 
 
-def do_dns_tests(tests):
-    """
-    Run all DNS tests
+config = None
+parser = None
+chk = None
 
-    param tests: dict with keys 'added',
-    """
 
-    if 'added' in tests:
-        check_added_names(tests['added'])
-    if 'removed' in tests:
-        check_removed_names(tests['removed'])
-    if 'changed' in tests:
-        check_changed_names(tests['changed'])
-    return
+def run_input_line(line):
+    """
+    Parses a raw input line, runs the tests for that line,
+    and returns the result of the tests.
+    """
+    d = parser.parse_line(line)
+    if d['operation'] == 'add':
+        return chk.check_added_name(d['hostname'], d['value'])
+    elif d['operation'] == 'remove':
+        return chk.check_removed_name(d['hostname'])
+    elif d['operation'] == 'change':
+        return chk.check_changed_name(d['hostname'], d['value'])
+    elif d['operation'] == 'rename':
+        return chk.check_renamed_name(d['hostname'], d['value'])
+    else:
+        print "ERROR: unknown input operation"
+        return False
+
+
+def format_test_output(res):
+    """
+    Prints test output in a nice textual format
+    """
+    print res
+
 
 if __name__ == "__main__":
     # read in config, set variable
@@ -53,7 +69,5 @@ if __name__ == "__main__":
             continue
         if line == "" or line[:1] == "#":
             continue
-        d = parser.parse_line(line)
-        if d['operation'] == 'add':
-            res = chk.check_added_name(d['hostname'], d['value'])
-
+        r = run_input_line(line)
+        format_test_output(r)
