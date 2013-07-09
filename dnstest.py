@@ -47,7 +47,7 @@ def format_test_output(res):
     """
     Prints test output in a nice textual format
     """
-    print res
+    return
 
 
 if __name__ == "__main__":
