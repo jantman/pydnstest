@@ -73,6 +73,7 @@ class TestLanguageParsing:
         "change foobar",
         "change foobar to",
         "change foobar.hosts.example.com to",
+        "add m.foo.example.com with target foo.example.com.edgesuite.net.",
     ])
     def test_parse_should_raise_exception(self, line):
         with pytest.raises(ParseException):
