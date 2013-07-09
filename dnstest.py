@@ -50,7 +50,7 @@ def format_test_output(res):
     if r['result']:
         print "OK: %s" % r['message']
     else:
-        print "NG: %s" % r['message']
+        print "**NG: %s" % r['message']
     # @TODO: print warnings and secondary messages
 
 
