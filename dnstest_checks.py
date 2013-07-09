@@ -7,6 +7,15 @@ from dnstest_dns import DNStestDNS
 
 
 class DNStestChecks:
+    """
+    Methods for checking actual DNS against the desired state.
+
+    Each method returns a dict with the following keys:
+    - result: Boolean, True if the test is considered a success, False otherwise
+    - message: String, the overall status message, human-readable text
+    - secondary: list of strings, describing sub-test steps
+    - warnings: list of strings, of any non-critical warnings generated
+    """
 
 
     config = None
