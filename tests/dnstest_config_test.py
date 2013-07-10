@@ -73,7 +73,7 @@ class TestConfigMethods:
         assert dc.server_prod == '1.2.3.4'
         assert dc.server_test == '1.2.3.5'
         assert dc.default_domain == '.example.com'
-        assert dc.reverse_dns == True
+        assert dc.have_reverse_dns == True
 
 
     def test_parse_bad_config_file(self, save_user_config):
@@ -97,4 +97,4 @@ blarg
         assert dc.server_prod == ''
         assert dc.server_test == ''
         assert dc.default_domain == ''
-        assert dc.reverse_dns == True
+        assert dc.have_reverse_dns == True
