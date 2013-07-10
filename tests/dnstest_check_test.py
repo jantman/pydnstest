@@ -66,24 +66,28 @@ class TestDNSChecks:
         """
 
         if name in known_rev_dns[to_server]:
-            #a = name.split('.')
-            #a.reverse()
-            #rev_name = '.'.join(a) + '.in-addr.arpa'
             return {'answer': {'name': name, 'data': known_rev_dns[to_server][name], 'typename': 'PTR', 'classstr': 'IN', 'ttl': 360, 'type': 12, 'class': 1, 'rdlength': 33}}
         else:
             return {'status': 'NXDOMAIN'}
 
 
-    def test_dns_add(self, setup_checks):
+    @pytest.mark.parametrize(("hostname", "value"), [
+        ("newhostname", "1.2.3.1"),
+    ])
+    def test_dns_add(self, setup_checks, hostname, value):
         """
         Test checks for adding a record to DNS
         """
-        foo = setup_checks.check_added_name('newhostname', '1.2.3.1')
+        foo = setup_checks.check_added_name(hostname, value)
         assert foo == True
 
-    def test_dns_add_already_in_prod(self, setup_checks):
+
+    @pytest.mark.parametrize(("hostname", "value"), [
+        ("existinghostname", "1.2.3.2"),
+    ])
+    def test_dns_add_already_in_prod(self, setup_checks, hostname, value):
         """
         Test for adding a record that's already in prod
         """
-        foo = setup_checks.check_added_name('existinghostname', '1.2.3.2')
+        foo = setup_checks.check_added_name(hostname, value)
         assert foo == False
