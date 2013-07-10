@@ -58,7 +58,7 @@ def format_test_output(res):
 if __name__ == "__main__":
     parser = optparse.OptionParser()
     parser.add_option('-c', '--config', dest='config_file',
-                      help='path config file (default looks for ./dnstest.ini or ~/.dnstest.ini)')
+                      help='path to config file (default looks for ./dnstest.ini or ~/.dnstest.ini)')
 
     options, args = parser.parse_args()
 
