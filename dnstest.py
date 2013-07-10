@@ -15,6 +15,7 @@ ToDo: flag to confirm against prod once live
 
 import sys
 import optparse
+import os.path
 from dnstest_checks import DNStestChecks
 from dnstest_config import DnstestConfig
 from dnstest_parser import DnstestParser
@@ -60,11 +61,14 @@ if __name__ == "__main__":
     parser.add_option('-c', '--config', dest='config_file',
                       help='path to config file (default looks for ./dnstest.ini or ~/.dnstest.ini)')
 
+    parser.add_option('-f', '--file', dest='testfile',
+                      help='path to file listing tests (default reads from STDIN)')
+
     options, args = parser.parse_args()
 
     # read in config, set variable
     config = DnstestConfig()
-    if config_file in options:
+    if options.config_file:
         conf_file = options.config_file
     else:
         conf_file = config.find_config_file()
@@ -77,7 +81,17 @@ if __name__ == "__main__":
     chk = DNStestChecks(config)
 
     # if no other options, read from stdin
-    for line in sys.stdin:
+    if options.testfile:
+        if not os.path.exists(options.testfile):
+            print "ERROR: test file '%s' does not exist." % options.testfile
+            sys.exit(1)
+        fh = open(options.testfile, 'r')
+    else:
+        # read from stdin
+        fh = sys.stdin
+
+    # read input line by line, handle each line as we're given it
+    for line in fh:
         line = line.strip()
         if not line:
             continue
@@ -85,3 +99,7 @@ if __name__ == "__main__":
             continue
         r = run_input_line(line)
         format_test_output(r)
+
+    if options.testfile:
+        # we were reading a file, close it
+        fh.close()
