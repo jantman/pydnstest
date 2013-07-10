@@ -26,7 +26,7 @@ parser = None
 chk = None
 
 
-def run_input_line(line):
+def run_check_line(line):
     """
     Parses a raw input line, runs the tests for that line,
     and returns the result of the tests.
@@ -40,6 +40,26 @@ def run_input_line(line):
         return chk.check_changed_name(d['hostname'], d['value'])
     elif d['operation'] == 'rename':
         return chk.check_renamed_name(d['hostname'], d['value'])
+    else:
+        print "ERROR: unknown input operation"
+        return False
+
+
+def run_verify_line(line):
+    """
+    Parses a raw input line, runs the tests for that line verifying
+    against the PROD server (i.e. once the changes have gone live)
+    and returns the result of the tests.
+    """
+    d = parser.parse_line(line)
+    if d['operation'] == 'add':
+        return chk.verify_added_name(d['hostname'], d['value'])
+    elif d['operation'] == 'remove':
+        return chk.verify_removed_name(d['hostname'])
+    elif d['operation'] == 'change':
+        return chk.verify_changed_name(d['hostname'], d['value'])
+    elif d['operation'] == 'rename':
+        return chk.verify_renamed_name(d['hostname'], d['value'])
     else:
         print "ERROR: unknown input operation"
         return False
@@ -63,6 +83,9 @@ if __name__ == "__main__":
 
     parser.add_option('-f', '--file', dest='testfile',
                       help='path to file listing tests (default reads from STDIN)')
+
+    parser.add_option('-V', '--verify', dest='verify', default=False, action='store_true',
+                      help='verify changes against PROD server once they\'re live (default False)')
 
     options, args = parser.parse_args()
 
@@ -97,7 +120,10 @@ if __name__ == "__main__":
             continue
         if line == "" or line[:1] == "#":
             continue
-        r = run_input_line(line)
+        if options.verify:
+            r = run_verify_line(line)
+        else:
+            r = run_check_line(line)
         format_test_output(r)
 
     if options.testfile:

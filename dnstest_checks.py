@@ -165,3 +165,43 @@ class DNStestChecks:
             res['result'] = False
             res['message'] = "status %s for name %s (TEST)" % (qt['status'], n)
         return res
+
+
+    def verify_added_name(self, n, value):
+        """
+        Verify an added name against the prod server
+        """
+        res = {'result': None, 'message': None, 'secondary': [], 'warnings': []}
+        name = n
+        # make sure we have a FQDN
+        if name.find('.') == -1:
+            name = name + self.config.default_domain
+
+        target = value
+        if target.find('.') == -1:
+            target = target + self.config.default_domain
+
+        # resolve with both test and prod
+        qp = self.DNS.resolve_name(name, self.config.server_prod)
+
+        # check the answer we got back from PROD
+        if 'answer' in qp:
+            if qp['answer']['data'] == value or qp['answer']['data'] == target:
+                res['result'] = True
+                res['message'] = "%s => %s (PROD)" % (n, value)
+            else:
+                res['result'] = False
+                res['message'] = "%s resolves to %s instead of %s (PROD)" % (n, qp['answer']['data'], value)
+            # check reverse DNS if we say to
+            if self.config.have_reverse_dns and qp['answer']['typename'] == 'A':
+                rev = self.DNS.lookup_reverse(value, self.config.server_prod)
+                if 'status' in rev:
+                    res['warnings'].append("REVERSE NG: got status %s for name %s (PROD)" % (rev['status'], value))
+                elif rev['answer']['data'] == n or rev['answer']['data'] == name:
+                    res['secondary'].append("REVERSE OK: %s => %s (PROD)" % (value, rev['answer']['data']))
+                else:
+                    res['warnings'].append("REVERSE NG: got answer %s for name %s (PROD)" % (rev['answer']['data'], value))
+        else:
+            res['result'] = False
+            res['message'] = "status %s for name %s (PROD)" % (qp['status'], n)
+        return res

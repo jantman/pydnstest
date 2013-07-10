@@ -18,6 +18,8 @@ known_rev_dns['test_server_stub']['10.188.12.10'] = 'foo.example.com'
 known_dns = {'test_server_stub': {}, 'prod_server_stub': {}}
 known_dns['test_server_stub']['newhostname.example.com'] = ['1.2.3.1', 'A']
 known_dns['prod_server_stub']['existinghostname.example.com'] = ['1.2.3.2', 'A']
+known_dns['test_server_stub']['addedhostname.example.com'] = ['1.2.3.3', 'A']
+known_dns['prod_server_stub']['addedhostname.example.com'] = ['1.2.3.3', 'A']
 
 
 class TestDNSChecks:
@@ -71,23 +73,24 @@ class TestDNSChecks:
             return {'status': 'NXDOMAIN'}
 
 
-    @pytest.mark.parametrize(("hostname", "value"), [
-        ("newhostname", "1.2.3.1"),
+    @pytest.mark.parametrize(("hostname", "value", "result"), [
+        ("newhostname", "1.2.3.1", {'message': 'newhostname => 1.2.3.1 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for newhostname (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.1 (TEST)']}),
+        ("existinghostname", "1.2.3.2", {'message': 'new name existinghostname returned valid result from prod server (PROD)', 'result': False, 'secondary': [], 'warnings': []}),
     ])
-    def test_dns_add(self, setup_checks, hostname, value):
+    def test_dns_add(self, setup_checks, hostname, value, result):
         """
         Test checks for adding a record to DNS
         """
         foo = setup_checks.check_added_name(hostname, value)
-        assert foo == True
+        assert foo == result
 
 
-    @pytest.mark.parametrize(("hostname", "value"), [
-        ("existinghostname", "1.2.3.2"),
+    @pytest.mark.parametrize(("hostname", "value", "result"), [
+        ("addedhostname.example.com", "1.2.3.3", {'message': 'addedhostname.example.com => 1.2.3.3 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.3 (PROD)']}),
     ])
-    def test_dns_add_already_in_prod(self, setup_checks, hostname, value):
+    def test_dns_verify_add(self, setup_checks, hostname, value, result):
         """
-        Test for adding a record that's already in prod
+        Test checks for adding a record to DNS
         """
-        foo = setup_checks.check_added_name(hostname, value)
-        assert foo == False
+        foo = setup_checks.verify_added_name(hostname, value)
+        assert foo == result
