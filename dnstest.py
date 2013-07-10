@@ -14,6 +14,7 @@ ToDo: flag to confirm against prod once live
 """
 
 import sys
+import optparse
 from dnstest_checks import DNStestChecks
 from dnstest_config import DnstestConfig
 from dnstest_parser import DnstestParser
@@ -55,9 +56,18 @@ def format_test_output(res):
 
 
 if __name__ == "__main__":
+    parser = optparse.OptionParser()
+    parser.add_option('-c', '--config', dest='config_file',
+                      help='path config file (default looks for ./dnstest.ini or ~/.dnstest.ini)')
+
+    options, args = parser.parse_args()
+
     # read in config, set variable
     config = DnstestConfig()
-    conf_file = config.find_config_file()
+    if config_file in options:
+        conf_file = options.config_file
+    else:
+        conf_file = config.find_config_file()
     if conf_file is None:
         print "ERROR: no configuration file."
         sys.exit(1)
