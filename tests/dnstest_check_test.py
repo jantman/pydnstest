@@ -20,6 +20,7 @@ known_dns['test_server_stub']['newhostname.example.com'] = ['1.2.3.1', 'A']
 known_dns['prod_server_stub']['existinghostname.example.com'] = ['1.2.3.2', 'A']
 known_dns['test_server_stub']['addedhostname.example.com'] = ['1.2.3.3', 'A']
 known_dns['prod_server_stub']['addedhostname.example.com'] = ['1.2.3.3', 'A']
+known_dns['test_server_stub']['host-no-reverse.example.com'] = ['1.2.3.4', 'A']
 
 
 class TestDNSChecks:
@@ -76,6 +77,7 @@ class TestDNSChecks:
     @pytest.mark.parametrize(("hostname", "value", "result"), [
         ("newhostname", "1.2.3.1", {'message': 'newhostname => 1.2.3.1 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for newhostname (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.1 (TEST)']}),
         ("existinghostname", "1.2.3.2", {'message': 'new name existinghostname returned valid result from prod server (PROD)', 'result': False, 'secondary': [], 'warnings': []}),
+        ("host-no-reverse", "1.2.3.4", {'message': 'host-no-reverse => 1.2.3.4 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for host-no-reverse (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.4 (TEST)']}),
     ])
     def test_dns_add(self, setup_checks, hostname, value, result):
         """
