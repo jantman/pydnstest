@@ -117,6 +117,8 @@ if __name__ == "__main__":
         fh = sys.stdin
 
     # read input line by line, handle each line as we're given it
+    passed = 0
+    failed = 0
     for line in fh:
         line = line.strip()
         if not line:
@@ -127,7 +129,18 @@ if __name__ == "__main__":
             r = run_verify_line(line)
         else:
             r = run_check_line(line)
+        if r['result']:
+            passed = passed + 1
+        else:
+            failed = failed + 1
         format_test_output(r)
+
+    msg = ""
+    if failed == 0:
+        msg = "All %d tests passed." % passed
+    else:
+        msg = "%d passed / %d FAILED." % (passed, failed)
+    print "++++ %s" % msg
 
     if options.testfile:
         # we were reading a file, close it
