@@ -73,7 +73,10 @@ def format_test_output(res):
         print "OK: %s" % r['message']
     else:
         print "**NG: %s" % r['message']
-    # @TODO: print warnings and secondary messages
+    for m in r['secondary']:
+        print "\t%s" % m
+    for w in r['warnings']:
+        print "\t%s" % w
 
 
 if __name__ == "__main__":
