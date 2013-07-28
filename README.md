@@ -41,3 +41,4 @@ ToDo
 * lots more testing
 * Figure out how to test command line options - config override
 * doctest
+* coverage reports seem to be broken, only showing one class. how to fix??
