@@ -32,8 +32,7 @@ logic (via stubbing the DNS lookup methods and returning known results).
 * `pip install -r requirements_test.txt`
 * `py.test`
 * If you want to see code coverage: `py.test --cov-report term-missing --cov=. tests/`
-* If you want to check pep8 compliance: `py.test --pep8` (should be done
-before any pull requests or merges)
+* If you want to check pep8 compliance: `py.test --pep8` (should be done before any pull requests or merges)
 
 ToDo
 ----
@@ -41,4 +40,3 @@ ToDo
 * lots more testing
 * Figure out how to test command line options - config override
 * doctest
-* coverage reports seem to be broken, only showing one class. how to fix??
