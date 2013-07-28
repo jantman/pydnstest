@@ -31,7 +31,7 @@ logic (via stubbing the DNS lookup methods and returning known results).
 
 * `pip install -r requirements_test.txt`
 * `py.test`
-* If you want to see code coverage: `py.test --cov *.py tests/`
+* If you want to see code coverage: `py.test --cov-report term-missing --cov=. tests/`
 * If you want to check pep8 compliance: `py.test --pep8` (should be done
 before any pull requests or merges)
 
