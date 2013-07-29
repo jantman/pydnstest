@@ -46,7 +46,6 @@ class TestDNSChecks:
         chk.DNS.lookup_reverse = self.stub_lookup_reverse
         return chk
 
-
     def stub_resolve_name(self, query, to_server, to_port=53):
         """
         stub method
@@ -73,7 +72,6 @@ class TestDNSChecks:
         else:
             return {'status': 'NXDOMAIN'}
 
-
     @pytest.mark.parametrize(("hostname", "value", "result"), [
         ("newhostname", "1.2.3.1", {'message': 'newhostname => 1.2.3.1 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for newhostname (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.1 (TEST)']}),
         ("existinghostname", "1.2.3.2", {'message': 'new name existinghostname returned valid result from prod server (PROD)', 'result': False, 'secondary': [], 'warnings': []}),
@@ -85,7 +83,6 @@ class TestDNSChecks:
         """
         foo = setup_checks.check_added_name(hostname, value)
         assert foo == result
-
 
     @pytest.mark.parametrize(("hostname", "value", "result"), [
         ("addedhostname.example.com", "1.2.3.3", {'message': 'addedhostname.example.com => 1.2.3.3 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.3 (PROD)']}),

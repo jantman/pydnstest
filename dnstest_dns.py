@@ -9,7 +9,6 @@ import DNS
 
 class DNStestDNS:
 
-
     def resolve_name(self, query, to_server, to_port=53):
         """
         Resolves a single name against the given server
@@ -27,7 +26,6 @@ class DNStestDNS:
         if len(a.answers) > 0:
             return {'answer': a.answers[0]}
         return {'status': a.header['status']}
-
 
     def lookup_reverse(self, name, to_server, to_port=53):
         """

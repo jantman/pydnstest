@@ -23,6 +23,7 @@ known_dns['prod_server_stub']['existinghostname.example.com'] = ['1.2.3.2', 'A']
 known_dns['test_server_stub']['addedhostname.example.com'] = ['1.2.3.3', 'A']
 known_dns['prod_server_stub']['addedhostname.example.com'] = ['1.2.3.3', 'A']
 
+
 class TestDNSChecks:
     """
     Test DNS checks, using stubbed name resolution methods that return static values.
@@ -54,7 +55,6 @@ class TestDNSChecks:
         dnstest.chk = chk
         return (parser, chk)
 
-
     def stub_resolve_name(self, query, to_server, to_port=53):
         """
         stub method
@@ -84,7 +84,6 @@ class TestDNSChecks:
         else:
             return {'status': 'NXDOMAIN'}
 
-
     def test_line_add(self, setup_checks):
         """
         Test end-to-end input line for adding a record
@@ -92,11 +91,9 @@ class TestDNSChecks:
         foo = dnstest.run_check_line('add record newhostname address 1.2.3.1')
         assert foo == {'message': 'newhostname => 1.2.3.1 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for newhostname (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.1 (TEST)']}
 
-
     def test_line_verify_add(self, setup_checks):
         """
         Test end-to-end input line for adding a record
         """
         foo = dnstest.run_verify_line('add record addedhostname address 1.2.3.3')
         assert foo == {'message': 'addedhostname => 1.2.3.3 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.3 (PROD)']}
-

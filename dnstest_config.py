@@ -10,12 +10,10 @@ import ConfigParser
 
 class DnstestConfig():
 
-
     server_prod = ""
     server_test = ""
     have_reverse_dns = True
     default_domain = ""
-
 
     def __init__(self):
         """
@@ -34,7 +32,7 @@ class DnstestConfig():
         """
         Returns the absolute path to the dnstest config file, or
         None if no config file is found.
-        
+
         Looks first for ./dnstest.ini then for ~/.dnstest.ini
         """
         if os.path.exists("dnstest.ini"):
@@ -43,11 +41,10 @@ class DnstestConfig():
             return os.path.abspath(os.path.expanduser("~/.dnstest.ini"))
         return None
 
-
     def load_config(self, conf_file):
         """
         Read configuration from a specified file, return config dict
-        
+
         :param conf_file: String, absolute path to the conf file to read.
         """
         Config = ConfigParser.ConfigParser()

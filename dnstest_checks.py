@@ -18,10 +18,8 @@ class DNStestChecks:
     {'result': None, 'message': None, 'secondary': [], 'warnings': []}
     """
 
-
     config = None
     DNS = None
-
 
     def __init__(self, config):
         """
@@ -51,7 +49,7 @@ class DNStestChecks:
 
         if 'status' in qt and qt['status'] == "NXDOMAIN":
             res['result'] = True
-            res['message'] =  "%s removed, got status NXDOMAIN (TEST)" % (n)
+            res['message'] = "%s removed, got status NXDOMAIN (TEST)" % (n)
             res['secondary'].append("PROD value was %s (PROD)" % qp['answer']['data'])
             # check for any leftover reverse lookups
             rev = self.DNS.lookup_reverse(qp['answer']['data'], self.config.server_test)
@@ -64,7 +62,6 @@ class DNStestChecks:
             res['result'] = False
             res['message'] = "%s returned valid answer, not removed (TEST)" % n
         return res
-
 
     def check_renamed_name(self, n, newn):
         """
@@ -84,7 +81,7 @@ class DNStestChecks:
         qp = self.DNS.resolve_name(name, self.config.server_prod)
         if 'status' in qp:
             res['result'] = False
-            res['message'] =  "%s got status %s from PROD - cannot change a name that doesn't exist (PROD)" % (n, qp['status'])
+            res['message'] = "%s got status %s from PROD - cannot change a name that doesn't exist (PROD)" % (n, qp['status'])
             return res
         # else we got an answer, it's there, check that it's right
 
@@ -100,7 +97,7 @@ class DNStestChecks:
         else:
             # data matches, looks good
             res['result'] = True
-            res['message'] =  "rename %s => %s (TEST)" % (n, newn)
+            res['message'] = "rename %s => %s (TEST)" % (n, newn)
             # check for any leftover reverse lookups
             if qt['answer']['typename'] == 'A' or qp['answer']['typename'] == 'A':
                 rev = self.DNS.lookup_reverse(qt['answer']['data'], self.config.server_test)
@@ -112,7 +109,6 @@ class DNStestChecks:
                 else:
                     res['warnings'].append("no reverse DNS appears to be set for %s (TEST)" % qt['answer']['data'])
         return res
-
 
     def check_added_name(self, n, value):
         """
@@ -135,11 +131,11 @@ class DNStestChecks:
         if 'status' in qp:
             if qp['status'] != 'NXDOMAIN':
                 res['result'] = False
-                res['message'] =  "prod server returned status %s for name %s (PROD)" % (qp['status'], n)
+                res['message'] = "prod server returned status %s for name %s (PROD)" % (qp['status'], n)
                 return res
         else:
             res['result'] = False
-            res['message'] =  "new name %s returned valid result from prod server (PROD)" % n
+            res['message'] = "new name %s returned valid result from prod server (PROD)" % n
             return res
 
         # check the answer we got back from TEST
@@ -165,7 +161,6 @@ class DNStestChecks:
             res['result'] = False
             res['message'] = "status %s for name %s (TEST)" % (qt['status'], n)
         return res
-
 
     def verify_added_name(self, n, value):
         """

@@ -75,7 +75,6 @@ class TestConfigMethods:
         assert dc.default_domain == '.example.com'
         assert dc.have_reverse_dns == True
 
-
     def test_parse_bad_config_file(self, save_user_config):
         fpath = os.path.abspath("dnstest.ini")
         contents = """
