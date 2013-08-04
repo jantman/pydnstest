@@ -201,11 +201,10 @@ class DNStestChecks:
             res['message'] = "status %s for name %s (PROD)" % (qp['status'], n)
         return res
 
-    # @TODO - this function is not yet tested
     def check_changed_name(self, n, val):
         """
-        Run tests for renamed names (same value, record name changes)
-        
+        Run tests for changed names (same record name, value changes)
+
         @param n name to change
         @param val new value
         """
@@ -235,14 +234,14 @@ class DNStestChecks:
         # got valid answers for both, check them
         if qt['answer']['data'] == qp['answer']['data']:
             res['result'] = False
-            res['message'] = "%s change is bad, resolves to same value (%s) in TEST and PROD" % (n, qt['answer']['data'])
+            res['message'] = "%s is not changed, resolves to same value (%s) in TEST and PROD" % (n, qt['answer']['data'])
         elif qt['answer']['data'] != val and qt['answer']['data'] != newval:
-	    res['result'] = False
-	    res['message'] = "%s resolves to %s instead of %s (TEST)" % (n, qt['answer']['data'], val)
+            res['result'] = False
+            res['message'] = "%s resolves to %s instead of %s (TEST)" % (n, qt['answer']['data'], val)
         else:
             # data matches, looks good
             res['result'] = True
-            res['message'] = "change %s from %s to %s (TEST)" % (n, qp['answer']['data'], qt['answer']['data'])
+            res['message'] = "change %s from '%s' to '%s' (TEST)" % (n, qp['answer']['data'], qt['answer']['data'])
             # check for any leftover reverse lookups
             if qt['answer']['typename'] == 'A' or qp['answer']['typename'] == 'A':
                 rev = self.DNS.lookup_reverse(qt['answer']['data'], self.config.server_test)
@@ -253,4 +252,55 @@ class DNStestChecks:
                         res['warnings'].append("%s appears to still have reverse DNS set to %s (TEST)" % (n, rev['answer']['data']))
                 else:
                     res['warnings'].append("no reverse DNS appears to be set for %s (TEST)" % qt['answer']['data'])
+        return res
+
+    def verify_changed_name(self, n, val):
+        """
+        Run tests to verify changed names (same record name, value changes)
+
+        @TODO - how to verify that the old reverse DNS is removed?
+
+        @param n name to change
+        @param val new value
+        """
+        res = {'result': None, 'message': None, 'secondary': [], 'warnings': []}
+        name = n
+        newval = val
+        # make sure we have a FQDN
+        if name.find('.') == -1:
+            name = name + self.config.default_domain
+        if newval.find('.') == -1:
+            newval = newval + self.config.default_domain
+
+        # resolve with both test and prod
+        qt = self.DNS.resolve_name(name, self.config.server_test)
+        qp = self.DNS.resolve_name(name, self.config.server_prod)
+        if 'status' in qp:
+            res['result'] = False
+            res['message'] = "%s got status %s from PROD (PROD)" % (n, qp['status'])
+            return res
+        # else we got an answer, it's there, check that it's right
+
+        if 'status' in qt:
+            res['result'] = False
+            res['message'] = "%s got status %s (TEST)" % (n, qt['status'])
+            return res
+
+        # got valid answers for both, check them
+        if qp['answer']['data'] == val or qp['answer']['data'] == newval:
+            # data matches, looks good
+            res['result'] = True
+            res['message'] = "change %s value to '%s' (PROD)" % (n, qp['answer']['data'])
+            # check for bad reverse DNS
+            rev = self.DNS.lookup_reverse(qp['answer']['data'], self.config.server_prod)
+            if 'answer' in rev:
+                if rev['answer']['data'] == newval or rev['answer']['data'] == val:
+                    res['secondary'].append("reverse DNS is set correctly for %s (PROD)" % qp['answer']['data'])
+                else:
+                    res['warnings'].append("%s appears to still have reverse DNS set to %s (PROD)" % (n, rev['answer']['data']))
+            else:
+                res['warnings'].append("no reverse DNS appears to be set for %s (PROD)" % qp['answer']['data'])
+        else:
+	  res['result'] = False
+	  res['message'] = "change %s to %s failed, resolved to %s (PROD)" % (n, val, qp['answer']['data'])
         return res
