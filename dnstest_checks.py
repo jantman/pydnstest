@@ -304,3 +304,22 @@ class DNStestChecks:
 	  res['result'] = False
 	  res['message'] = "change %s to %s failed, resolved to %s (PROD)" % (n, val, qp['answer']['data'])
         return res
+
+    def verify_renamed_name(self, n, newn):
+        """
+        Verify a renamed (same value, different record name) named against the PROD server.
+
+        @param n original name
+        @param newn new name
+        """
+        # unimplemented
+        return False
+
+    def verify_removed_name(self, n):
+        """
+        Verify a removed DNS name against the PROD server.
+
+        @param n name that was removed
+        """
+        # unimplemented
+        return False
