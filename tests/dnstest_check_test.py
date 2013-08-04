@@ -56,6 +56,7 @@ known_dns['test_server_stub']['addedwithrev.example.com'] = ['1.2.3.16', 'A']
 known_dns['test_server_stub']['addedbadprodrev.example.com'] = ['1.2.3.17', 'A']
 known_dns['test_server_stub']['addedprodrevservfail.example.com'] = ['1.9.9.9', 'A']
 
+
 class TestDNSChecks:
     """
     Test DNS checks, using stubbed name resolution methods that return static values.
@@ -113,6 +114,10 @@ class TestDNSChecks:
         else:
             return {'status': 'NXDOMAIN'}
 
+    ###########################################
+    # Done with setup, start the actual tests #
+    ###########################################
+
     @pytest.mark.parametrize(("hostname", "value", "result"), [
         ("newhostname", "1.2.3.1", {'message': 'newhostname => 1.2.3.1 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for newhostname (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.1 (TEST)']}),
         ("existinghostname", "1.2.3.2", {'message': 'new name existinghostname returned valid result from prod server (PROD)', 'result': False, 'secondary': [], 'warnings': []}),
@@ -142,13 +147,13 @@ class TestDNSChecks:
     ])
     def test_dns_verify_add(self, setup_checks, hostname, value, result):
         """
-        Test checks for adding a record to DNS
+        Test checks for verifying an added record
         """
         foo = setup_checks.verify_added_name(hostname, value)
         assert foo == result
 
     @pytest.mark.parametrize(("hostname", "result"), [
-        ("badhostname", {'message': "badhostname got status NXDOMAIN from PROD - cannot remove a name that doesn't exist (PROD)", 'secondary': [], 'result': False, 'warnings': []} ),
+        ("badhostname", {'message': "badhostname got status NXDOMAIN from PROD - cannot remove a name that doesn't exist (PROD)", 'secondary': [], 'result': False, 'warnings': []}),
         ("prodonlyhostname", {'message': 'prodonlyhostname removed, got status NXDOMAIN (TEST)', 'result': True, 'secondary': ['PROD value was 1.2.3.5 (PROD)'], 'warnings': []}),
         ("addedhostname", {'message': 'addedhostname returned valid answer, not removed (TEST)', 'result': False, 'secondary': [], 'warnings': []}),
         ("prodonlywithrev", {'message': 'prodonlywithrev removed, got status NXDOMAIN (TEST)', 'result': True, 'secondary': ['PROD value was 1.2.3.6 (PROD)'], 'warnings': []}),
@@ -160,4 +165,56 @@ class TestDNSChecks:
         Test checks for removing a record from DNS
         """
         foo = setup_checks.check_removed_name(hostname)
+        assert foo == result
+
+    @pytest.mark.parametrize(("hostname", "result"), [
+        ("notahostname", {}),  # success - in neither test nor prod
+        ("existinghostname", {}),  # failure - in prod but not test
+        ("newhostname", {}),  # failure - in test but not prod
+    ])
+    def test_dns_verify_remove(self, setup_checks, hostname, result):
+        """
+        Test checks for verifying a removed record
+        """
+        foo = setup_checks.verify_removed_name(hostname)
+        assert foo == result
+
+    @pytest.mark.parametrize(("hostname", "newval", "result"), [
+        ("addedname2", "1.2.3.12", {}),
+    ])
+    def test_dns_change(self, setup_checks, hostname, newval, result):
+        """
+        Test checks for changing a record in DNS (same name, new value)
+        """
+        foo = setup_checks.check_changed_name(hostname, newval)
+        assert foo == result
+
+    @pytest.mark.parametrize(("hostname", "newval", "result"), [
+        ("addedhostname", "1.2.3.3", {}),
+    ])
+    def test_dns_verify_change(self, setup_checks, hostname, newval, result):
+        """
+        Test checks for verifying a changed record in DNS (same name, new value)
+        """
+        foo = setup_checks.verify_changed_name(hostname, newval)
+        assert foo == result
+
+    @pytest.mark.parametrize(("oldname", "newname", "result"), [
+        ("addedname2", "1.2.3.12", {}),
+    ])
+    def test_dns_rename(self, setup_checks, oldname, newname, result):
+        """
+        Test checks for renaming a record in DNS (new name, same value)
+        """
+        foo = setup_checks.check_renamed_name(oldname, newname)
+        assert foo == result
+
+    @pytest.mark.parametrize(("oldname", "newname", "result"), [
+        ("addedname2", "1.2.3.12", {}),
+    ])
+    def test_dns_verify_rename(self, setup_checks, oldname, newname, result):
+        """
+        Test checks for verifying a renamed record in DNS (new name, same value)
+        """
+        foo = setup_checks.verify_renamed_name(oldname, newname)
         assert foo == result
