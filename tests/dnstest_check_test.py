@@ -16,6 +16,9 @@ known_rev_dns['prod_server_stub']['1.2.3.7'] = 'prodwithtestrev.example.com'
 known_rev_dns['prod_server_stub']['1.2.3.15'] = 'addedname3.example.com'
 known_rev_dns['prod_server_stub']['1.2.3.16'] = 'addedwithrev.example.com'
 known_rev_dns['prod_server_stub']['1.2.3.17'] = 'groijg.example.com'
+known_rev_dns['prod_server_stub']['1.2.3.25'] = 'renametest5.example.com'
+known_rev_dns['prod_server_stub']['1.2.3.26'] = 'renametest6.example.com'
+known_rev_dns['prod_server_stub']['1.9.9.9'] = 'SERVFAIL'
 
 known_rev_dns['test_server_stub']['10.188.12.10'] = 'foo.example.com'
 known_rev_dns['test_server_stub']['1.2.3.7'] = 'prodwithtestrev.example.com'
@@ -27,6 +30,8 @@ known_rev_dns['test_server_stub']['1.2.3.17'] = 'addedbadprodrev.example.com'
 known_rev_dns['test_server_stub']['1.9.9.9'] = 'prodrevservfail.example.com'
 known_rev_dns['test_server_stub']['1.2.3.21'] = 'renametest2.example.com'
 known_rev_dns['test_server_stub']['1.2.3.22'] = 'renametest3b.example.com'
+known_rev_dns['test_server_stub']['1.2.3.25'] = 'renametest5.example.com'
+known_rev_dns['test_server_stub']['1.2.3.26'] = 'renametest6b.example.com'
 
 # dict of known (mocked) forward DNS values for test and prod servers
 # each known_dns[server][name] is [value, record_type]
@@ -48,6 +53,12 @@ known_dns['prod_server_stub']['renametest1.example.com'] = ['1.2.3.20', 'A']
 known_dns['prod_server_stub']['renametest2.example.com'] = ['1.2.3.21', 'A']
 known_dns['prod_server_stub']['renametest3.example.com'] = ['1.2.3.22', 'A']
 known_dns['prod_server_stub']['renametest4.example.com'] = ['1.2.3.23', 'A']
+known_dns['prod_server_stub']['renametest5.example.com'] = ['1.2.3.25', 'A']
+known_dns['prod_server_stub']['renametest6b.example.com'] = ['1.2.3.26', 'A']
+known_dns['prod_server_stub']['servfail-prod'] = ['STATUS', 'SERVFAIL']
+known_dns['prod_server_stub']['servfail-prod.example.com'] = ['STATUS', 'SERVFAIL']
+known_dns['prod_server_stub']['servall-test'] = ['STATUS', 'SERVFAIL']
+known_dns['prod_server_stub']['servfail-all.example.com'] = ['STATUS', 'SERVFAIL']
 
 known_dns['test_server_stub']['newhostname.example.com'] = ['1.2.3.1', 'A']
 known_dns['test_server_stub']['addedhostname.example.com'] = ['1.2.3.3', 'A']
@@ -66,7 +77,14 @@ known_dns['test_server_stub']['renametest1b.example.com'] = ['1.2.3.20', 'A']
 known_dns['test_server_stub']['renametest2b.example.com'] = ['1.2.3.21', 'A']
 known_dns['test_server_stub']['renametest3b.example.com'] = ['1.2.3.22', 'A']
 known_dns['test_server_stub']['renametest4b.example.com'] = ['1.2.3.23', 'A']
-
+known_dns['test_server_stub']['renametest5b.example.com'] = ['1.2.3.25', 'A']
+known_dns['test_server_stub']['renametest6b.example.com'] = ['1.2.3.26', 'A']
+known_dns['test_server_stub']['servfail-test'] = ['STATUS', 'SERVFAIL']
+known_dns['test_server_stub']['servfail-test.example.com'] = ['STATUS', 'SERVFAIL']
+known_dns['test_server_stub']['servfail-test2'] = ['STATUS', 'SERVFAIL']
+known_dns['test_server_stub']['servfail-test2.example.com'] = ['STATUS', 'SERVFAIL']
+known_dns['test_server_stub']['servall-test'] = ['STATUS', 'SERVFAIL']
+known_dns['test_server_stub']['servfail-all.example.com'] = ['STATUS', 'SERVFAIL']
 
 class TestDNSChecks:
     """
@@ -99,14 +117,10 @@ class TestDNSChecks:
         but either returns one of a hard-coded group of dicts, or an error.
         """
 
-        if query in known_dns[to_server]:
+        if query in known_dns[to_server] and known_dns[to_server][query][0] == "STATUS":
+            return {'status': known_dns[to_server][query][1]}
+        elif query in known_dns[to_server]:
             return {'answer': {'name': query, 'data': known_dns[to_server][query][0], 'typename': known_dns[to_server][query][1], 'classstr': 'IN', 'ttl': 360, 'type': 5, 'class': 1, 'rdlength': 14}}
-        elif (query == "servfail-prod" or query == "servfail-prod.example.com") and to_server == 'prod_server_stub':
-            return {'status': 'SERVFAIL'}
-        elif (query == "servfail-test" or query == "servfail-test.example.com" or query == "servfail-test2" or query == "servfail-test2.example.com") and to_server == 'test_server_stub':
-            return {'status': 'SERVFAIL'}
-        elif (query == "servall-test" or query == "servfail-all.example.com"):
-            return {'status': 'SERVFAIL'}
         else:
             return {'status': 'NXDOMAIN'}
 
@@ -118,10 +132,10 @@ class TestDNSChecks:
         but either returns one of a hard-coded group of dicts, or an error.
         """
 
-        if name in known_rev_dns[to_server]:
-            return {'answer': {'name': name, 'data': known_rev_dns[to_server][name], 'typename': 'PTR', 'classstr': 'IN', 'ttl': 360, 'type': 12, 'class': 1, 'rdlength': 33}}
-        elif name in '1.9.9.9' and to_server == 'prod_server_stub':
+        if name in known_rev_dns[to_server] and known_rev_dns[to_server][name] == "SERVFAIL":
             return {'status': 'SERVFAIL'}
+        elif name in known_rev_dns[to_server]:
+            return {'answer': {'name': name, 'data': known_rev_dns[to_server][name], 'typename': 'PTR', 'classstr': 'IN', 'ttl': 360, 'type': 12, 'class': 1, 'rdlength': 33}}
         else:
             return {'status': 'NXDOMAIN'}
 
@@ -216,6 +230,7 @@ class TestDNSChecks:
         ("renametest3", "renametest3b", "1.2.3.22", {'message': 'rename renametest3 => renametest3b (TEST)', 'result': True, 'secondary': ['reverse DNS is set correctly for 1.2.3.22 (TEST)'], 'warnings': []}),
         # this next one should fail, it's actually an addition and a deletion, but values differ
         ("renametest4", "renametest4b", "1.2.3.24", {'message': 'renametest4 => renametest4b rename is bad, resolves to 1.2.3.23 in TEST (expected value was 1.2.3.24) (TEST)', 'result': False, 'secondary': [], 'warnings': []}),
+        ("renametest5", "renametest5b", "1.2.3.25", {'message': 'rename renametest5 => renametest5b (TEST)', 'result': True, 'secondary': [], 'warnings': ['renametest5 appears to still have reverse DNS set to renametest5.example.com (TEST)']}),
     ])
     def test_dns_rename(self, setup_checks, oldname, newname, value, result):
         """
@@ -226,6 +241,7 @@ class TestDNSChecks:
 
     @pytest.mark.parametrize(("oldname", "newname", "value", "result"), [
         ("addedname2", "renamedname", "1.2.3.12", {'message': 'addedname2 got answer from PROD (1.2.3.13), old name is still active (PROD)', 'result': False, 'secondary': [], 'warnings': []}),
+        ("renametest5", "renametest5b", "1.2.3.25", {'message': 'renametest5b got status NXDOMAIN (PROD)', 'result': False, 'secondary': [], 'warnings': []}),
     ])
     def test_dns_verify_rename(self, setup_checks, oldname, newname, value, result):
         """

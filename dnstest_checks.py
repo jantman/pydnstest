@@ -184,7 +184,7 @@ class DNStestChecks:
         qp_old = self.DNS.resolve_name(name, self.config.server_prod)
         if 'status' in qp:
             res['result'] = False
-            res['message'] = "%s got status %s (PROD)" % (n, qp['status'])
+            res['message'] = "%s got status %s (PROD)" % (newn, qp['status'])
             return res
         if 'answer' in qp_old:
             res['result'] = False
@@ -207,7 +207,7 @@ class DNStestChecks:
                     if rev['answer']['data'] == newn or rev['answer']['data'] == newname:
                         res['secondary'].append("reverse DNS is set correctly for %s (TEST)" % qt['answer']['data'])
                     else:
-                        res['warnings'].append("%s appears to still have reverse DNS set to %s (TEST)" % (n, rev['answer']['data']))
+                        res['warnings'].append("%s appears to still have reverse DNS set to %s (TEST)" % (newn, rev['answer']['data']))
                 else:
                     res['warnings'].append("no reverse DNS appears to be set for %s (TEST)" % qt['answer']['data'])
         return res
