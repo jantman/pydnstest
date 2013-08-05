@@ -22,7 +22,7 @@ Usage
 pydnstest takes one or more specifications for DNS changes to be made, in a natural-language-like grammar, and tests a staging DNS server (and optionally verifies against a PROD server once the changes are live). For each specification, it prints out a simple one-line OK/NG summary, and optionally some helpful secondary messages and/or warnings. At the moment, it takes input either on STDIN or read from a file, but will soon also support interactive testing.
 
 Grammar:
-* add [record|name|entry] <hostname_or_fqdn> [with ][value|address|target] <hostname_fqdn_or_ip>
+* add [record|name|entry] \<hostname_or_fqdn\> [with ][value|address|target] <hostname_fqdn_or_ip>
 * remove [record|name|entry] <hostname_or_fqdn>'
 * rename [record|name|entry] <hostname_or_fqdn> to <hostname_or_fqdn>
 * change [record|name|entry] <hostname_or_fqdn> to <hostname_fqdn_or_ip>
