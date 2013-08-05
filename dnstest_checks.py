@@ -112,11 +112,14 @@ class DNStestChecks:
         res = {'result': None, 'message': None, 'secondary': [], 'warnings': []}
         name = n
         newname = newn
+        newval = value
         # make sure we have a FQDN
         if name.find('.') == -1:
             name = name + self.config.default_domain
         if newname.find('.') == -1:
             newname = newname + self.config.default_domain
+        if newval.find('.') == -1:
+            newval = newval + self.config.default_domain
 
         # resolve with both test and prod
         qt = self.DNS.resolve_name(newname, self.config.server_test)
@@ -136,6 +139,9 @@ class DNStestChecks:
         if qt['answer']['data'] != qp['answer']['data']:
             res['result'] = False
             res['message'] = "%s => %s rename is bad, resolves to %s in TEST and %s in PROD" % (n, newn, qt['answer']['data'], qp['answer']['data'])
+        elif qt['answer']['data'] != value and qt['answer']['data'] != newval:
+            res['result'] = False
+            res['message'] = "%s => %s rename is bad, resolves to %s in TEST (expected value was %s) (TEST)" % (n, newn, qt['answer']['data'], value)
         else:
             # data matches, looks good
             res['result'] = True
@@ -160,8 +166,51 @@ class DNStestChecks:
         @param newn new name
         @param value the record value (should be unchanged)
         """
-        # unimplemented
-        return False
+        res = {'result': None, 'message': None, 'secondary': [], 'warnings': []}
+        name = n
+        newname = newn
+        newval = value
+        # make sure we have a FQDN
+        if name.find('.') == -1:
+            name = name + self.config.default_domain
+        if newname.find('.') == -1:
+            newname = newname + self.config.default_domain
+        if newval.find('.') == -1:
+            newval = newval + self.config.default_domain
+
+        # resolve with both test and prod
+        qt = self.DNS.resolve_name(newname, self.config.server_test)
+        qp = self.DNS.resolve_name(newname, self.config.server_prod)
+        qp_old = self.DNS.resolve_name(name, self.config.server_prod)
+        if 'status' in qp:
+            res['result'] = False
+            res['message'] = "%s got status %s (PROD)" % (n, qp['status'])
+            return res
+        if 'answer' in qp_old:
+            res['result'] = False
+            res['message'] = "%s got answer from PROD (%s), old name is still active (PROD)" % (n, qp_old['answer']['data'])
+            return res
+        # else we got an answer, it's there, check that it's right
+
+        # got valid answers for both, check them
+        if qp['answer']['data'] != value and qp['answer']['data'] != newval:
+            res['result'] = False
+            res['message'] = "%s => %s rename is bad, resolves to %s in PROD (expected value was %s) (PROD)" % (n, newn, qt['answer']['data'], value)
+        else:
+            # value matches, old name is gone, looks good
+            res['result'] = True
+            res['message'] = "rename %s => %s (PROD)" % (n, newn)
+            # check for any leftover reverse lookups
+            if qp['answer']['typename'] == 'A':
+                rev = self.DNS.lookup_reverse(qp['answer']['data'], self.config.server_prod)
+                if 'answer' in rev:
+                    if rev['answer']['data'] == newn or rev['answer']['data'] == newname:
+                        res['secondary'].append("reverse DNS is set correctly for %s (TEST)" % qt['answer']['data'])
+                    else:
+                        res['warnings'].append("%s appears to still have reverse DNS set to %s (TEST)" % (n, rev['answer']['data']))
+                else:
+                    res['warnings'].append("no reverse DNS appears to be set for %s (TEST)" % qt['answer']['data'])
+        return res
 
     def check_added_name(self, n, value):
         """
