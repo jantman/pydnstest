@@ -27,6 +27,35 @@ Grammar:
 * rename [record|name|entry] \<hostname_or_fqdn\> [with] [value|address|target] \<value\> to \<hostname_or_fqdn\>
 * change [record|name|entry] \<hostname_or_fqdn\> to \<hostname_fqdn_or_ip\>
 
+Sample input file:
+```
+jantman@jarvis$ cat dnstests.txt 
+add foo.example.com with address 1.2.3.4
+remove bar.example.com
+rename baz.example.com with value 1.2.3.5 to blam.example.com
+change quux.example.com to 1.2.3.6
+```
+
+Usage with input file:
+```
+jantman@jarvis$ ./dnstest.py -f dnstests.txt
+```
+
+Verify once in prod:
+```
+jantman@jarvis$ ./dnstest.py -V -f dnstests.txt
+```
+
+Read from stdin:
+```
+jantman@jarvis$ cat dnstests.txt | ./dnstest.py
+```
+
+Run one quick test:
+```
+jantman@jarvis$ echo "add host.example.com with address 192.168.0.1" | ./dnstest.py
+```
+
 Testing
 -------
 Testing is done via [pytest](http://pytest.org/latest/) and currently
