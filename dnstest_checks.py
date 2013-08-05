@@ -23,14 +23,16 @@ class DNStestChecks:
 
     def __init__(self, config):
         """
-        init
+        init method for DNStestChecks - class for all DNS check and verify methods
         """
         self.config = config
         self.DNS = DNStestDNS()
 
     def check_removed_name(self, n):
         """
-        Run tests for removed names
+        Test a removed name
+
+        @param n name that should be removed
         """
         res = {'result': None, 'message': None, 'secondary': [], 'warnings': []}
         name = n
@@ -65,7 +67,7 @@ class DNStestChecks:
 
     def verify_removed_name(self, n):
         """
-        Verify a removed DNS name against the PROD server.
+        Verify a removed name against the PROD server.
 
         @param n name that was removed
         """
@@ -74,7 +76,10 @@ class DNStestChecks:
 
     def check_renamed_name(self, n, newn):
         """
-        Run tests for renamed names (same value, record name changes)
+        Test a renamed name (same value, record name changes)
+
+        @param n old name
+        @param newn new name
         """
         res = {'result': None, 'message': None, 'secondary': [], 'warnings': []}
         name = n
@@ -121,7 +126,7 @@ class DNStestChecks:
 
     def verify_renamed_name(self, n, newn):
         """
-        Verify a renamed (same value, different record name) named against the PROD server.
+        Verify a renamed name (same value, record name changes) against the PROD server.
 
         @param n original name
         @param newn new name
@@ -131,7 +136,10 @@ class DNStestChecks:
 
     def check_added_name(self, n, value):
         """
-        Run tests for added names
+        Tests an added name (new record)
+
+        @param n name
+        @param value record value
         """
         res = {'result': None, 'message': None, 'secondary': [], 'warnings': []}
         name = n
@@ -183,7 +191,10 @@ class DNStestChecks:
 
     def verify_added_name(self, n, value):
         """
-        Verify an added name against the prod server
+        Verify an added name (new record) against the PROD server
+
+        @param n name
+        @param value record value
         """
         res = {'result': None, 'message': None, 'secondary': [], 'warnings': []}
         name = n
@@ -222,7 +233,7 @@ class DNStestChecks:
 
     def check_changed_name(self, n, val):
         """
-        Run tests for changed names (same record name, value changes)
+        Test a changed name (same record name, new/different value)
 
         @param n name to change
         @param val new value
@@ -275,7 +286,7 @@ class DNStestChecks:
 
     def verify_changed_name(self, n, val):
         """
-        Run tests to verify changed names (same record name, value changes)
+        Verify a changed name (same record name, new/different value) against the PROD server
 
         @TODO - how to verify that the old reverse DNS is removed?
 
