@@ -85,6 +85,7 @@ known_dns['test_server_stub']['servfail-test2'] = ['STATUS', 'SERVFAIL']
 known_dns['test_server_stub']['servfail-test2.example.com'] = ['STATUS', 'SERVFAIL']
 known_dns['test_server_stub']['servall-test'] = ['STATUS', 'SERVFAIL']
 known_dns['test_server_stub']['servfail-all.example.com'] = ['STATUS', 'SERVFAIL']
+known_dns['test_server_stub']['removetest1.example.com'] = ['1.2.3.27', 'A']
 
 class TestDNSChecks:
     """
@@ -195,7 +196,9 @@ class TestDNSChecks:
     @pytest.mark.parametrize(("hostname", "result"), [
         ("notahostname", {'message': 'notahostname removed, got status NXDOMAIN (PROD)', 'result': True, 'secondary': [], 'warnings': []}),
         ("existinghostname", {'message': "existinghostname returned valid answer of '1.2.3.2', not removed (PROD)", 'result': False, 'secondary': [], 'warnings': []}),
-        ("newhostname", {'message': 'newhostname removed, got status NXDOMAIN (PROD)', 'result': True, 'secondary': [], 'warnings': []}),
+        ("newhostname", {'message': 'newhostname removed, got status NXDOMAIN (PROD)', 'result': True, 'secondary': ['newhostname returned answer 1.2.3.1 (TEST)'], 'warnings': []}),
+        ("servfail-prod", {'message': "servfail-prod returned a 'strange' status of SERVFAIL (PROD)", 'result': False, 'secondary': [], 'warnings': []}),
+        ("removetest1", {'message': 'removetest1 removed, got status NXDOMAIN (PROD)', 'result': True, 'secondary': ['removetest1 returned answer 1.2.3.27 (TEST)'], 'warnings': []}),
     ])
     def test_dns_verify_remove(self, setup_checks, hostname, result):
         """
