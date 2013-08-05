@@ -50,9 +50,9 @@ class TestDNS:
         Test that a should-be-correct CNAME is resolved correctly (server can't return an A answer).
         """
 
-        query = "github.jasonantman.com"
+        query = "pydnstest1.jasonantman.com"
         server = "ns1.linode.com"
-        result = {'answer': {'class': 1, 'classstr': 'IN', 'data': 'github.com', 'name': 'github.jasonantman.com', 'rdlength': 9, 'ttl': 86400, 'type': 5, 'typename': 'CNAME'}}
+        result = {'answer': {'class': 1, 'classstr': 'IN', 'data': 'github.com', 'name': 'pydnstest1.jasonantman.com', 'rdlength': 9, 'ttl': 86400, 'type': 5, 'typename': 'CNAME'}}
 
         foo = test_DNS.resolve_name(query, server)
         assert foo == result
