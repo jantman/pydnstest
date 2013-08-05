@@ -409,6 +409,6 @@ class DNStestChecks:
             else:
                 res['warnings'].append("no reverse DNS appears to be set for %s (PROD)" % qp['answer']['data'])
         else:
-          res['result'] = False
-          res['message'] = "change %s to %s failed, resolved to %s (PROD)" % (n, val, qp['answer']['data'])
+            res['result'] = False
+            res['message'] = "change %s to %s failed, resolved to %s (PROD)" % (n, val, qp['answer']['data'])
         return res

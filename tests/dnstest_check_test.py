@@ -67,6 +67,7 @@ known_dns['test_server_stub']['renametest2b.example.com'] = ['1.2.3.21', 'A']
 known_dns['test_server_stub']['renametest3b.example.com'] = ['1.2.3.22', 'A']
 known_dns['test_server_stub']['renametest4b.example.com'] = ['1.2.3.23', 'A']
 
+
 class TestDNSChecks:
     """
     Test DNS checks, using stubbed name resolution methods that return static values.
