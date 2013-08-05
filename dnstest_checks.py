@@ -71,8 +71,32 @@ class DNStestChecks:
 
         @param n name that was removed
         """
-        # unimplemented
-        return False
+        res = {'result': None, 'message': None, 'secondary': [], 'warnings': []}
+        name = n
+        # make sure we have a FQDN
+        if name.find('.') == -1:
+            name = name + self.config.default_domain
+
+        # resolve with both test and prod
+        qt = self.DNS.resolve_name(name, self.config.server_test)
+        qp = self.DNS.resolve_name(name, self.config.server_prod)
+
+        if 'status' in qp and qp['status'] == "NXDOMAIN":
+            res['result'] = True
+            res['message'] = "%s removed, got status NXDOMAIN (PROD)" % (n)
+            # check for any leftover reverse lookups
+            rev = self.DNS.lookup_reverse(n, self.config.server_prod)
+            if 'answer' in rev:
+                res['warnings'].append("%s appears to still have reverse DNS set to %s (PROD)" % (n, rev['answer']['data']))
+            rev = self.DNS.lookup_reverse(name, self.config.server_prod)
+            if 'answer' in rev:
+                res['warnings'].append("%s appears to still have reverse DNS set to %s (PROD)" % (name, rev['answer']['data']))
+        elif 'answer' in qt:
+            res['secondary'] = ["%s returned answer %s (TEST)" % (n, qt['answer']['data'])]
+        else:
+            res['result'] = False
+            res['message'] = "%s returned valid answer of '%s', not removed (PROD)" % (n, qp['answer']['data'])
+        return res
 
     def check_renamed_name(self, n, newn):
         """
