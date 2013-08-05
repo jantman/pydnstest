@@ -16,7 +16,7 @@ class TestLanguageParsing:
     Grammars supported:
     'add (record|name|entry)? <hostname_or_fqdn> (with ?)(value|address|target)? <hostname_fqdn_or_ip>'
     'remove (record|name|entry)? <hostname_or_fqdn>'
-    'rename (record|name|entry)? <hostname_or_fqdn> to <hostname_or_fqdn>'
+    'rename (record|name|entry)? <hostname_or_fqdn> (with ?)(value ?) <value> to <hostname_or_fqdn>'
     'change (record|name|entry)? <hostname_or_fqdn> to <hostname_fqdn_or_ip>'
     """
 
@@ -37,12 +37,12 @@ class TestLanguageParsing:
         ("remove name foo.example.com", {'operation': 'remove', 'hostname': 'foo.example.com'}),
         ("remove entry foo.example.com", {'operation': 'remove', 'hostname': 'foo.example.com'}),
         ("remove entry foo.bar.baz.example.com", {'operation': 'remove', 'hostname': 'foo.bar.baz.example.com'}),
-        ("rename fooHostOne to fooHostTwo", {'operation': 'rename', 'hostname': 'fooHostOne', 'value': 'fooHostTwo'}),
-        ("rename entry foobar to baz", {'operation': 'rename', 'hostname': 'foobar', 'value': 'baz'}),
-        ("rename record foobar.example.com to blam", {'operation': 'rename', 'hostname': 'foobar.example.com', 'value': 'blam'}),
-        ("rename name foobar to baz.example.com", {'operation': 'rename', 'hostname': 'foobar', 'value': 'baz.example.com'}),
-        ("rename foobar.example.com to baz.blam.hosts.example.com", {'operation': 'rename', 'hostname': 'foobar.example.com', 'value': 'baz.blam.hosts.example.com'}),
-        ("rename foobar.hosts.example.com to blam", {'operation': 'rename', 'hostname': 'foobar.hosts.example.com', 'value': 'blam'}),
+        ("rename fooHostOne with target targ to fooHostTwo", {'operation': 'rename', 'hostname': 'fooHostOne', 'newname': 'fooHostTwo', 'value': 'targ'}),
+        ("rename entry foobar foo.bar.net to baz", {'operation': 'rename', 'hostname': 'foobar', 'newname': 'baz', 'value': 'foo.bar.net'}),
+        ("rename record foobar.example.com with address 1.2.3.4 to blam", {'operation': 'rename', 'hostname': 'foobar.example.com', 'newname': 'blam', 'value': '1.2.3.4'}),
+        ("rename name foobar 1.2.3.5 to baz.example.com", {'operation': 'rename', 'hostname': 'foobar', 'newname': 'baz.example.com', 'value': '1.2.3.5'}),
+        ("rename foobar.example.com value 1.2.3.4 to baz.blam.hosts.example.com", {'operation': 'rename', 'hostname': 'foobar.example.com', 'newname': 'baz.blam.hosts.example.com', 'value': '1.2.3.4'}),
+        ("rename foobar.hosts.example.com with value baz to blam", {'operation': 'rename', 'hostname': 'foobar.hosts.example.com', 'newname': 'blam', 'value': 'baz'}),
         ("change fooHostOne to fooHostTwo", {'operation': 'change', 'hostname': 'fooHostOne', 'value': 'fooHostTwo'}),
         ("change foobar to 10.104.92.243", {'operation': 'change', 'hostname': 'foobar', 'value': '10.104.92.243'}),
         ("change entry foobar to baz", {'operation': 'change', 'hostname': 'foobar', 'value': 'baz'}),

@@ -101,12 +101,13 @@ class DNStestChecks:
             res['message'] = "%s returned valid answer of '%s', not removed (PROD)" % (n, qp['answer']['data'])
         return res
 
-    def check_renamed_name(self, n, newn):
+    def check_renamed_name(self, n, newn, value):
         """
         Test a renamed name (same value, record name changes)
 
         @param n old name
         @param newn new name
+        @param value the record value (should be unchanged)
         """
         res = {'result': None, 'message': None, 'secondary': [], 'warnings': []}
         name = n
@@ -151,12 +152,13 @@ class DNStestChecks:
                     res['warnings'].append("no reverse DNS appears to be set for %s (TEST)" % qt['answer']['data'])
         return res
 
-    def verify_renamed_name(self, n, newn):
+    def verify_renamed_name(self, n, newn, value):
         """
         Verify a renamed name (same value, record name changes) against the PROD server.
 
         @param n original name
         @param newn new name
+        @param value the record value (should be unchanged)
         """
         # unimplemented
         return False

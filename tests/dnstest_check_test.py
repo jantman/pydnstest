@@ -38,6 +38,7 @@ known_dns['prod_server_stub']['prodonlywithrev.example.com'] = ['1.2.3.6', 'A']
 known_dns['prod_server_stub']['prodwithtestrev.example.com'] = ['1.2.3.7', 'A']
 known_dns['prod_server_stub']['servfail-test.example.com'] = ['1.2.3.8', 'A']
 known_dns['prod_server_stub']['addedcname.example.com'] = ['barbaz', 'CNAME']
+known_dns['prod_server_stub']['renamedname.example.com'] = ['1.2.3.12', 'A']
 known_dns['prod_server_stub']['addedname2.example.com'] = ['1.2.3.13', 'A']
 known_dns['prod_server_stub']['addedname3.example.com'] = ['1.2.3.14', 'A']
 known_dns['prod_server_stub']['addedwithrev.example.com'] = ['1.2.3.16', 'A']
@@ -207,24 +208,24 @@ class TestDNSChecks:
         foo = setup_checks.verify_changed_name(hostname, newval)
         assert foo == result
 
-    @pytest.mark.parametrize(("oldname", "newname", "result"), [
-        ("renametest1", "renametest1b", {'message': 'rename renametest1 => renametest1b (TEST)', 'result': True, 'secondary': [], 'warnings': ['no reverse DNS appears to be set for 1.2.3.20 (TEST)']}),
-        ("renametest2", "renametest2b", {'message': 'rename renametest2 => renametest2b (TEST)', 'result': True, 'secondary': [], 'warnings': ['renametest2 appears to still have reverse DNS set to renametest2.example.com (TEST)']}),
-        ("renametest3", "renametest3b", {'message': 'rename renametest3 => renametest3b (TEST)', 'result': True, 'secondary': ['reverse DNS is set correctly for 1.2.3.22 (TEST)'], 'warnings': []}),
+    @pytest.mark.parametrize(("oldname", "newname", "value", "result"), [
+        ("renametest1", "renametest1b", "1.2.3.20", {'message': 'rename renametest1 => renametest1b (TEST)', 'result': True, 'secondary': [], 'warnings': ['no reverse DNS appears to be set for 1.2.3.20 (TEST)']}),
+        ("renametest2", "renametest2b", "1.2.3.21", {'message': 'rename renametest2 => renametest2b (TEST)', 'result': True, 'secondary': [], 'warnings': ['renametest2 appears to still have reverse DNS set to renametest2.example.com (TEST)']}),
+        ("renametest3", "renametest3b", "1.2.3.22", {'message': 'rename renametest3 => renametest3b (TEST)', 'result': True, 'secondary': ['reverse DNS is set correctly for 1.2.3.22 (TEST)'], 'warnings': []}),
     ])
-    def test_dns_rename(self, setup_checks, oldname, newname, result):
+    def test_dns_rename(self, setup_checks, oldname, newname, value, result):
         """
         Test checks for renaming a record in DNS (new name, same value)
         """
-        foo = setup_checks.check_renamed_name(oldname, newname)
+        foo = setup_checks.check_renamed_name(oldname, newname, value)
         assert foo == result
 
-    @pytest.mark.parametrize(("oldname", "newname", "result"), [
-        ("addedname2", "1.2.3.12", {}),
+    @pytest.mark.parametrize(("oldname", "newname", "value", "result"), [
+        ("addedname2", "renamedname", "1.2.3.12", {}),
     ])
-    def test_dns_verify_rename(self, setup_checks, oldname, newname, result):
+    def test_dns_verify_rename(self, setup_checks, oldname, newname, value, result):
         """
         Test checks for verifying a renamed record in DNS (new name, same value)
         """
-        foo = setup_checks.verify_renamed_name(oldname, newname)
+        foo = setup_checks.verify_renamed_name(oldname, newname, value)
         assert foo == result

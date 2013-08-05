@@ -24,7 +24,7 @@ pydnstest takes one or more specifications for DNS changes to be made, in a natu
 Grammar:
 * add [record|name|entry] \<hostname_or_fqdn\> [with ][value|address|target] \<hostname_fqdn_or_ip\>
 * remove [record|name|entry] \<hostname_or_fqdn\>'
-* rename [record|name|entry] \<hostname_or_fqdn\> to \<hostname_or_fqdn\>
+* rename [record|name|entry] \<hostname_or_fqdn\> [with] [value|address|target] \<value\> to \<hostname_or_fqdn\>
 * change [record|name|entry] \<hostname_or_fqdn\> to \<hostname_fqdn_or_ip\>
 
 Testing
