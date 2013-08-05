@@ -25,6 +25,8 @@ known_rev_dns['test_server_stub']['1.2.3.15'] = 'addedname3.example.com'
 known_rev_dns['test_server_stub']['1.2.3.16'] = 'addedwithrev.example.com'
 known_rev_dns['test_server_stub']['1.2.3.17'] = 'addedbadprodrev.example.com'
 known_rev_dns['test_server_stub']['1.9.9.9'] = 'prodrevservfail.example.com'
+known_rev_dns['test_server_stub']['1.2.3.21'] = 'renametest2.example.com'
+known_rev_dns['test_server_stub']['1.2.3.22'] = 'renametest3b.example.com'
 
 # dict of known (mocked) forward DNS values for test and prod servers
 # each known_dns[server][name] is [value, record_type]
@@ -41,6 +43,9 @@ known_dns['prod_server_stub']['addedname3.example.com'] = ['1.2.3.14', 'A']
 known_dns['prod_server_stub']['addedwithrev.example.com'] = ['1.2.3.16', 'A']
 known_dns['prod_server_stub']['addedbadprodrev.example.com'] = ['1.2.3.17', 'A']
 known_dns['prod_server_stub']['addedprodrevservfail.example.com'] = ['1.9.9.9', 'A']
+known_dns['prod_server_stub']['renametest1.example.com'] = ['1.2.3.20', 'A']
+known_dns['prod_server_stub']['renametest2.example.com'] = ['1.2.3.21', 'A']
+known_dns['prod_server_stub']['renametest3.example.com'] = ['1.2.3.22', 'A']
 
 known_dns['test_server_stub']['newhostname.example.com'] = ['1.2.3.1', 'A']
 known_dns['test_server_stub']['addedhostname.example.com'] = ['1.2.3.3', 'A']
@@ -55,6 +60,9 @@ known_dns['test_server_stub']['addedname3.example.com'] = ['1.2.3.15', 'A']
 known_dns['test_server_stub']['addedwithrev.example.com'] = ['1.2.3.16', 'A']
 known_dns['test_server_stub']['addedbadprodrev.example.com'] = ['1.2.3.17', 'A']
 known_dns['test_server_stub']['addedprodrevservfail.example.com'] = ['1.9.9.9', 'A']
+known_dns['test_server_stub']['renametest1b.example.com'] = ['1.2.3.20', 'A']
+known_dns['test_server_stub']['renametest2b.example.com'] = ['1.2.3.21', 'A']
+known_dns['test_server_stub']['renametest3b.example.com'] = ['1.2.3.22', 'A']
 
 
 class TestDNSChecks:
@@ -168,9 +176,9 @@ class TestDNSChecks:
         assert foo == result
 
     @pytest.mark.parametrize(("hostname", "result"), [
-        ("notahostname", {}),  # success - in neither test nor prod
-        ("existinghostname", {}),  # failure - in prod but not test
-        ("newhostname", {}),  # failure - in test but not prod
+        ("notahostname", {'message': 'notahostname removed, got status NXDOMAIN (PROD)', 'result': True, 'secondary': [], 'warnings': []}),
+        ("existinghostname", {'message': "existinghostname returned valid answer of '1.2.3.2', not removed (PROD)", 'result': False, 'secondary': [], 'warnings': []}),
+        ("newhostname", {'message': 'newhostname removed, got status NXDOMAIN (PROD)', 'result': True, 'secondary': [], 'warnings': []}),
     ])
     def test_dns_verify_remove(self, setup_checks, hostname, result):
         """
@@ -180,7 +188,7 @@ class TestDNSChecks:
         assert foo == result
 
     @pytest.mark.parametrize(("hostname", "newval", "result"), [
-        ("addedname2", "1.2.3.12", {}),
+        ("addedname2", "1.2.3.12", {'message': "change addedname2 from '1.2.3.13' to '1.2.3.12' (TEST)", 'result': True, 'secondary': [], 'warnings': ['no reverse DNS appears to be set for 1.2.3.12 (TEST)']}),
     ])
     def test_dns_change(self, setup_checks, hostname, newval, result):
         """
@@ -190,7 +198,7 @@ class TestDNSChecks:
         assert foo == result
 
     @pytest.mark.parametrize(("hostname", "newval", "result"), [
-        ("addedhostname", "1.2.3.3", {}),
+        ("addedhostname", "1.2.3.3", {'message': "change addedhostname value to '1.2.3.3' (PROD)", 'result': True, 'secondary': [], 'warnings': ['no reverse DNS appears to be set for 1.2.3.3 (PROD)']}),
     ])
     def test_dns_verify_change(self, setup_checks, hostname, newval, result):
         """
@@ -200,7 +208,9 @@ class TestDNSChecks:
         assert foo == result
 
     @pytest.mark.parametrize(("oldname", "newname", "result"), [
-        ("addedname2", "1.2.3.12", {}),
+        ("renametest1", "renametest1b", {'message': 'rename renametest1 => renametest1b (TEST)', 'result': True, 'secondary': [], 'warnings': ['no reverse DNS appears to be set for 1.2.3.20 (TEST)']}),
+        ("renametest2", "renametest2b", {'message': 'rename renametest2 => renametest2b (TEST)', 'result': True, 'secondary': [], 'warnings': ['renametest2 appears to still have reverse DNS set to renametest2.example.com (TEST)']}),
+        ("renametest3", "renametest3b", {'message': 'rename renametest3 => renametest3b (TEST)', 'result': True, 'secondary': ['reverse DNS is set correctly for 1.2.3.22 (TEST)'], 'warnings': []}),
     ])
     def test_dns_rename(self, setup_checks, oldname, newname, result):
         """
