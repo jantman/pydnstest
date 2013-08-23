@@ -6,16 +6,19 @@ Python script for testing DNS changes (add, remove, change records) against a st
 Requirements
 ------------
 * Python2
-* pydns from <http://pydns.sourceforge.net/>
+* Python [VirtualEnv](http://www.virtualenv.org/) (your OS/distribution should have packages for these)
 
 Installation
 ------------
-It's recommended that you install into a virtual environment.
+It's recommended that you clone the git repository and install into a virtual environment.
+If you want to install some other way, that's fine, but you'll have to figure it out on your own.
 
-* `git clone`
-* `virtualenv2 pydnstest`
-* `cd pydnstest && source bin/activate`
-* `pip install -r requirements.txt`
+```
+git clone https://github.com/jantman/pydnstest.git
+virtualenv2 pydnstest
+cd pydnstest && source bin/activate
+pip install -r requirements.txt
+```
 
 Usage
 -----
@@ -38,22 +41,24 @@ change quux.example.com to 1.2.3.6
 
 Usage with input file:
 ```
-jantman@jarvis$ ./dnstest.py -f dnstests.txt
+cd pydnstest
+source bin/activate
+./dnstest.py -f dnstests.txt
 ```
 
 Verify once in prod:
 ```
-jantman@jarvis$ ./dnstest.py -V -f dnstests.txt
+./dnstest.py -V -f dnstests.txt
 ```
 
 Read from stdin:
 ```
-jantman@jarvis$ cat dnstests.txt | ./dnstest.py
+cat dnstests.txt | ./dnstest.py
 ```
 
 Run one quick test:
 ```
-jantman@jarvis$ echo "add host.example.com with address 192.168.0.1" | ./dnstest.py
+echo "add host.example.com with address 192.168.0.1" | ./dnstest.py
 ```
 
 Testing
