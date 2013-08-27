@@ -43,6 +43,7 @@ class TestLanguageParsing:
         ("rename name foobar 1.2.3.5 to baz.example.com", {'operation': 'rename', 'hostname': 'foobar', 'newname': 'baz.example.com', 'value': '1.2.3.5'}),
         ("rename foobar.example.com value 1.2.3.4 to baz.blam.hosts.example.com", {'operation': 'rename', 'hostname': 'foobar.example.com', 'newname': 'baz.blam.hosts.example.com', 'value': '1.2.3.4'}),
         ("rename foobar.hosts.example.com with value baz to blam", {'operation': 'rename', 'hostname': 'foobar.hosts.example.com', 'newname': 'blam', 'value': 'baz'}),
+        ("rename foo.subdomain.example.com with value 10.188.8.76 to bar.subdomain.example.com", {'operation': 'rename', 'hostname': 'foo.subdomain.example.com', 'newname': 'bar.subdomain.example.com', 'value': '10.188.8.76'}),
         ("change fooHostOne to fooHostTwo", {'operation': 'change', 'hostname': 'fooHostOne', 'value': 'fooHostTwo'}),
         ("change foobar to 10.104.92.243", {'operation': 'change', 'hostname': 'foobar', 'value': '10.104.92.243'}),
         ("change entry foobar to baz", {'operation': 'change', 'hostname': 'foobar', 'value': 'baz'}),
