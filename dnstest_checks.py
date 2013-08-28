@@ -354,12 +354,12 @@ class DNStestChecks:
             if qt['answer']['typename'] == 'A' or qp['answer']['typename'] == 'A':
                 rev = self.DNS.lookup_reverse(qt['answer']['data'], self.config.server_test)
                 if 'answer' in rev:
-                    if rev['answer']['data'] == newval or rev['answer']['data'] == val:
-                        res['secondary'].append("reverse DNS is set correctly for %s (TEST)" % qt['answer']['data'])
+                    if rev['answer']['data'] == name or rev['answer']['data'] == n:
+                        res['secondary'].append("REVERSE OK: %s => %s (TEST)" % (qt['answer']['data'], rev['answer']['data']))
                     else:
-                        res['warnings'].append("%s appears to still have reverse DNS set to %s (TEST)" % (n, rev['answer']['data']))
+                        res['warnings'].append("REVERSE NG: %s appears to still have reverse DNS set to %s (TEST)" % (n, rev['answer']['data']))
                 else:
-                    res['warnings'].append("no reverse DNS appears to be set for %s (TEST)" % qt['answer']['data'])
+                    res['warnings'].append("REVERSE NG: no reverse DNS appears to be set for %s (TEST)" % qt['answer']['data'])
         return res
 
     def verify_changed_name(self, n, val):
