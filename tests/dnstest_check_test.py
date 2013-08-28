@@ -208,7 +208,7 @@ class TestDNSChecks:
         assert foo == result
 
     @pytest.mark.parametrize(("hostname", "newval", "result"), [
-        ("addedname2", "1.2.3.12", {'message': "change addedname2 from '1.2.3.13' to '1.2.3.12' (TEST)", 'result': True, 'secondary': [], 'warnings': ['no reverse DNS appears to be set for 1.2.3.12 (TEST)']}),
+        ("addedname2", "1.2.3.12", {'message': "change addedname2 from '1.2.3.13' to '1.2.3.12' (TEST)", 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.3.12 (TEST)']}),
     ])
     def test_dns_change(self, setup_checks, hostname, newval, result):
         """
