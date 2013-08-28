@@ -10,7 +10,7 @@ Define our initial grammars:
 
 """
 
-from pyparsing import Word, alphas, alphanums, Suppress, Optional, Or, Regex, Literal, Keyword
+from pyparsing import Word, alphas, alphanums, Suppress, Optional, Or, Regex, Literal, Keyword, MatchFirst
 
 
 class DnstestParser:
@@ -29,10 +29,10 @@ class DnstestParser:
     val_op = Optional(Keyword("with")) + Or([Keyword("value"), Keyword("address"), Keyword("target")])
 
     fqdn = Regex("(([a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*)")
-    ipaddr = Regex("((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}(1[0-9]{2}|2[0-4][0-9]|25[0-5]|[0-9]|[1-9][0-9]))")
+    ipaddr = Regex("((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}(1[0-9]{2}|2[0-4][0-9]|25[0-5]|[1-9][0-9]|[0-9]))")
     hostname = Regex("([a-zA-Z0-9][a-zA-Z0-9\-]{0,62}[a-zA-Z0-9])")
-    hostname_or_fqdn = Or([hostname, fqdn])
-    hostname_fqdn_or_ip = Or([hostname, fqdn, ipaddr])
+    hostname_or_fqdn = MatchFirst([fqdn, hostname])
+    hostname_fqdn_or_ip = MatchFirst([ipaddr, fqdn, hostname])
 
     cmd_add = add_op + Optional(rec_op) + hostname_or_fqdn.setResultsName("hostname") + Suppress(val_op) + hostname_fqdn_or_ip.setResultsName('value')
     cmd_remove = rm_op + Optional(rec_op) + hostname_or_fqdn.setResultsName("hostname")
