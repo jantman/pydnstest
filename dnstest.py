@@ -16,10 +16,11 @@ ToDo: flag to confirm against prod once live
 import sys
 import optparse
 import os.path
+from pyparsing import ParseException
+
 from dnstest_checks import DNStestChecks
 from dnstest_config import DnstestConfig
 from dnstest_parser import DnstestParser
-
 
 config = None
 parser = None
@@ -31,7 +32,12 @@ def run_check_line(line):
     Parses a raw input line, runs the tests for that line,
     and returns the result of the tests.
     """
-    d = parser.parse_line(line)
+    try:
+        d = parser.parse_line(line)
+    except ParseException:
+        print "ERROR: could not parse input line, SKIPPING: %s" % line
+        return False
+
     if d['operation'] == 'add':
         return chk.check_added_name(d['hostname'], d['value'])
     elif d['operation'] == 'remove':
@@ -51,7 +57,12 @@ def run_verify_line(line):
     against the PROD server (i.e. once the changes have gone live)
     and returns the result of the tests.
     """
-    d = parser.parse_line(line)
+    try:
+        d = parser.parse_line(line)
+    except ParseException:
+        print "ERROR: could not parse input line, SKIPPING: %s" % line
+        return False
+
     if d['operation'] == 'add':
         return chk.verify_added_name(d['hostname'], d['value'])
     elif d['operation'] == 'remove':
@@ -129,7 +140,9 @@ if __name__ == "__main__":
             r = run_verify_line(line)
         else:
             r = run_check_line(line)
-        if r['result']:
+        if r == False:
+            continue
+        elif r['result']:
             passed = passed + 1
         else:
             failed = failed + 1
