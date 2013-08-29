@@ -87,7 +87,7 @@ known_dns['test_server_stub']['servall-test'] = ['STATUS', 'SERVFAIL']
 known_dns['test_server_stub']['servfail-all.example.com'] = ['STATUS', 'SERVFAIL']
 known_dns['test_server_stub']['removetest1.example.com'] = ['1.2.3.27', 'A']
 
-class TestDNSChecks:
+class TestDNSCheckChange:
     """
     Test DNS checks, using stubbed name resolution methods that return static values.
 
@@ -144,69 +144,6 @@ class TestDNSChecks:
     # Done with setup, start the actual tests #
     ###########################################
 
-    @pytest.mark.parametrize(("hostname", "value", "result"), [
-        ("newhostname", "1.2.3.1", {'message': 'newhostname => 1.2.3.1 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for newhostname (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.1 (TEST)']}),
-        ("existinghostname", "1.2.3.2", {'message': 'new name existinghostname returned valid result from prod server (PROD)', 'result': False, 'secondary': [], 'warnings': []}),
-        ("host-no-reverse", "1.2.3.4", {'message': 'host-no-reverse => 1.2.3.4 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for host-no-reverse (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.4 (TEST)']}),
-        ("cnametestonly", "foobar", {'message': 'cnametestonly => foobar (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for cnametestonly (PROD)'], 'warnings': []}),
-        ("servfail-prod", "1.2.3.9", {'message': 'prod server returned status SERVFAIL for name servfail-prod (PROD)', 'result': False, 'secondary': [], 'warnings': []}),
-        ("newhostname", "1.2.3.5", {'message': 'newhostname resolves to 1.2.3.1 instead of 1.2.3.5 (TEST)', 'result': False, 'secondary': ['PROD server returns NXDOMAIN for newhostname (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.5 (TEST)']}),
-        ("newwithreverse", "1.2.3.10", {'message': 'newwithreverse => 1.2.3.10 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for newwithreverse (PROD)', 'REVERSE OK: 1.2.3.10 => newwithreverse.example.com (TEST)'], 'warnings': []}),
-        ("newwrongreverse", "1.2.3.11", {'message': 'newwrongreverse => 1.2.3.11 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for newwrongreverse (PROD)'], 'warnings': ['REVERSE NG: got answer newBADreverse.example.com for name 1.2.3.11 (TEST)']}),
-        ("servfail-test2", "1.2.3.8", {'message': 'status SERVFAIL for name servfail-test2 (TEST)', 'result': False, 'secondary': [], 'warnings': []}),
-    ])
-    def test_dns_add(self, setup_checks, hostname, value, result):
-        """
-        Test checks for adding a record to DNS
-        """
-        foo = setup_checks.check_added_name(hostname, value)
-        assert foo == result
-
-    @pytest.mark.parametrize(("hostname", "value", "result"), [
-        ("addedhostname.example.com", "1.2.3.3", {'message': 'addedhostname.example.com => 1.2.3.3 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.3 (PROD)']}),
-        ("addedcname.example.com", "barbaz", {'message': 'addedcname.example.com => barbaz (PROD)', 'result': True, 'secondary': [], 'warnings': []}),
-        ("addedname2.example.com", "1.2.3.12", {'message': 'addedname2.example.com resolves to 1.2.3.13 instead of 1.2.3.12 (PROD)', 'result': False, 'secondary': [], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.12 (PROD)']}),
-        ("addedwithrev.example.com", "1.2.3.16", {'message': 'addedwithrev.example.com => 1.2.3.16 (PROD)', 'result': True, 'secondary': ['REVERSE OK: 1.2.3.16 => addedwithrev.example.com (PROD)'], 'warnings': []}),
-        ("servfail-prod", "1.2.3.9", {'message': 'status SERVFAIL for name servfail-prod (PROD)', 'result': False, 'secondary': [], 'warnings': []}),
-        ("addedbadprodrev.example.com", "1.2.3.17", {'message': 'addedbadprodrev.example.com => 1.2.3.17 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got answer groijg.example.com for name 1.2.3.17 (PROD)']}),
-        ("addedprodrevservfail.example.com", "1.9.9.9", {'message': 'addedprodrevservfail.example.com => 1.9.9.9 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got status SERVFAIL for name 1.9.9.9 (PROD)']}),
-    ])
-    def test_dns_verify_add(self, setup_checks, hostname, value, result):
-        """
-        Test checks for verifying an added record
-        """
-        foo = setup_checks.verify_added_name(hostname, value)
-        assert foo == result
-
-    @pytest.mark.parametrize(("hostname", "result"), [
-        ("badhostname", {'message': "badhostname got status NXDOMAIN from PROD - cannot remove a name that doesn't exist (PROD)", 'secondary': [], 'result': False, 'warnings': []}),
-        ("prodonlyhostname", {'message': 'prodonlyhostname removed, got status NXDOMAIN (TEST)', 'result': True, 'secondary': ['PROD value was 1.2.3.5 (PROD)'], 'warnings': []}),
-        ("addedhostname", {'message': 'addedhostname returned valid answer, not removed (TEST)', 'result': False, 'secondary': [], 'warnings': []}),
-        ("prodonlywithrev", {'message': 'prodonlywithrev removed, got status NXDOMAIN (TEST)', 'result': True, 'secondary': ['PROD value was 1.2.3.6 (PROD)'], 'warnings': []}),
-        ("prodwithtestrev", {'message': 'prodwithtestrev removed, got status NXDOMAIN (TEST)', 'result': True, 'secondary': ['PROD value was 1.2.3.7 (PROD)'], 'warnings': ['prodwithtestrev appears to still have reverse DNS set to prodwithtestrev.example.com (TEST)']}),
-        ("servfail-test", {'message': 'servfail-test returned status SERVFAIL (TEST)', 'result': False, 'secondary': [], 'warnings': []}),
-    ])
-    def test_dns_remove(self, setup_checks, hostname, result):
-        """
-        Test checks for removing a record from DNS
-        """
-        foo = setup_checks.check_removed_name(hostname)
-        assert foo == result
-
-    @pytest.mark.parametrize(("hostname", "result"), [
-        ("notahostname", {'message': 'notahostname removed, got status NXDOMAIN (PROD)', 'result': True, 'secondary': [], 'warnings': []}),
-        ("existinghostname", {'message': "existinghostname returned valid answer of '1.2.3.2', not removed (PROD)", 'result': False, 'secondary': [], 'warnings': []}),
-        ("newhostname", {'message': 'newhostname removed, got status NXDOMAIN (PROD)', 'result': True, 'secondary': ['newhostname returned answer 1.2.3.1 (TEST)'], 'warnings': []}),
-        ("servfail-prod", {'message': "servfail-prod returned a 'strange' status of SERVFAIL (PROD)", 'result': False, 'secondary': [], 'warnings': []}),
-        ("removetest1", {'message': 'removetest1 removed, got status NXDOMAIN (PROD)', 'result': True, 'secondary': ['removetest1 returned answer 1.2.3.27 (TEST)'], 'warnings': []}),
-    ])
-    def test_dns_verify_remove(self, setup_checks, hostname, result):
-        """
-        Test checks for verifying a removed record
-        """
-        foo = setup_checks.verify_removed_name(hostname)
-        assert foo == result
-
     @pytest.mark.parametrize(("hostname", "newval", "result"), [
         ("addedname2", "1.2.3.12", {'message': "change addedname2 from '1.2.3.13' to '1.2.3.12' (TEST)", 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.3.12 (TEST)']}),
     ])
@@ -225,30 +162,4 @@ class TestDNSChecks:
         Test checks for verifying a changed record in DNS (same name, new value)
         """
         foo = setup_checks.verify_changed_name(hostname, newval)
-        assert foo == result
-
-    @pytest.mark.parametrize(("oldname", "newname", "value", "result"), [
-        ("renametest1", "renametest1b", "1.2.3.20", {'message': 'rename renametest1 => renametest1b (TEST)', 'result': True, 'secondary': [], 'warnings': ['no reverse DNS appears to be set for 1.2.3.20 (TEST)']}),
-        ("renametest2", "renametest2b", "1.2.3.21", {'message': 'rename renametest2 => renametest2b (TEST)', 'result': True, 'secondary': [], 'warnings': ['renametest2 appears to still have reverse DNS set to renametest2.example.com (TEST)']}),
-        ("renametest3", "renametest3b", "1.2.3.22", {'message': 'rename renametest3 => renametest3b (TEST)', 'result': True, 'secondary': ['reverse DNS is set correctly for 1.2.3.22 (TEST)'], 'warnings': []}),
-        # this next one should fail, it's actually an addition and a deletion, but values differ
-        ("renametest4", "renametest4b", "1.2.3.24", {'message': 'renametest4 => renametest4b rename is bad, resolves to 1.2.3.23 in TEST (expected value was 1.2.3.24) (TEST)', 'result': False, 'secondary': [], 'warnings': []}),
-        ("renametest5", "renametest5b", "1.2.3.25", {'message': 'rename renametest5 => renametest5b (TEST)', 'result': True, 'secondary': [], 'warnings': ['renametest5 appears to still have reverse DNS set to renametest5.example.com (TEST)']}),
-    ])
-    def test_dns_rename(self, setup_checks, oldname, newname, value, result):
-        """
-        Test checks for renaming a record in DNS (new name, same value)
-        """
-        foo = setup_checks.check_renamed_name(oldname, newname, value)
-        assert foo == result
-
-    @pytest.mark.parametrize(("oldname", "newname", "value", "result"), [
-        ("addedname2", "renamedname", "1.2.3.12", {'message': 'addedname2 got answer from PROD (1.2.3.13), old name is still active (PROD)', 'result': False, 'secondary': [], 'warnings': []}),
-        ("renametest5", "renametest5b", "1.2.3.25", {'message': 'renametest5b got status NXDOMAIN (PROD)', 'result': False, 'secondary': [], 'warnings': []}),
-    ])
-    def test_dns_verify_rename(self, setup_checks, oldname, newname, value, result):
-        """
-        Test checks for verifying a renamed record in DNS (new name, same value)
-        """
-        foo = setup_checks.verify_renamed_name(oldname, newname, value)
         assert foo == result
