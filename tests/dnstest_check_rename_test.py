@@ -26,6 +26,33 @@ for 'fwd' dns:
 """
 known_dns = {'chk': {'test': {'fwd': {}, 'rev': {}}, 'prod': {'fwd': {}, 'rev': {}}}, 'ver': {'test': {'fwd': {}, 'rev': {}}, 'prod': {'fwd': {}, 'rev': {}}}}
 
+"""
+This list 
+"""
+TESTS = [
+    {'oldname': "renametest1", 'newname': "renametest1b", 'value': "1.2.3.20"}, # 0
+    {'oldname': "renametest2", 'newname': "renametest2b", 'value': "1.2.3.21"), # 1
+    {'oldname': "renametest3", 'newname': "renametest3b", 'value': "1.2.3.22"), # 2
+    # this next one should fail, it's actually an addition and a deletion, but values differ
+    {'oldname': "renametest4", 'newname': "renametest4b", 'value': "1.2.3.24"), # 3
+    {'oldname': "renametest5", 'newname': "renametest5b", 'value': "1.2.3.25"), # 4
+    ]
+
+"""
+The goal of what's started (but not finished) above is to be able to do something like:
+TESTS[0] = {'oldname': "renametest1", 'newname': "renametest1b", 'value': "1.2.3.20"}
+known_dns['chk']['prod']['fwd']['renametest1.example.com'] = ['1.2.3.20', 'A']
+known_dns['chk']['test']['fwd']['renametest1b.example.com'] = ['1.2.3.20', 'A']
+known_dns['ver']['test']['fwd']['renametest1b.example.com'] = ['1.2.3.20', 'A']
+TESTS[0]['result_chk'] = {'message': 'rename renametest1 => renametest1b (TEST)', 'result': True, 'secondary': [], 'warnings': ['no reverse DNS appears to be set for 1.2.3.20 (TEST)']}
+TESTS[0]['result_ver'] = {'something'}
+
+and then have our decorators just use an iterator/lambda/whatever it's called like:
+(x.oldname, x.newname, x.value, x.result_chk) for x in for y in TESTS
+
+
+"""
+
 # test 0
 known_dns['chk']['prod']['fwd']['renametest1.example.com'] = ['1.2.3.20', 'A']
 known_dns['chk']['test']['fwd']['renametest1b.example.com'] = ['1.2.3.20', 'A']
@@ -167,15 +194,6 @@ class TestDNSCheckRename:
     ###########################################
     # Done with setup, start the actual tests #
     ###########################################
-
-    TESTS = [
-        ("renametest1", "renametest1b", "1.2.3.20"), # 0
-        ("renametest2", "renametest2b", "1.2.3.21"), # 1
-        ("renametest3", "renametest3b", "1.2.3.22"), # 2
-        # this next one should fail, it's actually an addition and a deletion, but values differ
-        ("renametest4", "renametest4b", "1.2.3.24"), # 3
-        ("renametest5", "renametest5b", "1.2.3.25"), # 4
-        ]
 
     @pytest.mark.parametrize(("oldname", "newname", "value", "result"), [
         TESTS[0] + ({'message': 'rename renametest1 => renametest1b (TEST)', 'result': True, 'secondary': [], 'warnings': ['no reverse DNS appears to be set for 1.2.3.20 (TEST)']}, ),
