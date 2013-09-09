@@ -77,9 +77,6 @@ class TestDNSChecks:
         """
 
         if name in known_rev_dns[to_server]:
-            #a = name.split('.')
-            #a.reverse()
-            #rev_name = '.'.join(a) + '.in-addr.arpa'
             return {'answer': {'name': name, 'data': known_rev_dns[to_server][name], 'typename': 'PTR', 'classstr': 'IN', 'ttl': 360, 'type': 12, 'class': 1, 'rdlength': 33}}
         else:
             return {'status': 'NXDOMAIN'}
