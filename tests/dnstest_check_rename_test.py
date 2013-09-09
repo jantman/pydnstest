@@ -142,7 +142,7 @@ class TestDNSCheckRename:
 
     def stub_resolve_name(self, query, to_server, to_port=53):
         """
-        stub method
+        DNS stub method
 
         return a dict that looks like the return value from dnstest.resolve_name
         but either returns one of a hard-coded group of dicts, or an error.
@@ -157,7 +157,7 @@ class TestDNSCheckRename:
 
     def stub_lookup_reverse(self, name, to_server, to_port=53):
         """
-        stub method
+        DNS stub method
 
         return a dict that looks like the return value from dnstest.lookup_reverse
         but either returns one of a hard-coded group of dicts, or an error.
@@ -172,7 +172,7 @@ class TestDNSCheckRename:
 
     def stub_resolve_name_verify(self, query, to_server, to_port=53):
         """
-        stub method
+        DNS stub method
 
         return a dict that looks like the return value from dnstest.resolve_name
         but either returns one of a hard-coded group of dicts, or an error.
@@ -187,7 +187,7 @@ class TestDNSCheckRename:
 
     def stub_lookup_reverse_verify(self, name, to_server, to_port=53):
         """
-        stub method
+        DNS stub method
 
         return a dict that looks like the return value from dnstest.lookup_reverse
         but either returns one of a hard-coded group of dicts, or an error.
