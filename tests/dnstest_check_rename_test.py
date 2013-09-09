@@ -27,60 +27,69 @@ for 'fwd' dns:
 known_dns = {'chk': {'test': {'fwd': {}, 'rev': {}}, 'prod': {'fwd': {}, 'rev': {}}}, 'ver': {'test': {'fwd': {}, 'rev': {}}, 'prod': {'fwd': {}, 'rev': {}}}}
 
 """
-This list 
+This is a dict of dicts, each one corresponding to a single test case, and 
+having the following elements:
+'oldname' - the old DNS record to be renamed
+'newname' - what to rename that to
+'value' - the value of the DNS record to rename
+'result_chk' - the expected return dict for the check operation
+'result_ver' - the expected return dict for the verify operation
 """
-TESTS = [
-    {'oldname': "renametest1", 'newname': "renametest1b", 'value': "1.2.3.20"}, # 0
-    {'oldname': "renametest2", 'newname': "renametest2b", 'value': "1.2.3.21"), # 1
-    {'oldname': "renametest3", 'newname': "renametest3b", 'value': "1.2.3.22"), # 2
-    # this next one should fail, it's actually an addition and a deletion, but values differ
-    {'oldname': "renametest4", 'newname': "renametest4b", 'value': "1.2.3.24"), # 3
-    {'oldname': "renametest5", 'newname': "renametest5b", 'value': "1.2.3.25"), # 4
-    ]
+TESTS = {}
 
 """
-The goal of what's started (but not finished) above is to be able to do something like:
+Here we define all of the tests, along with their expected results for 
+check and verify, and the DNS entries that each test uses.
+"""
+
+# test 0
 TESTS[0] = {'oldname': "renametest1", 'newname': "renametest1b", 'value': "1.2.3.20"}
 known_dns['chk']['prod']['fwd']['renametest1.example.com'] = ['1.2.3.20', 'A']
 known_dns['chk']['test']['fwd']['renametest1b.example.com'] = ['1.2.3.20', 'A']
 known_dns['ver']['test']['fwd']['renametest1b.example.com'] = ['1.2.3.20', 'A']
 TESTS[0]['result_chk'] = {'message': 'rename renametest1 => renametest1b (TEST)', 'result': True, 'secondary': [], 'warnings': ['no reverse DNS appears to be set for 1.2.3.20 (TEST)']}
-TESTS[0]['result_ver'] = {'something'}
 
-and then have our decorators just use an iterator/lambda/whatever it's called like:
-(x.oldname, x.newname, x.value, x.result_chk) for x in for y in TESTS
-
-
-"""
-
-# test 0
-known_dns['chk']['prod']['fwd']['renametest1.example.com'] = ['1.2.3.20', 'A']
-known_dns['chk']['test']['fwd']['renametest1b.example.com'] = ['1.2.3.20', 'A']
-known_dns['ver']['test']['fwd']['renametest1b.example.com'] = ['1.2.3.20', 'A']
 # test 1
+TESTS[1] = {'oldname': "renametest2", 'newname': "renametest2b", 'value': "1.2.3.21"}
 known_dns['chk']['prod']['fwd']['renametest2.example.com'] = ['1.2.3.21', 'A']
 known_dns['chk']['test']['fwd']['renametest2b.example.com'] = ['1.2.3.21', 'A']
 known_dns['chk']['test']['rev']['1.2.3.21'] = 'renametest2.example.com'
 known_dns['ver']['test']['fwd']['renametest2b.example.com'] = ['1.2.3.21', 'A']
+TESTS[1]['result_chk'] = {'message': 'rename renametest2 => renametest2b (TEST)', 'result': True, 'secondary': [], 'warnings': ['renametest2 appears to still have reverse DNS set to renametest2.example.com (TEST)']}
+
 # test 2
+TESTS[2] = {'oldname': "renametest3", 'newname': "renametest3b", 'value': "1.2.3.22"}
 known_dns['chk']['prod']['fwd']['renametest3.example.com'] = ['1.2.3.22', 'A']
 known_dns['chk']['test']['fwd']['renametest3b.example.com'] = ['1.2.3.22', 'A']
 known_dns['chk']['test']['rev']['1.2.3.22'] = 'renametest3b.example.com'
 known_dns['ver']['test']['fwd']['renametest3b.example.com'] = ['1.2.3.22', 'A']
+TESTS[2]['result_chk'] = {'message': 'rename renametest3 => renametest3b (TEST)', 'result': True, 'secondary': ['reverse DNS is set correctly for 1.2.3.22 (TEST)'], 'warnings': []}
+
 # test 3
+# this next one should fail, it's actually an addition and a deletion, but values differ
+TESTS[3] = {'oldname': "renametest4", 'newname': "renametest4b", 'value': "1.2.3.24"}
 known_dns['chk']['prod']['fwd']['renametest4.example.com'] = ['1.2.3.23', 'A']
 known_dns['chk']['test']['fwd']['renametest4b.example.com'] = ['1.2.3.23', 'A']
+TESTS[3]['result_chk'] = {'message': 'renametest4 => renametest4b rename is bad, resolves to 1.2.3.23 in TEST (expected value was 1.2.3.24) (TEST)', 'result': False, 'secondary': [], 'warnings': []}
+
 # test 4
+TESTS[4] = {'oldname': "renametest5", 'newname': "renametest5b", 'value': "1.2.3.25"}
 known_dns['chk']['prod']['fwd']['renametest5.example.com'] = ['1.2.3.25', 'A']
 known_dns['chk']['prod']['rev']['1.2.3.25'] = 'renametest5.example.com'
 known_dns['chk']['test']['fwd']['renametest5b.example.com'] = ['1.2.3.25', 'A']
 known_dns['chk']['test']['rev']['1.2.3.25'] = 'renametest5.example.com'
+TESTS[4]['result_chk'] = {'message': 'rename renametest5 => renametest5b (TEST)', 'result': True, 'secondary': [], 'warnings': ['renametest5 appears to still have reverse DNS set to renametest5.example.com (TEST)']}
+TESTS[4]['result_ver'] = {'message': 'renametest5b got status NXDOMAIN (PROD)', 'result': False, 'secondary': [], 'warnings': []}
+
 # test 5
+TESTS[5] = {'oldname': "addedname2", 'newname': "renamedname", 'value': "1.2.3.12"}
 known_dns['chk']['prod']['fwd']['renamedname.example.com'] = ['1.2.3.12', 'A']
 known_dns['chk']['prod']['fwd']['addedname2.example.com'] = ['1.2.3.13', 'A']
 known_dns['chk']['test']['fwd']['addedname2.example.com'] = ['1.2.3.12', 'A']
 known_dns['ver']['prod']['fwd']['renamedname.example.com'] = ['1.2.3.12', 'A']
 known_dns['ver']['prod']['fwd']['addedname2.example.com'] = ['1.2.3.13', 'A']
+TESTS[5]['result_ver'] = {'message': 'addedname2 got answer from PROD (1.2.3.13), old name is still active (PROD)', 'result': False, 'secondary': [], 'warnings': []}
+
 
 class TestDNSCheckRename:
     """
@@ -195,26 +204,25 @@ class TestDNSCheckRename:
     # Done with setup, start the actual tests #
     ###########################################
 
-    @pytest.mark.parametrize(("oldname", "newname", "value", "result"), [
-        TESTS[0] + ({'message': 'rename renametest1 => renametest1b (TEST)', 'result': True, 'secondary': [], 'warnings': ['no reverse DNS appears to be set for 1.2.3.20 (TEST)']}, ),
-        TESTS[1] + ({'message': 'rename renametest2 => renametest2b (TEST)', 'result': True, 'secondary': [], 'warnings': ['renametest2 appears to still have reverse DNS set to renametest2.example.com (TEST)']}, ),
-        TESTS[2] + ({'message': 'rename renametest3 => renametest3b (TEST)', 'result': True, 'secondary': ['reverse DNS is set correctly for 1.2.3.22 (TEST)'], 'warnings': []},),
-        # this next one should fail, it's actually an addition and a deletion, but values differ
-        TESTS[3] + ({'message': 'renametest4 => renametest4b rename is bad, resolves to 1.2.3.23 in TEST (expected value was 1.2.3.24) (TEST)', 'result': False, 'secondary': [], 'warnings': []}, ),
-        TESTS[4] + ({'message': 'rename renametest5 => renametest5b (TEST)', 'result': True, 'secondary': [], 'warnings': ['renametest5 appears to still have reverse DNS set to renametest5.example.com (TEST)']}, ),
-    ])
-    def test_dns_rename(self, setup_checks, oldname, newname, value, result):
+    def test_rename(self):
+	"""
+	Run all of the tests from the TESTS dict, via yield
+	"""
+	for t in TESTS:
+	    tst = TESTS[t]
+	    if 'result_chk' in tst:
+		yield self.dns_rename, tst['oldname'], tst['newname'], tst['value'], tst['result_chk']
+	    if 'result_ver' in tst:
+		yield self.dns_verify_rename, tst['oldname'], tst['newname'], tst['value'], tst['result_ver']
+    
+    def dns_rename(self, setup_checks, oldname, newname, value, result):
         """
         Test checks for renaming a record in DNS (new name, same value)
         """
         foo = setup_checks.check_renamed_name(oldname, newname, value)
         assert foo == result
 
-    @pytest.mark.parametrize(("oldname", "newname", "value", "result"), [
-        ("addedname2", "renamedname", "1.2.3.12", {'message': 'addedname2 got answer from PROD (1.2.3.13), old name is still active (PROD)', 'result': False, 'secondary': [], 'warnings': []}),
-        TESTS[4] + ({'message': 'renametest5b got status NXDOMAIN (PROD)', 'result': False, 'secondary': [], 'warnings': []}, ),
-    ])
-    def test_dns_verify_rename(self, setup_verifies, oldname, newname, value, result):
+    def dns_verify_rename(self, setup_verifies, oldname, newname, value, result):
         """
         Test checks for verifying a renamed record in DNS (new name, same value)
         """
