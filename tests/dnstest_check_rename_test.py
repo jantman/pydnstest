@@ -78,8 +78,7 @@ known_dns['chk']['prod']['fwd']['renametest5.example.com'] = ['1.2.3.25', 'A']
 known_dns['chk']['prod']['rev']['1.2.3.25'] = 'renametest5.example.com'
 known_dns['chk']['test']['fwd']['renametest5b.example.com'] = ['1.2.3.25', 'A']
 known_dns['chk']['test']['rev']['1.2.3.25'] = 'renametest5.example.com'
-TESTS[4]['result_chk'] = {}
-#TESTS[4]['result_chk'] = {'message': 'rename renametest5 => renametest5b (TEST)', 'result': True, 'secondary': [], 'warnings': ['renametest5 appears to still have reverse DNS set to renametest5.example.com (TEST)']}
+TESTS[4]['result_chk'] = {'message': 'rename renametest5 => renametest5b (TEST)', 'result': True, 'secondary': [], 'warnings': ['renametest5 appears to still have reverse DNS set to renametest5.example.com (TEST)']}
 TESTS[4]['result_ver'] = {'message': 'renametest5b got status NXDOMAIN (PROD)', 'result': False, 'secondary': [], 'warnings': []}
 
 # test 5
