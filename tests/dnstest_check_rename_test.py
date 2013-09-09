@@ -78,7 +78,8 @@ known_dns['chk']['prod']['fwd']['renametest5.example.com'] = ['1.2.3.25', 'A']
 known_dns['chk']['prod']['rev']['1.2.3.25'] = 'renametest5.example.com'
 known_dns['chk']['test']['fwd']['renametest5b.example.com'] = ['1.2.3.25', 'A']
 known_dns['chk']['test']['rev']['1.2.3.25'] = 'renametest5.example.com'
-TESTS[4]['result_chk'] = {'message': 'rename renametest5 => renametest5b (TEST)', 'result': True, 'secondary': [], 'warnings': ['renametest5 appears to still have reverse DNS set to renametest5.example.com (TEST)']}
+TESTS[4]['result_chk'] = {}
+#TESTS[4]['result_chk'] = {'message': 'rename renametest5 => renametest5b (TEST)', 'result': True, 'secondary': [], 'warnings': ['renametest5 appears to still have reverse DNS set to renametest5.example.com (TEST)']}
 TESTS[4]['result_ver'] = {'message': 'renametest5b got status NXDOMAIN (PROD)', 'result': False, 'secondary': [], 'warnings': []}
 
 # test 5
@@ -208,12 +209,14 @@ class TestDNSCheckRename:
 	"""
 	Run all of the tests from the TESTS dict, via yield
 	"""
+	sc = self.setup_checks()
+	sv = self.setup_verifies()
 	for t in TESTS:
 	    tst = TESTS[t]
 	    if 'result_chk' in tst:
-		yield self.dns_rename, tst['oldname'], tst['newname'], tst['value'], tst['result_chk']
+		yield self.dns_rename, sc, tst['oldname'], tst['newname'], tst['value'], tst['result_chk']
 	    if 'result_ver' in tst:
-		yield self.dns_verify_rename, tst['oldname'], tst['newname'], tst['value'], tst['result_ver']
+		yield self.dns_verify_rename, sv, tst['oldname'], tst['newname'], tst['value'], tst['result_ver']
     
     def dns_rename(self, setup_checks, oldname, newname, value, result):
         """
