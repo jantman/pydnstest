@@ -8,6 +8,40 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../')
 from dnstest_checks import DNStestChecks
 from dnstest_config import DnstestConfig
 
+"""
+This dict stores the DNS results that our DNS-mocking functions will return.
+Format of the 'known_dns' dict:
+[chk|ver] - whether this is pre-change (_check methods) or post-change (_verify methods)
+    [prod|test] - whether this is for the prod or test DNS server
+        [fwd|rev] - whether this is forward or reverse DNS
+            [recordname] - the name of this record, as sent to the DNS query methods
+                = value - a string or list of the record value, see below
+value can be:
+for 'rev' dns:
+  - a string with the value of the PTR record
+  - the string "SERVFAIL", which returns a SERVFAIL result
+for 'fwd' dns:
+  - a list whose first item is "STATUS", and whose second item is the 'status' attribute of the DNS result
+  - a list whose first item is the data/value of the record, and whose second item is the typename of the record (i.e. "A" or "CNAME")
+"""
+known_dns = {'chk': {'test': {'fwd': {}, 'rev': {}}, 'prod': {'fwd': {}, 'rev': {}}}, 'ver': {'test': {'fwd': {}, 'rev': {}}, 'prod': {'fwd': {}, 'rev': {}}}}
+
+"""
+This is a dict of dicts, each one corresponding to a single test case, and 
+having the following elements:
+'oldname' - the old DNS record to be renamed
+'newname' - what to rename that to
+'value' - the value of the DNS record to rename
+'result_chk' - the expected return dict for the check operation
+'result_ver' - the expected return dict for the verify operation
+"""
+TESTS = {}
+
+"""
+Here we define all of the tests, along with their expected results for 
+check and verify, and the DNS entries that each test uses.
+"""
+
 
 # dict of known (mocked) reverse DNS values for test and prod servers
 known_rev_dns = {'test_server_stub': {}, 'prod_server_stub': {}}
