@@ -84,14 +84,7 @@ class DNStestChecks:
         if 'status' in qp and qp['status'] == "NXDOMAIN":
             res['result'] = True
             res['message'] = "%s removed, got status NXDOMAIN (PROD)" % (n)
-            # check for any leftover reverse lookups
-            rev = self.DNS.lookup_reverse(n, self.config.server_prod)
-            if 'answer' in rev:
-                res['warnings'].append("%s appears to still have reverse DNS set to %s (PROD)" % (n, rev['answer']['data']))
-            rev = self.DNS.lookup_reverse(name, self.config.server_prod)
-            if 'answer' in rev:
-                res['warnings'].append("%s appears to still have reverse DNS set to %s (PROD)" % (name, rev['answer']['data']))
-            elif 'answer' in qt:
+            if 'answer' in qt:
                 res['secondary'] = ["%s returned answer %s (TEST)" % (n, qt['answer']['data'])]
         elif 'status' in qp and qp['status'] != "NXDOMAIN":
             res['result'] = False
