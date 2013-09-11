@@ -27,7 +27,7 @@ for 'fwd' dns:
 known_dns = {'chk': {'test': {'fwd': {}, 'rev': {}}, 'prod': {'fwd': {}, 'rev': {}}}, 'ver': {'test': {'fwd': {}, 'rev': {}}, 'prod': {'fwd': {}, 'rev': {}}}}
 
 """
-This is a dict of dicts, each one corresponding to a single test case, and 
+This is a dict of dicts, each one corresponding to a single test case, and
 having the following elements:
 'oldname' - the old DNS record to be renamed
 'newname' - what to rename that to
@@ -38,7 +38,7 @@ having the following elements:
 TESTS = {}
 
 """
-Here we define all of the tests, along with their expected results for 
+Here we define all of the tests, along with their expected results for
 check and verify, and the DNS entries that each test uses.
 """
 
@@ -99,6 +99,7 @@ TESTS[9]['result_ver'] = {'message': "servfail-prod returned a 'strange' status 
 TESTS[10] = {'hostname': "removetest1"}
 known_dns['ver']['test']['fwd']['removetest1.example.com'] = ['1.2.3.27', 'A']
 TESTS[10]['result_ver'] = {'message': 'removetest1 removed, got status NXDOMAIN (PROD)', 'result': True, 'secondary': ['removetest1 returned answer 1.2.3.27 (TEST)'], 'warnings': []}
+
 
 class TestDNSCheckRemove:
     """
@@ -208,24 +209,23 @@ class TestDNSCheckRemove:
         else:
             return {'status': 'NXDOMAIN'}
 
-
     ###########################################
     # Done with setup, start the actual tests #
     ###########################################
 
     def test_remove(self):
-	"""
-	Run all of the tests from the TESTS dict, via yield
-	"""
-	sc = self.setup_checks()
-	sv = self.setup_verifies()
-	for t in TESTS:
-	    tst = TESTS[t]
-	    if 'result_chk' in tst:
-		yield self.dns_remove, sc, tst['hostname'], tst['result_chk']
-	    if 'result_ver' in tst:
-		yield self.dns_verify_remove, sv, tst['hostname'], tst['result_ver']
-    
+        """
+        Run all of the tests from the TESTS dict, via yield
+        """
+        sc = self.setup_checks()
+        sv = self.setup_verifies()
+        for t in TESTS:
+            tst = TESTS[t]
+            if 'result_chk' in tst:
+                yield self.dns_remove, sc, tst['hostname'], tst['result_chk']
+            if 'result_ver' in tst:
+                yield self.dns_verify_remove, sv, tst['hostname'], tst['result_ver']
+
     def dns_remove(self, setup_checks, hostname, result):
         """
         Test checks for removing a record from DNS

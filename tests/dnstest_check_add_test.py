@@ -27,7 +27,7 @@ for 'fwd' dns:
 known_dns = {'chk': {'test': {'fwd': {}, 'rev': {}}, 'prod': {'fwd': {}, 'rev': {}}}, 'ver': {'test': {'fwd': {}, 'rev': {}}, 'prod': {'fwd': {}, 'rev': {}}}}
 
 """
-This is a dict of dicts, each one corresponding to a single test case, and 
+This is a dict of dicts, each one corresponding to a single test case, and
 having the following elements:
 'oldname' - the old DNS record to be renamed
 'newname' - what to rename that to
@@ -38,7 +38,7 @@ having the following elements:
 TESTS = {}
 
 """
-Here we define all of the tests, along with their expected results for 
+Here we define all of the tests, along with their expected results for
 check and verify, and the DNS entries that each test uses.
 """
 
@@ -100,13 +100,13 @@ TESTS[9]['result_ver'] = {'message': 'addedhostname.example.com => 1.2.3.3 (PROD
 TESTS[10] = {'hostname': "addedcname.example.com", 'value': "barbaz"}
 known_dns['ver']['test']['fwd']['addedcname.example.com'] = ['barbaz', 'CNAME']
 known_dns['ver']['prod']['fwd']['addedcname.example.com'] = ['barbaz', 'CNAME']
-TESTS[10]['result_ver'] =  {'message': 'addedcname.example.com => barbaz (PROD)', 'result': True, 'secondary': [], 'warnings': []}
+TESTS[10]['result_ver'] = {'message': 'addedcname.example.com => barbaz (PROD)', 'result': True, 'secondary': [], 'warnings': []}
 
 # test 11
 TESTS[11] = {'hostname': "addedname2.example.com", 'value': "1.2.3.12"}
 known_dns['ver']['test']['fwd']['addedname2.example.com'] = ['1.2.3.12', 'A']
 known_dns['ver']['prod']['fwd']['addedname2.example.com'] = ['1.2.3.13', 'A']
-TESTS[11]['result_ver'] =  {'message': 'addedname2.example.com resolves to 1.2.3.13 instead of 1.2.3.12 (PROD)', 'result': False, 'secondary': [], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.12 (PROD)']}
+TESTS[11]['result_ver'] = {'message': 'addedname2.example.com resolves to 1.2.3.13 instead of 1.2.3.12 (PROD)', 'result': False, 'secondary': [], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.12 (PROD)']}
 
 # test 12
 TESTS[12] = {'hostname': "addedwithrev.example.com", 'value': "1.2.3.16"}
@@ -114,12 +114,12 @@ known_dns['ver']['test']['fwd']['addedwithrev.example.com'] = ['1.2.3.16', 'A']
 known_dns['ver']['test']['rev']['1.2.3.16'] = 'addedwithrev.example.com'
 known_dns['ver']['prod']['fwd']['addedwithrev.example.com'] = ['1.2.3.16', 'A']
 known_dns['ver']['prod']['rev']['1.2.3.16'] = 'addedwithrev.example.com'
-TESTS[12]['result_ver'] =  {'message': 'addedwithrev.example.com => 1.2.3.16 (PROD)', 'result': True, 'secondary': ['REVERSE OK: 1.2.3.16 => addedwithrev.example.com (PROD)'], 'warnings': []}
+TESTS[12]['result_ver'] = {'message': 'addedwithrev.example.com => 1.2.3.16 (PROD)', 'result': True, 'secondary': ['REVERSE OK: 1.2.3.16 => addedwithrev.example.com (PROD)'], 'warnings': []}
 
 # test 13
 TESTS[13] = {'hostname': "servfail-prod", 'value': "1.2.3.9"}
 known_dns['ver']['prod']['fwd']['servfail-prod.example.com'] = ['STATUS', 'SERVFAIL']
-TESTS[13]['result_ver'] =  {'message': 'status SERVFAIL for name servfail-prod (PROD)', 'result': False, 'secondary': [], 'warnings': []}
+TESTS[13]['result_ver'] = {'message': 'status SERVFAIL for name servfail-prod (PROD)', 'result': False, 'secondary': [], 'warnings': []}
 
 # test 14
 TESTS[14] = {'hostname': "addedbadprodrev.example.com", 'value': "1.2.3.17"}
@@ -127,7 +127,7 @@ known_dns['ver']['test']['fwd']['addedbadprodrev.example.com'] = ['1.2.3.17', 'A
 known_dns['ver']['test']['rev']['1.2.3.17'] = 'addedbadprodrev.example.com'
 known_dns['ver']['prod']['fwd']['addedbadprodrev.example.com'] = ['1.2.3.17', 'A']
 known_dns['ver']['prod']['rev']['1.2.3.17'] = 'groijg.example.com'
-TESTS[14]['result_ver'] =  {'message': 'addedbadprodrev.example.com => 1.2.3.17 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got answer groijg.example.com for name 1.2.3.17 (PROD)']}
+TESTS[14]['result_ver'] = {'message': 'addedbadprodrev.example.com => 1.2.3.17 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got answer groijg.example.com for name 1.2.3.17 (PROD)']}
 
 # test 15
 TESTS[15] = {'hostname': "addedprodrevservfail.example.com", 'value': "1.9.9.9"}
@@ -135,7 +135,8 @@ known_dns['ver']['test']['fwd']['addedprodrevservfail.example.com'] = ['1.9.9.9'
 known_dns['ver']['test']['rev']['1.9.9.9'] = 'prodrevservfail.example.com'
 known_dns['ver']['prod']['fwd']['addedprodrevservfail.example.com'] = ['1.9.9.9', 'A']
 known_dns['ver']['prod']['rev']['1.9.9.9'] = 'SERVFAIL'
-TESTS[15]['result_ver'] =  {'message': 'addedprodrevservfail.example.com => 1.9.9.9 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got status SERVFAIL for name 1.9.9.9 (PROD)']}
+TESTS[15]['result_ver'] = {'message': 'addedprodrevservfail.example.com => 1.9.9.9 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got status SERVFAIL for name 1.9.9.9 (PROD)']}
+
 
 class TestDNSCheckAdd:
     """
@@ -245,24 +246,23 @@ class TestDNSCheckAdd:
         else:
             return {'status': 'NXDOMAIN'}
 
-
     ###########################################
     # Done with setup, start the actual tests #
     ###########################################
 
     def test_add(self):
-	"""
-	Run all of the tests from the TESTS dict, via yield
-	"""
-	sc = self.setup_checks()
-	sv = self.setup_verifies()
-	for t in TESTS:
-	    tst = TESTS[t]
-	    if 'result_chk' in tst:
-		yield self.dns_add, sc, tst['hostname'],tst['value'], tst['result_chk']
-	    if 'result_ver' in tst:
-		yield self.dns_verify_add, sv, tst['hostname'], tst['value'], tst['result_ver']
-    
+        """
+        Run all of the tests from the TESTS dict, via yield
+        """
+        sc = self.setup_checks()
+        sv = self.setup_verifies()
+        for t in TESTS:
+            tst = TESTS[t]
+            if 'result_chk' in tst:
+                yield self.dns_add, sc, tst['hostname'], tst['value'], tst['result_chk']
+            if 'result_ver' in tst:
+                yield self.dns_verify_add, sv, tst['hostname'], tst['value'], tst['result_ver']
+
     def dns_add(self, setup_checks, hostname, value, result):
         """
         Test checks for adding a record to DNS

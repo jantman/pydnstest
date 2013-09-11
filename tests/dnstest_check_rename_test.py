@@ -27,7 +27,7 @@ for 'fwd' dns:
 known_dns = {'chk': {'test': {'fwd': {}, 'rev': {}}, 'prod': {'fwd': {}, 'rev': {}}}, 'ver': {'test': {'fwd': {}, 'rev': {}}, 'prod': {'fwd': {}, 'rev': {}}}}
 
 """
-This is a dict of dicts, each one corresponding to a single test case, and 
+This is a dict of dicts, each one corresponding to a single test case, and
 having the following elements:
 'oldname' - the old DNS record to be renamed
 'newname' - what to rename that to
@@ -38,7 +38,7 @@ having the following elements:
 TESTS = {}
 
 """
-Here we define all of the tests, along with their expected results for 
+Here we define all of the tests, along with their expected results for
 check and verify, and the DNS entries that each test uses.
 """
 
@@ -199,24 +199,23 @@ class TestDNSCheckRename:
         else:
             return {'status': 'NXDOMAIN'}
 
-
     ###########################################
     # Done with setup, start the actual tests #
     ###########################################
 
     def test_rename(self):
-	"""
-	Run all of the tests from the TESTS dict, via yield
-	"""
-	sc = self.setup_checks()
-	sv = self.setup_verifies()
-	for t in TESTS:
-	    tst = TESTS[t]
-	    if 'result_chk' in tst:
-		yield self.dns_rename, sc, tst['oldname'], tst['newname'], tst['value'], tst['result_chk']
-	    if 'result_ver' in tst:
-		yield self.dns_verify_rename, sv, tst['oldname'], tst['newname'], tst['value'], tst['result_ver']
-    
+        """
+        Run all of the tests from the TESTS dict, via yield
+        """
+        sc = self.setup_checks()
+        sv = self.setup_verifies()
+        for t in TESTS:
+            tst = TESTS[t]
+            if 'result_chk' in tst:
+                yield self.dns_rename, sc, tst['oldname'], tst['newname'], tst['value'], tst['result_chk']
+            if 'result_ver' in tst:
+                yield self.dns_verify_rename, sv, tst['oldname'], tst['newname'], tst['value'], tst['result_ver']
+
     def dns_rename(self, setup_checks, oldname, newname, value, result):
         """
         Test checks for renaming a record in DNS (new name, same value)

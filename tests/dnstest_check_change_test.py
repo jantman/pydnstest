@@ -27,7 +27,7 @@ for 'fwd' dns:
 known_dns = {'chk': {'test': {'fwd': {}, 'rev': {}}, 'prod': {'fwd': {}, 'rev': {}}}, 'ver': {'test': {'fwd': {}, 'rev': {}}, 'prod': {'fwd': {}, 'rev': {}}}}
 
 """
-This is a dict of dicts, each one corresponding to a single test case, and 
+This is a dict of dicts, each one corresponding to a single test case, and
 having the following elements:
 'oldname' - the old DNS record to be renamed
 'newname' - what to rename that to
@@ -38,7 +38,7 @@ having the following elements:
 TESTS = {}
 
 """
-Here we define all of the tests, along with their expected results for 
+Here we define all of the tests, along with their expected results for
 check and verify, and the DNS entries that each test uses.
 """
 
@@ -53,6 +53,7 @@ TESTS[1] = {"hostname": "addedhostname", "newvalue": "1.2.3.3"}
 known_dns['ver']['test']['fwd']['addedhostname.example.com'] = ['1.2.3.3', 'A']
 known_dns['ver']['prod']['fwd']['addedhostname.example.com'] = ['1.2.3.3', 'A']
 TESTS[1]['result_ver'] = {'message': "change addedhostname value to '1.2.3.3' (PROD)", 'result': True, 'secondary': [], 'warnings': ['no reverse DNS appears to be set for 1.2.3.3 (PROD)']}
+
 
 class TestDNSCheckChange:
     """
@@ -162,23 +163,22 @@ class TestDNSCheckChange:
         else:
             return {'status': 'NXDOMAIN'}
 
-
     ###########################################
     # Done with setup, start the actual tests #
     ###########################################
 
     def test_change(self):
-	"""
-	Run all of the tests from the TESTS dict, via yield
-	"""
-	sc = self.setup_checks()
-	sv = self.setup_verifies()
-	for t in TESTS:
-	    tst = TESTS[t]
-	    if 'result_chk' in tst:
-		yield self.dns_change, sc, tst['hostname'], tst['newvalue'], tst['result_chk']
-	    if 'result_ver' in tst:
-		yield self.dns_verify_change, sv, tst['hostname'], tst['newvalue'], tst['result_ver']
+        """
+        Run all of the tests from the TESTS dict, via yield
+        """
+        sc = self.setup_checks()
+        sv = self.setup_verifies()
+        for t in TESTS:
+            tst = TESTS[t]
+            if 'result_chk' in tst:
+                yield self.dns_change, sc, tst['hostname'], tst['newvalue'], tst['result_chk']
+            if 'result_ver' in tst:
+                yield self.dns_verify_change, sv, tst['hostname'], tst['newvalue'], tst['result_ver']
 
     def dns_change(self, setup_checks, hostname, newval, result):
         """
