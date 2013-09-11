@@ -90,6 +90,21 @@ known_dns['ver']['prod']['fwd']['renamedname.example.com'] = ['1.2.3.12', 'A']
 known_dns['ver']['prod']['fwd']['addedname2.example.com'] = ['1.2.3.13', 'A']
 TESTS[5]['result_ver'] = {'message': 'addedname2 got answer from PROD (1.2.3.13), old name is still active (PROD)', 'result': False, 'secondary': [], 'warnings': []}
 
+# test 6
+TESTS[6] = {'oldname': "renametest6", 'newname': "renametest6b", 'value': "renametest6cname"}
+known_dns['chk']['prod']['fwd']['renametest6.example.com'] = ['renametest6cname', 'CNAME']
+known_dns['chk']['test']['fwd']['renametest6b.example.com'] = ['renametest6cname', 'CNAME']
+known_dns['chk']['test']['rev']['renametest6cname.example.com'] = 'renametest6b.example.com'
+known_dns['ver']['test']['fwd']['renametest6b.example.com'] = ['renametest6cname', 'CNAME']
+TESTS[6]['result_chk'] = {'message': 'rename renametest6 => renametest6b (TEST)', 'result': True, 'secondary': [], 'warnings': []}
+
+# test 7
+TESTS[7] = {'oldname': "renametest7", 'newname': "renametest7b", 'value': "renametest7cname"}
+known_dns['chk']['prod']['fwd']['renametest7.example.com'] = ['STATUS', 'SERVFAIL']
+known_dns['chk']['test']['fwd']['renametest7b.example.com'] = ['renametest7cname', 'CNAME']
+known_dns['chk']['test']['rev']['renametest7cname.example.com'] = 'renametest7b.example.com'
+known_dns['ver']['test']['fwd']['renametest7b.example.com'] = ['renametest7cname', 'CNAME']
+TESTS[7]['result_chk'] = {'message': "renametest7 got status SERVFAIL from PROD - cannot change a name that doesn't exist (PROD)", 'result': False, 'secondary': [], 'warnings': []}
 
 class TestDNSCheckRename:
     """

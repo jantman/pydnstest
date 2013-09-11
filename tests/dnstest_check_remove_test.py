@@ -100,6 +100,10 @@ TESTS[10] = {'hostname': "removetest1"}
 known_dns['ver']['test']['fwd']['removetest1.example.com'] = ['1.2.3.27', 'A']
 TESTS[10]['result_ver'] = {'message': 'removetest1 removed, got status NXDOMAIN (PROD)', 'result': True, 'secondary': ['removetest1 returned answer 1.2.3.27 (TEST)'], 'warnings': []}
 
+# test 11
+#TESTS[11] = {'hostname': 'test11'}
+#known_dns['ver']['prod']['1.2.5.11'] = 'test11.example.com'
+#TESTS[11]['result_ver'] = {}
 
 class TestDNSCheckRemove:
     """
