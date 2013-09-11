@@ -222,9 +222,9 @@ class TestDNSCheckRemove:
         for t in TESTS:
             tst = TESTS[t]
             if 'result_chk' in tst:
-                yield self.dns_remove, sc, tst['hostname'], tst['result_chk']
+                yield "test_remove chk TESTS[%d]" % t, self.dns_remove, sc, tst['hostname'], tst['result_chk']
             if 'result_ver' in tst:
-                yield self.dns_verify_remove, sv, tst['hostname'], tst['result_ver']
+                yield "test_remove ver TESTS[%d]" % t, self.dns_verify_remove, sv, tst['hostname'], tst['result_ver']
 
     def dns_remove(self, setup_checks, hostname, result):
         """

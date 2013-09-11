@@ -259,9 +259,9 @@ class TestDNSCheckAdd:
         for t in TESTS:
             tst = TESTS[t]
             if 'result_chk' in tst:
-                yield self.dns_add, sc, tst['hostname'], tst['value'], tst['result_chk']
+                yield "test_add chk TESTS[%d]" % t, self.dns_add, sc, tst['hostname'], tst['value'], tst['result_chk']
             if 'result_ver' in tst:
-                yield self.dns_verify_add, sv, tst['hostname'], tst['value'], tst['result_ver']
+                yield "test_add ver TESTS[%d]" % t, self.dns_verify_add, sv, tst['hostname'], tst['value'], tst['result_ver']
 
     def dns_add(self, setup_checks, hostname, value, result):
         """

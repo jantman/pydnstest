@@ -176,9 +176,9 @@ class TestDNSCheckChange:
         for t in TESTS:
             tst = TESTS[t]
             if 'result_chk' in tst:
-                yield self.dns_change, sc, tst['hostname'], tst['newvalue'], tst['result_chk']
+                yield "test_change chk TESTS[%d]" % t, self.dns_change, sc, tst['hostname'], tst['newvalue'], tst['result_chk']
             if 'result_ver' in tst:
-                yield self.dns_verify_change, sv, tst['hostname'], tst['newvalue'], tst['result_ver']
+                yield "test_change ver TESTS[%d]" % t, self.dns_verify_change, sv, tst['hostname'], tst['newvalue'], tst['result_ver']
 
     def dns_change(self, setup_checks, hostname, newval, result):
         """

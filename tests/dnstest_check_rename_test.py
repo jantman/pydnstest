@@ -212,9 +212,9 @@ class TestDNSCheckRename:
         for t in TESTS:
             tst = TESTS[t]
             if 'result_chk' in tst:
-                yield self.dns_rename, sc, tst['oldname'], tst['newname'], tst['value'], tst['result_chk']
+                yield "test_rename chk TESTS[%d]" % t, self.dns_rename, sc, tst['oldname'], tst['newname'], tst['value'], tst['result_chk']
             if 'result_ver' in tst:
-                yield self.dns_verify_rename, sv, tst['oldname'], tst['newname'], tst['value'], tst['result_ver']
+                yield "test_rename ver TESTS[%d]" % t, self.dns_verify_rename, sv, tst['oldname'], tst['newname'], tst['value'], tst['result_ver']
 
     def dns_rename(self, setup_checks, oldname, newname, value, result):
         """
