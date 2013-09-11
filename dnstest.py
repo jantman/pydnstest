@@ -140,7 +140,7 @@ if __name__ == "__main__":
             r = run_verify_line(line)
         else:
             r = run_check_line(line)
-        if r == False:
+        if r is False:
             continue
         elif r['result']:
             passed = passed + 1
