@@ -198,11 +198,11 @@ class DNStestChecks:
                 rev = self.DNS.lookup_reverse(qp['answer']['data'], self.config.server_prod)
                 if 'answer' in rev:
                     if rev['answer']['data'] == newn or rev['answer']['data'] == newname:
-                        res['secondary'].append("reverse DNS is set correctly for %s (TEST)" % qt['answer']['data'])
+                        res['secondary'].append("reverse DNS is set correctly for %s (PROD)" % qp['answer']['data'])
                     else:
-                        res['warnings'].append("%s appears to still have reverse DNS set to %s (TEST)" % (newn, rev['answer']['data']))
+                        res['warnings'].append("%s appears to still have reverse DNS set to %s (PROD)" % (newn, rev['answer']['data']))
                 else:
-                    res['warnings'].append("no reverse DNS appears to be set for %s (TEST)" % qt['answer']['data'])
+                    res['warnings'].append("no reverse DNS appears to be set for %s (PROD)" % qp['answer']['data'])
         return res
 
     def check_added_name(self, n, value):
