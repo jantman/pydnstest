@@ -69,7 +69,33 @@ known_dns['ver']['prod']['fwd']['changetest2.example.com'] = ['STATUS', 'SERVFAI
 TESTS[2]['result_chk'] = {'message': 'changetest2 got status SERVFAIL (TEST)', 'result': False, 'secondary': [], 'warnings': []}
 TESTS[2]['result_ver'] = {'message': 'changetest2 got status SERVFAIL from PROD (PROD)', 'result': False, 'secondary': [], 'warnings': []}
 
+# test 3 - SERVFAIL in prod only
+TESTS[3] = {'hostname': 'changetest3', 'newvalue': '1.2.8.3'}
+known_dns['chk']['test']['fwd']['changetest3.example.com'] = ['1.2.8.3', 'A']
+known_dns['chk']['prod']['fwd']['changetest3.example.com'] = ['STATUS', 'SERVFAIL']
+TESTS[3]['result_chk'] = {'message': "changetest3 got status SERVFAIL from PROD - cannot change a name that doesn't exist (PROD)", 'result': False, 'secondary': [], 'warnings': []}
 
+# test 4 - not changed, same value in test and prod
+TESTS[4] = {'hostname': 'changetest4', 'newvalue': '1.2.8.4'}
+known_dns['chk']['test']['fwd']['changetest4.example.com'] = ['1.2.8.3', 'A']
+known_dns['chk']['prod']['fwd']['changetest4.example.com'] = ['1.2.8.3', 'A']
+TESTS[4]['result_chk'] = {'message': "changetest4 is not changed, resolves to same value (1.2.8.3) in TEST and PROD", 'result': False, 'secondary': [], 'warnings': []}
+
+# test 5 - change OK and reverse set
+TESTS[0] = {"hostname": "changetest5", "newvalue": "1.2.3.5"}
+known_dns['chk']['test']['fwd']['changetest5.example.com'] = ['1.2.3.5', 'A']
+known_dns['chk']['test']['rev']['1.2.3.5'] = 'changetest5.example.com'
+known_dns['chk']['prod']['fwd']['changetest5.example.com'] = ['1.2.3.6', 'A']
+known_dns['ver']['test']['fwd']['changetest5.example.com'] = ['1.2.3.5', 'A']
+known_dns['ver']['test']['rev']['1.2.3.5'] = 'changetest5.example.com'
+known_dns['ver']['prod']['fwd']['changetest5.example.com'] = ['1.2.3.5', 'A']
+known_dns['ver']['prod']['rev']['1.2.3.5'] = 'changetest5.example.com'
+TESTS[0]['result_chk'] = {'message': "change changetest5 from '1.2.3.6' to '1.2.3.5' (TEST)", 'result': True, 'secondary': ['REVERSE OK: 1.2.3.5 => changetest5.example.com (TEST)'], 'warnings': []}
+TESTS[0]['result_ver'] = {'message': "change changetest5 value to '1.2.3.5' (PROD)", 'result': True, 'secondary': ['REVERSE OK: 1.2.3.5 => changetest5.example.com (TEST)'], 'warnings': []}
+
+# test 6 - change OK but reverse set to old value
+
+# @TODO - remove this next line:
 # TESTS[]['result_chk'] = {'message': '', 'result': False, 'secondary': [], 'warnings': []}
 
 class TestDNSCheckChange:
