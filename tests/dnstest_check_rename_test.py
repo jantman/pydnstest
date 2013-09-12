@@ -115,11 +115,6 @@ known_dns['ver']['prod']['fwd']['renametest9b.example.com'] = ['1.2.4.9', 'A']
 TESTS[9]['result_chk'] = {'message': 'renametest9 => renametest9b rename is bad, resolves to 1.2.5.9 in TEST and 1.2.4.9 in PROD', 'result': False, 'secondary': [], 'warnings': []}
 TESTS[9]['result_ver'] = {'message': 'renametest9 => renametest9b rename is bad, resolves to 1.2.5.9 in PROD (expected value was 1.2.5.9) (PROD)', 'result': False, 'secondary': [], 'warnings': []}
 
-# test 10 - verify rename with hanging/incorrect prod reverse
-#TESTS[10] = {'oldname': "renametest10", 'newname': "renametest10b", 'value': '1.2.5.10'}
-
-#TESTS[10]['result_ver'] = {}
-
 class TestDNSCheckRename:
     """
     Test DNS checks, using stubbed name resolution methods that return static values.
