@@ -55,81 +55,69 @@ TESTS[1] = {'hostname': "existinghostname", 'value': "1.2.3.2"}
 known_dns['chk']['prod']['fwd']['existinghostname.example.com'] = ['1.2.3.2', 'A']
 TESTS[1]['result_chk'] = {'message': 'new name existinghostname returned valid result from prod server (PROD)', 'result': False, 'secondary': [], 'warnings': []}
 
-# test 2 - deleted, duplicate of test 0
-
-# test 3 - OK, cname
-TESTS[3] = {'hostname': "cnametestonly", 'value': "foobar"}
+# test 2 - OK, cname
+TESTS[2] = {'hostname': "cnametestonly", 'value': "foobar"}
 known_dns['chk']['test']['fwd']['cnametestonly.example.com'] = ['foobar', 'CNAME']
 known_dns['ver']['test']['fwd']['cnametestonly.example.com'] = ['foobar', 'CNAME']
 known_dns['ver']['prod']['fwd']['cnametestonly.example.com'] = ['foobar', 'CNAME']
-TESTS[3]['result_chk'] = {'message': 'cnametestonly => foobar (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for cnametestonly (PROD)'], 'warnings': []}
-TESTS[3]['result_ver'] = {'message': 'cnametestonly => foobar (PROD)', 'result': True, 'secondary': [], 'warnings': []}
+TESTS[2]['result_chk'] = {'message': 'cnametestonly => foobar (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for cnametestonly (PROD)'], 'warnings': []}
+TESTS[2]['result_ver'] = {'message': 'cnametestonly => foobar (PROD)', 'result': True, 'secondary': [], 'warnings': []}
 
-# test 4 - SERVFAIL in prod
-TESTS[4] = {'hostname': "servfail-prod", 'value': "1.2.3.9"}
+# test 3 - SERVFAIL in prod
+TESTS[3] = {'hostname': "servfail-prod", 'value': "1.2.3.9"}
 known_dns['chk']['prod']['fwd']['servfail-prod.example.com'] = ['STATUS', 'SERVFAIL']
 known_dns['chk']['test']['fwd']['servfail-prod.example.com'] = ['1.2.3.9', 'A']
-TESTS[4]['result_chk'] = {'message': 'prod server returned status SERVFAIL for name servfail-prod (PROD)', 'result': False, 'secondary': [], 'warnings': []}
+TESTS[3]['result_chk'] = {'message': 'prod server returned status SERVFAIL for name servfail-prod (PROD)', 'result': False, 'secondary': [], 'warnings': []}
 
-# test 5 - wrong value, no reverse
-TESTS[5] = {'hostname': "addtest5", 'value': "1.2.3.5"}
-known_dns['chk']['test']['fwd']['addtest5.example.com'] = ['1.2.3.1', 'A']
-known_dns['ver']['test']['fwd']['addtest5.example.com'] = ['1.2.3.1', 'A']
-known_dns['ver']['prod']['fwd']['addtest5.example.com'] = ['1.2.3.1', 'A']
-known_dns['ver']['test']['fwd']['addtest5.example.com'] = ['1.2.3.5', 'A']
-known_dns['ver']['prod']['fwd']['addtest5.example.com'] = ['1.2.3.13', 'A']
-TESTS[5]['result_chk'] = {'message': 'addtest5 resolves to 1.2.3.1 instead of 1.2.3.5 (TEST)', 'result': False, 'secondary': ['PROD server returns NXDOMAIN for addtest5 (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.5 (TEST)']}
-TESTS[5]['result_ver'] = {'message': 'addtest5 resolves to 1.2.3.13 instead of 1.2.3.5 (PROD)', 'result': False, 'secondary': [], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.5 (PROD)']}
+# test 4 - wrong value, no reverse
+TESTS[4] = {'hostname': "addtest4", 'value': "1.2.3.5"}
+known_dns['chk']['test']['fwd']['addtest4.example.com'] = ['1.2.3.1', 'A']
+known_dns['ver']['test']['fwd']['addtest4.example.com'] = ['1.2.3.1', 'A']
+known_dns['ver']['prod']['fwd']['addtest4.example.com'] = ['1.2.3.1', 'A']
+known_dns['ver']['test']['fwd']['addtest4.example.com'] = ['1.2.3.5', 'A']
+known_dns['ver']['prod']['fwd']['addtest4.example.com'] = ['1.2.3.13', 'A']
+TESTS[4]['result_chk'] = {'message': 'addtest4 resolves to 1.2.3.1 instead of 1.2.3.5 (TEST)', 'result': False, 'secondary': ['PROD server returns NXDOMAIN for addtest4 (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.5 (TEST)']}
+TESTS[4]['result_ver'] = {'message': 'addtest4 resolves to 1.2.3.13 instead of 1.2.3.5 (PROD)', 'result': False, 'secondary': [], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.5 (PROD)']}
 
-# test 6 - OK, with reverse
-TESTS[6] = {'hostname': "newwithreverse", 'value': "1.2.3.10"}
+# test 5 - OK, with reverse
+TESTS[5] = {'hostname': "newwithreverse", 'value': "1.2.3.10"}
 known_dns['chk']['test']['fwd']['newwithreverse.example.com'] = ['1.2.3.10', 'A']
 known_dns['chk']['test']['rev']['1.2.3.10'] = 'newwithreverse.example.com'
 known_dns['ver']['test']['fwd']['newwithreverse.example.com'] = ['1.2.3.10', 'A']
 known_dns['ver']['test']['rev']['1.2.3.10'] = 'newwithreverse.example.com'
 known_dns['ver']['prod']['fwd']['newwithreverse.example.com'] = ['1.2.3.10', 'A']
 known_dns['ver']['prod']['rev']['1.2.3.10'] = 'newwithreverse.example.com'
-TESTS[6]['result_chk'] = {'message': 'newwithreverse => 1.2.3.10 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for newwithreverse (PROD)', 'REVERSE OK: 1.2.3.10 => newwithreverse.example.com (TEST)'], 'warnings': []}
-TESTS[6]['result_ver'] = {'message': 'newwithreverse => 1.2.3.10 (PROD)', 'result': True, 'secondary': ['REVERSE OK: 1.2.3.10 => newwithreverse.example.com (PROD)'], 'warnings': []}
+TESTS[5]['result_chk'] = {'message': 'newwithreverse => 1.2.3.10 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for newwithreverse (PROD)', 'REVERSE OK: 1.2.3.10 => newwithreverse.example.com (TEST)'], 'warnings': []}
+TESTS[5]['result_ver'] = {'message': 'newwithreverse => 1.2.3.10 (PROD)', 'result': True, 'secondary': ['REVERSE OK: 1.2.3.10 => newwithreverse.example.com (PROD)'], 'warnings': []}
 
 # test 7 - OK, but bad reverse record
-TESTS[7] = {'hostname': "newwrongreverse", 'value': "1.2.3.11"}
+TESTS[6] = {'hostname': "newwrongreverse", 'value': "1.2.3.11"}
 known_dns['chk']['test']['fwd']['newwrongreverse.example.com'] = ['1.2.3.11', 'A']
 known_dns['chk']['test']['rev']['1.2.3.11'] = 'newBADreverse.example.com'
 known_dns['ver']['test']['fwd']['newwrongreverse.example.com'] = ['1.2.3.11', 'A']
 known_dns['ver']['test']['rev']['1.2.3.11'] = 'newwrongreverse.example.com'
 known_dns['ver']['prod']['fwd']['newwrongreverse.example.com'] = ['1.2.3.11', 'A']
 known_dns['ver']['prod']['rev']['1.2.3.11'] = 'groijg.example.com'
-TESTS[7]['result_chk'] = {'message': 'newwrongreverse => 1.2.3.11 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for newwrongreverse (PROD)'], 'warnings': ['REVERSE NG: got answer newBADreverse.example.com for name 1.2.3.11 (TEST)']}
-TESTS[7]['result_ver'] = {'message': 'newwrongreverse => 1.2.3.11 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got answer groijg.example.com for name 1.2.3.11 (PROD)']}
+TESTS[6]['result_chk'] = {'message': 'newwrongreverse => 1.2.3.11 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for newwrongreverse (PROD)'], 'warnings': ['REVERSE NG: got answer newBADreverse.example.com for name 1.2.3.11 (TEST)']}
+TESTS[6]['result_ver'] = {'message': 'newwrongreverse => 1.2.3.11 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got answer groijg.example.com for name 1.2.3.11 (PROD)']}
 
-# test 8 - SERVFAIL for test
-TESTS[8] = {'hostname': "servfail-test2", 'value': "1.2.3.8"}
+# test 7 - SERVFAIL for test
+TESTS[7] = {'hostname': "servfail-test2", 'value': "1.2.3.8"}
 known_dns['chk']['test']['fwd']['servfail-test2.example.com'] = ['STATUS', 'SERVFAIL']
-TESTS[8]['result_chk'] = {'message': 'status SERVFAIL for name servfail-test2 (TEST)', 'result': False, 'secondary': [], 'warnings': []}
+TESTS[7]['result_chk'] = {'message': 'status SERVFAIL for name servfail-test2 (TEST)', 'result': False, 'secondary': [], 'warnings': []}
 
-# test 9 - merged with test 0 (verify)
-
-# test 10 - merged with test 3 (verify)
-
-# test 11 - merged with test 5 (verify)
-
-# test 12 - merged with test 6 (verify)
-
-# test 13 - SERVFAIL in prod
-TESTS[13] = {'hostname': "servfail-prod", 'value': "1.2.3.9"}
+# test 8 - SERVFAIL in prod
+TESTS[8] = {'hostname': "servfail-prod", 'value': "1.2.3.9"}
 known_dns['ver']['prod']['fwd']['servfail-prod.example.com'] = ['STATUS', 'SERVFAIL']
-TESTS[13]['result_ver'] = {'message': 'status SERVFAIL for name servfail-prod (PROD)', 'result': False, 'secondary': [], 'warnings': []}
+TESTS[8]['result_ver'] = {'message': 'status SERVFAIL for name servfail-prod (PROD)', 'result': False, 'secondary': [], 'warnings': []}
 
-# test 14 - merged with test 7 (verify)
-
-# test 15 - OK but SERVFAIL for reverse
-TESTS[15] = {'hostname': "addedprodrevservfail.example.com", 'value': "1.9.9.9"}
+# test 9 - OK but SERVFAIL for reverse
+TESTS[9] = {'hostname': "addedprodrevservfail.example.com", 'value': "1.9.9.9"}
 known_dns['ver']['test']['fwd']['addedprodrevservfail.example.com'] = ['1.9.9.9', 'A']
 known_dns['ver']['test']['rev']['1.9.9.9'] = 'prodrevservfail.example.com'
 known_dns['ver']['prod']['fwd']['addedprodrevservfail.example.com'] = ['1.9.9.9', 'A']
 known_dns['ver']['prod']['rev']['1.9.9.9'] = 'SERVFAIL'
-TESTS[15]['result_ver'] = {'message': 'addedprodrevservfail.example.com => 1.9.9.9 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got status SERVFAIL for name 1.9.9.9 (PROD)']}
+TESTS[9]['result_ver'] = {'message': 'addedprodrevservfail.example.com => 1.9.9.9 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got status SERVFAIL for name 1.9.9.9 (PROD)']}
 
 
 class TestDNSCheckAdd:
