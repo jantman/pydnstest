@@ -46,24 +46,29 @@ check and verify, and the DNS entries that each test uses.
 TESTS[0] = {'oldname': "renametest1", 'newname': "renametest1b", 'value': "1.2.3.20"}
 known_dns['chk']['prod']['fwd']['renametest1.example.com'] = ['1.2.3.20', 'A']
 known_dns['chk']['test']['fwd']['renametest1b.example.com'] = ['1.2.3.20', 'A']
-known_dns['ver']['test']['fwd']['renametest1b.example.com'] = ['1.2.3.20', 'A']
+known_dns['ver']['prod']['fwd']['renametest1b.example.com'] = ['1.2.3.20', 'A']
 TESTS[0]['result_chk'] = {'message': 'rename renametest1 => renametest1b (TEST)', 'result': True, 'secondary': [], 'warnings': ['no reverse DNS appears to be set for 1.2.3.20 (TEST)']}
+TESTS[0]['result_ver'] = {'message': 'rename renametest1 => renametest1b (PROD)', 'result': True, 'secondary': [], 'warnings': ['no reverse DNS appears to be set for 1.2.3.20 (PROD)']}
 
-# test 1
+# test 1 - valid rename, but reverse DNS not updated (left at old value)
 TESTS[1] = {'oldname': "renametest2", 'newname': "renametest2b", 'value': "1.2.3.21"}
 known_dns['chk']['prod']['fwd']['renametest2.example.com'] = ['1.2.3.21', 'A']
 known_dns['chk']['test']['fwd']['renametest2b.example.com'] = ['1.2.3.21', 'A']
 known_dns['chk']['test']['rev']['1.2.3.21'] = 'renametest2.example.com'
-known_dns['ver']['test']['fwd']['renametest2b.example.com'] = ['1.2.3.21', 'A']
+known_dns['ver']['prod']['fwd']['renametest2b.example.com'] = ['1.2.3.21', 'A']
+known_dns['ver']['prod']['rev']['1.2.3.21'] = 'renametest2.example.com'
 TESTS[1]['result_chk'] = {'message': 'rename renametest2 => renametest2b (TEST)', 'result': True, 'secondary': [], 'warnings': ['renametest2 appears to still have reverse DNS set to renametest2.example.com (TEST)']}
+TESTS[1]['result_ver'] = {'message': 'rename renametest2 => renametest2b (PROD)', 'result': True, 'secondary': [], 'warnings': ['renametest2b appears to still have reverse DNS set to renametest2.example.com (PROD)']}
 
-# test 2
+# test 2 - everything right including reverse DNS
 TESTS[2] = {'oldname': "renametest3", 'newname': "renametest3b", 'value': "1.2.3.22"}
 known_dns['chk']['prod']['fwd']['renametest3.example.com'] = ['1.2.3.22', 'A']
 known_dns['chk']['test']['fwd']['renametest3b.example.com'] = ['1.2.3.22', 'A']
 known_dns['chk']['test']['rev']['1.2.3.22'] = 'renametest3b.example.com'
-known_dns['ver']['test']['fwd']['renametest3b.example.com'] = ['1.2.3.22', 'A']
+known_dns['ver']['prod']['fwd']['renametest3b.example.com'] = ['1.2.3.22', 'A']
+known_dns['ver']['prod']['rev']['1.2.3.22'] = 'renametest3b.example.com'
 TESTS[2]['result_chk'] = {'message': 'rename renametest3 => renametest3b (TEST)', 'result': True, 'secondary': ['reverse DNS is set correctly for 1.2.3.22 (TEST)'], 'warnings': []}
+TESTS[2]['result_ver'] = {'message': 'rename renametest3 => renametest3b (PROD)', 'result': True, 'secondary': ['reverse DNS is set correctly for 1.2.3.22 (PROD)'], 'warnings': []}
 
 # test 3
 # this next one should fail, it's actually an addition and a deletion, but values differ
@@ -96,7 +101,9 @@ known_dns['chk']['prod']['fwd']['renametest6.example.com'] = ['renametest6cname'
 known_dns['chk']['test']['fwd']['renametest6b.example.com'] = ['renametest6cname', 'CNAME']
 known_dns['chk']['test']['rev']['renametest6cname.example.com'] = 'renametest6b.example.com'
 known_dns['ver']['test']['fwd']['renametest6b.example.com'] = ['renametest6cname', 'CNAME']
+known_dns['ver']['prod']['fwd']['renametest6b.example.com'] = ['renametest6cname', 'CNAME']
 TESTS[6]['result_chk'] = {'message': 'rename renametest6 => renametest6b (TEST)', 'result': True, 'secondary': [], 'warnings': []}
+TESTS[6]['result_ver'] = {'message': 'rename renametest6 => renametest6b (PROD)', 'result': True, 'secondary': [], 'warnings': []}
 
 # test 7 - SERVFAIL in prod
 TESTS[7] = {'oldname': "renametest7", 'newname': "renametest7b", 'value': "renametest7cname"}
@@ -107,11 +114,25 @@ known_dns['ver']['test']['fwd']['renametest7b.example.com'] = ['renametest7cname
 TESTS[7]['result_chk'] = {'message': "renametest7 got status SERVFAIL from PROD - cannot change a name that doesn't exist (PROD)", 'result': False, 'secondary': [], 'warnings': []}
 
 # test 8 - SERVFAIL in test
-TESTS[7] = {'oldname': "renametest8", 'newname': "renametest8b", 'value': "1.2.5.8"}
+TESTS[8] = {'oldname': "renametest8", 'newname': "renametest8b", 'value': "1.2.5.8"}
 known_dns['chk']['prod']['fwd']['renametest8.example.com'] = ['1.2.5.8', 'A']
 known_dns['chk']['test']['fwd']['renametest8b.example.com'] = ['STATUS', 'SERVFAIL']
 known_dns['chk']['test']['rev']['1.2.5.8'] = 'renametest8b.example.com'
-TESTS[7]['result_chk'] = {'message': "renametest8b got status SERVFAIL (TEST)", 'result': False, 'secondary': [], 'warnings': []}
+TESTS[8]['result_chk'] = {'message': "renametest8b got status SERVFAIL (TEST)", 'result': False, 'secondary': [], 'warnings': []}
+
+# test 9 - valid but different answers in test and prod
+TESTS[9] = {'oldname': "renametest9", 'newname': "renametest9b", 'value': '1.2.5.9'}
+known_dns['chk']['test']['fwd']['renametest9b.example.com'] = ['1.2.5.9', 'A']
+known_dns['chk']['prod']['fwd']['renametest9.example.com'] = ['1.2.4.9', 'A']
+known_dns['ver']['test']['fwd']['renametest9b.example.com'] = ['1.2.5.9', 'A']
+known_dns['ver']['prod']['fwd']['renametest9b.example.com'] = ['1.2.4.9', 'A']
+TESTS[9]['result_chk'] = {'message': 'renametest9 => renametest9b rename is bad, resolves to 1.2.5.9 in TEST and 1.2.4.9 in PROD', 'result': False, 'secondary': [], 'warnings': []}
+TESTS[9]['result_ver'] = {'message': 'renametest9 => renametest9b rename is bad, resolves to 1.2.5.9 in PROD (expected value was 1.2.5.9) (PROD)', 'result': False, 'secondary': [], 'warnings': []}
+
+# test 10 - verify rename with hanging/incorrect prod reverse
+#TESTS[10] = {'oldname': "renametest10", 'newname': "renametest10b", 'value': '1.2.5.10'}
+
+#TESTS[10]['result_ver'] = {}
 
 class TestDNSCheckRename:
     """

@@ -42,18 +42,35 @@ Here we define all of the tests, along with their expected results for
 check and verify, and the DNS entries that each test uses.
 """
 
-# test 0
+# test 0 - change OK but no reverse DNS set
 TESTS[0] = {"hostname": "addedname2", "newvalue": "1.2.3.12"}
 known_dns['chk']['test']['fwd']['addedname2.example.com'] = ['1.2.3.12', 'A']
 known_dns['chk']['prod']['fwd']['addedname2.example.com'] = ['1.2.3.13', 'A']
+known_dns['ver']['test']['fwd']['addedname2.example.com'] = ['1.2.3.12', 'A']
+known_dns['ver']['prod']['fwd']['addedname2.example.com'] = ['1.2.3.12', 'A']
 TESTS[0]['result_chk'] = {'message': "change addedname2 from '1.2.3.13' to '1.2.3.12' (TEST)", 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.3.12 (TEST)']}
+TESTS[0]['result_ver'] = {'message': "change addedname2 from '1.2.3.13' to '1.2.3.12' (PROD)", 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.3.12 (PROD)']}
 
-# test 1
-TESTS[1] = {"hostname": "addedhostname", "newvalue": "1.2.3.3"}
-known_dns['ver']['test']['fwd']['addedhostname.example.com'] = ['1.2.3.3', 'A']
-known_dns['ver']['prod']['fwd']['addedhostname.example.com'] = ['1.2.3.3', 'A']
-TESTS[1]['result_ver'] = {'message': "change addedhostname value to '1.2.3.3' (PROD)", 'result': True, 'secondary': [], 'warnings': ['no reverse DNS appears to be set for 1.2.3.3 (PROD)']}
+# test 1 - change value of a CNAME; change to invalid value, test fails
+TESTS[1] = {'hostname': 'changetest1', 'newvalue': 'changetest1val'}
+known_dns['chk']['test']['fwd']['changetest1.example.com'] = ['changetest1bad.example.com', 'CNAME']
+known_dns['chk']['prod']['fwd']['changetest1.example.com'] = ['changetest1orig.example.com', 'CNAME']
+known_dns['ver']['test']['fwd']['changetest1.example.com'] = ['changetest1bad.example.com', 'CNAME']
+known_dns['ver']['prod']['fwd']['changetest1.example.com'] = ['changetest1bad.example.com', 'CNAME']
+TESTS[1]['result_chk'] = {'message': 'changetest1 resolves to changetest1bad.example.com instead of changetest1val (TEST)', 'result': False, 'secondary': [], 'warnings': []}
+TESTS[1]['result_ver'] = {'message': 'changetest1 resolves to changetest1bad.example.com instead of changetest1val (TEST)', 'result': False, 'secondary': [], 'warnings': []}
 
+# test 2 - SERVFAIL
+TESTS[2] = {'hostname': 'changetest2', 'newvalue': 'changetest2val'}
+known_dns['chk']['test']['fwd']['changetest2.example.com'] = ['STATUS', 'SERVFAIL']
+known_dns['chk']['prod']['fwd']['changetest2.example.com'] = ['changetest2orig.example.com', 'CNAME']
+known_dns['ver']['test']['fwd']['changetest2.example.com'] = ['changetest2orig.example.com', 'CNAME']
+known_dns['ver']['prod']['fwd']['changetest2.example.com'] = ['STATUS', 'SERVFAIL']
+TESTS[2]['result_chk'] = {'message': 'changetest2 got status SERVFAIL (TEST)', 'result': False, 'secondary': [], 'warnings': []}
+TESTS[2]['result_ver'] = {'message': 'changetest2 got status SERVFAIL from PROD (PROD)', 'result': False, 'secondary': [], 'warnings': []}
+
+
+# TESTS[]['result_chk'] = {'message': '', 'result': False, 'secondary': [], 'warnings': []}
 
 class TestDNSCheckChange:
     """
