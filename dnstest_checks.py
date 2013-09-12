@@ -56,13 +56,13 @@ class DNStestChecks:
             # check for any leftover reverse lookups
             rev = self.DNS.lookup_reverse(qp['answer']['data'], self.config.server_test)
             if 'answer' in rev:
-                res['warnings'].append("REVERSE NG: %s appears to still have reverse DNS set to %s (TEST)" % (n, rev['answer']['data']))
+                res['warnings'].append("REVERSE NG: %s appears to still have reverse DNS set to %s (TEST)" % (qp['answer']['data'], name))
         elif 'status' in qt:
             res['result'] = False
             res['message'] = "%s returned status %s (TEST)" % (n, qt['status'])
         else:
             res['result'] = False
-            res['message'] = "%s returned valid answer, not removed (TEST)" % n
+            res['message'] = "%s returned valid answer of '%s', not removed (TEST)" % (n, qt['answer']['data'])
         return res
 
     def verify_removed_name(self, n):

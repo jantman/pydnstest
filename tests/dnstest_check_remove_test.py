@@ -42,63 +42,59 @@ Here we define all of the tests, along with their expected results for
 check and verify, and the DNS entries that each test uses.
 """
 
-# test 0
+# test 0 - NXDOMAIN already
 TESTS[0] = {'hostname': "badhostname"}
 TESTS[0]['result_chk'] = {'message': "badhostname got status NXDOMAIN from PROD - cannot remove a name that doesn't exist (PROD)", 'secondary': [], 'result': False, 'warnings': []}
 
-# test 1
+# test 1 - OK, removed from test
 TESTS[1] = {'hostname': "prodonlyhostname"}
 known_dns['chk']['prod']['fwd']['prodonlyhostname.example.com'] = ['1.2.3.5', 'A']
 TESTS[1]['result_chk'] = {'message': 'prodonlyhostname removed, got status NXDOMAIN (TEST)', 'result': True, 'secondary': ['PROD value was 1.2.3.5 (PROD)'], 'warnings': []}
 
-# test 2
+# test 2 - valid answer - not removed
 TESTS[2] = {'hostname': "addedhostname"}
 known_dns['chk']['prod']['fwd']['addedhostname.example.com'] = ['1.2.3.3', 'A']
 known_dns['chk']['test']['fwd']['addedhostname.example.com'] = ['1.2.3.3', 'A']
-TESTS[2]['result_chk'] = {'message': 'addedhostname returned valid answer, not removed (TEST)', 'result': False, 'secondary': [], 'warnings': []}
+known_dns['ver']['prod']['fwd']['addedhostname.example.com'] = ['1.2.3.3', 'A']
+TESTS[2]['result_chk'] = {'message': "addedhostname returned valid answer of '1.2.3.3', not removed (TEST)", 'result': False, 'secondary': [], 'warnings': []}
+TESTS[2]['result_ver'] = {'message': "addedhostname returned valid answer of '1.2.3.3', not removed (PROD)", 'result': False, 'secondary': [], 'warnings': []}
 
-# test 3
+# test 3 - OK, removed from test, has reverse in prod too
 TESTS[3] = {'hostname': "prodonlywithrev"}
 known_dns['chk']['prod']['fwd']['prodonlywithrev.example.com'] = ['1.2.3.6', 'A']
 known_dns['chk']['prod']['rev']['1.2.3.6'] = 'prodonlywithrev.example.com'
 TESTS[3]['result_chk'] = {'message': 'prodonlywithrev removed, got status NXDOMAIN (TEST)', 'result': True, 'secondary': ['PROD value was 1.2.3.6 (PROD)'], 'warnings': []}
 
-# test 4
+# test 4 - OK, removed from test, still has reverse DNS set
 TESTS[4] = {'hostname': "prodwithtestrev"}
 known_dns['chk']['prod']['rev']['1.2.3.7'] = 'prodwithtestrev.example.com'
 known_dns['chk']['test']['rev']['1.2.3.7'] = 'prodwithtestrev.example.com'
 known_dns['chk']['prod']['fwd']['prodwithtestrev.example.com'] = ['1.2.3.7', 'A']
-TESTS[4]['result_chk'] = {'message': 'prodwithtestrev removed, got status NXDOMAIN (TEST)', 'result': True, 'secondary': ['PROD value was 1.2.3.7 (PROD)'], 'warnings': ['REVERSE NG: prodwithtestrev appears to still have reverse DNS set to prodwithtestrev.example.com (TEST)']}
+TESTS[4]['result_chk'] = {'message': 'prodwithtestrev removed, got status NXDOMAIN (TEST)', 'result': True, 'secondary': ['PROD value was 1.2.3.7 (PROD)'], 'warnings': ['REVERSE NG: 1.2.3.7 appears to still have reverse DNS set to prodwithtestrev.example.com (TEST)']}
 
-# test 5
+# test 5 - SERVFAIL on test server
 TESTS[5] = {'hostname': "servfail-test"}
 known_dns['chk']['test']['fwd']['servfail-test.example.com'] = ['STATUS', 'SERVFAIL']
 known_dns['chk']['prod']['fwd']['servfail-test.example.com'] = ['1.2.3.8', 'A']
 TESTS[5]['result_chk'] = {'message': 'servfail-test returned status SERVFAIL (TEST)', 'result': False, 'secondary': [], 'warnings': []}
 
-# test 6
+# test 6 - OK, verify - removed from both
 TESTS[6] = {'hostname': "notahostname"}
 TESTS[6]['result_ver'] = {'message': 'notahostname removed, got status NXDOMAIN (PROD)', 'result': True, 'secondary': [], 'warnings': []}
 
-# test 7
-TESTS[7] = {'hostname': "existinghostname"}
-known_dns['ver']['prod']['fwd']['existinghostname.example.com'] = ['1.2.3.2', 'A']
-TESTS[7]['result_ver'] = {'message': "existinghostname returned valid answer of '1.2.3.2', not removed (PROD)", 'result': False, 'secondary': [], 'warnings': []}
+# test 7 - deleted, duplicate of test 2
 
-# test 8
+# test 8 - removed from prod but still there (or back again) in test
 TESTS[8] = {'hostname': "newhostname"}
 known_dns['ver']['test']['fwd']['newhostname.example.com'] = ['1.2.3.1', 'A']
 TESTS[8]['result_ver'] = {'message': 'newhostname removed, got status NXDOMAIN (PROD)', 'result': True, 'secondary': ['newhostname returned answer 1.2.3.1 (TEST)'], 'warnings': []}
 
-# test 9
+# test 9 - SERVFAIL on prod server (verify)
 TESTS[9] = {'hostname': "servfail-prod"}
 known_dns['ver']['prod']['fwd']['servfail-prod.example.com'] = ['STATUS', 'SERVFAIL']
 TESTS[9]['result_ver'] = {'message': "servfail-prod returned a 'strange' status of SERVFAIL (PROD)", 'result': False, 'secondary': [], 'warnings': []}
 
-# test 10
-TESTS[10] = {'hostname': "removetest1"}
-known_dns['ver']['test']['fwd']['removetest1.example.com'] = ['1.2.3.27', 'A']
-TESTS[10]['result_ver'] = {'message': 'removetest1 removed, got status NXDOMAIN (PROD)', 'result': True, 'secondary': ['removetest1 returned answer 1.2.3.27 (TEST)'], 'warnings': []}
+# test 10 - deleted, duplicated test 8
 
 # test 11
 #TESTS[11] = {'hostname': 'test11'}
