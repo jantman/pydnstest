@@ -47,8 +47,8 @@ TESTS[0] = {'oldname': "renametest1", 'newname': "renametest1b", 'value': "1.2.3
 known_dns['chk']['prod']['fwd']['renametest1.example.com'] = ['1.2.3.20', 'A']
 known_dns['chk']['test']['fwd']['renametest1b.example.com'] = ['1.2.3.20', 'A']
 known_dns['ver']['prod']['fwd']['renametest1b.example.com'] = ['1.2.3.20', 'A']
-TESTS[0]['result_chk'] = {'message': 'rename renametest1 => renametest1b (TEST)', 'result': True, 'secondary': [], 'warnings': ['no reverse DNS appears to be set for 1.2.3.20 (TEST)']}
-TESTS[0]['result_ver'] = {'message': 'rename renametest1 => renametest1b (PROD)', 'result': True, 'secondary': [], 'warnings': ['no reverse DNS appears to be set for 1.2.3.20 (PROD)']}
+TESTS[0]['result_chk'] = {'message': 'rename renametest1 => renametest1b (TEST)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.3.20 (TEST)']}
+TESTS[0]['result_ver'] = {'message': 'rename renametest1 => renametest1b (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.3.20 (PROD)']}
 
 # test 1 - valid rename, but reverse DNS not updated (left at old value)
 TESTS[1] = {'oldname': "renametest2", 'newname': "renametest2b", 'value': "1.2.3.21"}
@@ -57,8 +57,8 @@ known_dns['chk']['test']['fwd']['renametest2b.example.com'] = ['1.2.3.21', 'A']
 known_dns['chk']['test']['rev']['1.2.3.21'] = 'renametest2.example.com'
 known_dns['ver']['prod']['fwd']['renametest2b.example.com'] = ['1.2.3.21', 'A']
 known_dns['ver']['prod']['rev']['1.2.3.21'] = 'renametest2.example.com'
-TESTS[1]['result_chk'] = {'message': 'rename renametest2 => renametest2b (TEST)', 'result': True, 'secondary': [], 'warnings': ['1.2.3.21 appears to still have reverse DNS set to renametest2.example.com (TEST)']}
-TESTS[1]['result_ver'] = {'message': 'rename renametest2 => renametest2b (PROD)', 'result': True, 'secondary': [], 'warnings': ['1.2.3.21 appears to still have reverse DNS set to renametest2.example.com (PROD)']}
+TESTS[1]['result_chk'] = {'message': 'rename renametest2 => renametest2b (TEST)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: 1.2.3.21 appears to still have reverse DNS set to renametest2.example.com (TEST)']}
+TESTS[1]['result_ver'] = {'message': 'rename renametest2 => renametest2b (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: 1.2.3.21 appears to still have reverse DNS set to renametest2.example.com (PROD)']}
 
 # test 2 - everything right including reverse DNS
 TESTS[2] = {'oldname': "renametest3", 'newname': "renametest3b", 'value': "1.2.3.22"}
@@ -67,8 +67,8 @@ known_dns['chk']['test']['fwd']['renametest3b.example.com'] = ['1.2.3.22', 'A']
 known_dns['chk']['test']['rev']['1.2.3.22'] = 'renametest3b.example.com'
 known_dns['ver']['prod']['fwd']['renametest3b.example.com'] = ['1.2.3.22', 'A']
 known_dns['ver']['prod']['rev']['1.2.3.22'] = 'renametest3b.example.com'
-TESTS[2]['result_chk'] = {'message': 'rename renametest3 => renametest3b (TEST)', 'result': True, 'secondary': ['reverse DNS is set correctly for 1.2.3.22 (TEST)'], 'warnings': []}
-TESTS[2]['result_ver'] = {'message': 'rename renametest3 => renametest3b (PROD)', 'result': True, 'secondary': ['reverse DNS is set correctly for 1.2.3.22 (PROD)'], 'warnings': []}
+TESTS[2]['result_chk'] = {'message': 'rename renametest3 => renametest3b (TEST)', 'result': True, 'secondary': ['REVERSE OK: reverse DNS is set correctly for 1.2.3.22 (TEST)'], 'warnings': []}
+TESTS[2]['result_ver'] = {'message': 'rename renametest3 => renametest3b (PROD)', 'result': True, 'secondary': ['REVERSE OK: reverse DNS is set correctly for 1.2.3.22 (PROD)'], 'warnings': []}
 
 # test 3 - this one should fail, it's actually an addition and a deletion, but values differ
 TESTS[3] = {'oldname': "renametest4", 'newname': "renametest4b", 'value': "1.2.3.24"}

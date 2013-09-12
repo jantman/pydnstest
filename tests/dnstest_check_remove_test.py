@@ -68,7 +68,7 @@ TESTS[4] = {'hostname': "prodwithtestrev"}
 known_dns['chk']['prod']['rev']['1.2.3.7'] = 'prodwithtestrev.example.com'
 known_dns['chk']['test']['rev']['1.2.3.7'] = 'prodwithtestrev.example.com'
 known_dns['chk']['prod']['fwd']['prodwithtestrev.example.com'] = ['1.2.3.7', 'A']
-TESTS[4]['result_chk'] = {'message': 'prodwithtestrev removed, got status NXDOMAIN (TEST)', 'result': True, 'secondary': ['PROD value was 1.2.3.7 (PROD)'], 'warnings': ['prodwithtestrev appears to still have reverse DNS set to prodwithtestrev.example.com (TEST)']}
+TESTS[4]['result_chk'] = {'message': 'prodwithtestrev removed, got status NXDOMAIN (TEST)', 'result': True, 'secondary': ['PROD value was 1.2.3.7 (PROD)'], 'warnings': ['REVERSE NG: prodwithtestrev appears to still have reverse DNS set to prodwithtestrev.example.com (TEST)']}
 
 # test 5
 TESTS[5] = {'hostname': "servfail-test"}

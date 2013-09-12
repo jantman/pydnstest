@@ -49,7 +49,7 @@ known_dns['chk']['prod']['fwd']['addedname2.example.com'] = ['1.2.3.13', 'A']
 known_dns['ver']['test']['fwd']['addedname2.example.com'] = ['1.2.3.12', 'A']
 known_dns['ver']['prod']['fwd']['addedname2.example.com'] = ['1.2.3.12', 'A']
 TESTS[0]['result_chk'] = {'message': "change addedname2 from '1.2.3.13' to '1.2.3.12' (TEST)", 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.3.12 (TEST)']}
-TESTS[0]['result_ver'] = {'message': "change addedname2 from '1.2.3.13' to '1.2.3.12' (PROD)", 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.3.12 (PROD)']}
+TESTS[0]['result_ver'] = {'message': "change addedname2 value to '1.2.3.12' (PROD)", 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.3.12 (PROD)']}
 
 # test 1 - change value of a CNAME; change to invalid value, test fails
 TESTS[1] = {'hostname': 'changetest1', 'newvalue': 'changetest1val'}
@@ -58,7 +58,7 @@ known_dns['chk']['prod']['fwd']['changetest1.example.com'] = ['changetest1orig.e
 known_dns['ver']['test']['fwd']['changetest1.example.com'] = ['changetest1bad.example.com', 'CNAME']
 known_dns['ver']['prod']['fwd']['changetest1.example.com'] = ['changetest1bad.example.com', 'CNAME']
 TESTS[1]['result_chk'] = {'message': 'changetest1 resolves to changetest1bad.example.com instead of changetest1val (TEST)', 'result': False, 'secondary': [], 'warnings': []}
-TESTS[1]['result_ver'] = {'message': 'changetest1 resolves to changetest1bad.example.com instead of changetest1val (TEST)', 'result': False, 'secondary': [], 'warnings': []}
+TESTS[1]['result_ver'] = {'message': 'changetest1 resolves to changetest1bad.example.com instead of changetest1val (PROD)', 'result': False, 'secondary': [], 'warnings': []}
 
 # test 2 - SERVFAIL
 TESTS[2] = {'hostname': 'changetest2', 'newvalue': 'changetest2val'}
