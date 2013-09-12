@@ -88,7 +88,7 @@ class DNStestChecks:
                 res['secondary'] = ["%s returned answer %s (TEST)" % (n, qt['answer']['data'])]
         elif 'status' in qp and qp['status'] != "NXDOMAIN":
             res['result'] = False
-            res['message'] = "%s returned a 'strange' status of %s (PROD)" % (n, qp['status'])
+            res['message'] = "%s returned status %s (PROD)" % (n, qp['status'])
         else:
             res['result'] = False
             res['message'] = "%s returned valid answer of '%s', not removed (PROD)" % (n, qp['answer']['data'])
