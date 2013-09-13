@@ -43,13 +43,13 @@ check and verify, and the DNS entries that each test uses.
 """
 
 # test 0 - change OK but no reverse DNS set
-TESTS[0] = {"hostname": "addedname2", "newvalue": "1.2.3.12"}
+TESTS[0] = {"hostname": "addedname2.example.com", "newvalue": "1.2.3.12"}
 known_dns['chk']['test']['fwd']['addedname2.example.com'] = ['1.2.3.12', 'A']
 known_dns['chk']['prod']['fwd']['addedname2.example.com'] = ['1.2.3.13', 'A']
 known_dns['ver']['test']['fwd']['addedname2.example.com'] = ['1.2.3.12', 'A']
 known_dns['ver']['prod']['fwd']['addedname2.example.com'] = ['1.2.3.12', 'A']
-TESTS[0]['result_chk'] = {'message': "change addedname2 from '1.2.3.13' to '1.2.3.12' (TEST)", 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.3.12 (TEST)']}
-TESTS[0]['result_ver'] = {'message': "change addedname2 value to '1.2.3.12' (PROD)", 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.3.12 (PROD)']}
+TESTS[0]['result_chk'] = {'message': "change addedname2.example.com from '1.2.3.13' to '1.2.3.12' (TEST)", 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.3.12 (TEST)']}
+TESTS[0]['result_ver'] = {'message': "change addedname2.example.com value to '1.2.3.12' (PROD)", 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.3.12 (PROD)']}
 
 # test 1 - change value of a CNAME; change to invalid value, test fails
 TESTS[1] = {'hostname': 'changetest1', 'newvalue': 'changetest1val'}
@@ -122,6 +122,15 @@ TESTS[8] = {'hostname': 'changetest8', 'newvalue': 'changetest8val'}
 known_dns['ver']['prod']['fwd']['changetest8.example.com'] = ['changetest8orig.example.com', 'CNAME']
 known_dns['ver']['test']['fwd']['changetest8.example.com'] = ['STATUS', 'SERVFAIL']
 TESTS[8]['result_ver'] = {'message': 'changetest8 got status SERVFAIL (TEST)', 'result': False, 'secondary': [], 'warnings': []}
+
+# test 9 - change OK but no reverse DNS set; change A to CNAME
+TESTS[9] = {"hostname": "changetest9.example.com", "newvalue": "changetest9cname.example.com"}
+known_dns['chk']['test']['fwd']['changetest9.example.com'] = ['changetest9cname.example.com', 'CNAME']
+known_dns['chk']['prod']['fwd']['changetest9.example.com'] = ['1.2.3.13', 'A']
+known_dns['ver']['test']['fwd']['changetest9.example.com'] = ['changetest9cname.example.com', 'CNAME']
+known_dns['ver']['prod']['fwd']['changetest9.example.com'] = ['changetest9cname.example.com', 'CNAME']
+TESTS[9]['result_chk'] = {'message': "change changetest9.example.com from '1.2.3.13' to 'changetest9cname.example.com' (TEST)", 'result': True, 'secondary': [], 'warnings': []}
+TESTS[9]['result_ver'] = {'message': "change changetest9.example.com value to 'changetest9cname.example.com' (PROD)", 'result': True, 'secondary': [], 'warnings': []}
 
 class TestDNSCheckChange:
     """

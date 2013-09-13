@@ -351,7 +351,7 @@ class DNStestChecks:
             res['result'] = True
             res['message'] = "change %s from '%s' to '%s' (TEST)" % (n, qp['answer']['data'], qt['answer']['data'])
             # check for any leftover reverse lookups
-            if qt['answer']['typename'] == 'A' or qp['answer']['typename'] == 'A':
+            if qt['answer']['typename'] == 'A':
                 rev = self.DNS.lookup_reverse(qt['answer']['data'], self.config.server_test)
                 if 'answer' in rev:
                     if rev['answer']['data'] == name or rev['answer']['data'] == n:
@@ -400,14 +400,15 @@ class DNStestChecks:
             res['result'] = True
             res['message'] = "change %s value to '%s' (PROD)" % (n, qp['answer']['data'])
             # check for bad reverse DNS
-            rev = self.DNS.lookup_reverse(qp['answer']['data'], self.config.server_prod)
-            if 'answer' in rev:
-                if rev['answer']['data'] == n or rev['answer']['data'] == name:
-                    res['secondary'].append("REVERSE OK: %s => %s (PROD)" % (qp['answer']['data'], rev['answer']['data']))
-                else:
-                    res['warnings'].append("REVERSE NG: %s appears to still have reverse DNS set to %s (PROD)" % (qp['answer']['data'], rev['answer']['data']))
-            else:
-                res['warnings'].append("REVERSE NG: no reverse DNS appears to be set for %s (PROD)" % qp['answer']['data'])
+            if qp['answer']['typename'] == 'A':
+		rev = self.DNS.lookup_reverse(qp['answer']['data'], self.config.server_prod)
+		if 'answer' in rev:
+		    if rev['answer']['data'] == n or rev['answer']['data'] == name:
+			res['secondary'].append("REVERSE OK: %s => %s (PROD)" % (qp['answer']['data'], rev['answer']['data']))
+		    else:
+			res['warnings'].append("REVERSE NG: %s appears to still have reverse DNS set to %s (PROD)" % (qp['answer']['data'], rev['answer']['data']))
+		else:
+		    res['warnings'].append("REVERSE NG: no reverse DNS appears to be set for %s (PROD)" % qp['answer']['data'])
         else:
             res['result'] = False
             res['message'] = "%s resolves to %s instead of %s (PROD)" % (n, qp['answer']['data'], val)

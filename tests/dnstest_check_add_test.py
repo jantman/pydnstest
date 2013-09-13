@@ -80,15 +80,15 @@ TESTS[4]['result_chk'] = {'message': 'addtest4 resolves to 1.2.3.1 instead of 1.
 TESTS[4]['result_ver'] = {'message': 'addtest4 resolves to 1.2.3.13 instead of 1.2.3.5 (PROD)', 'result': False, 'secondary': [], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.5 (PROD)']}
 
 # test 5 - OK, with reverse
-TESTS[5] = {'hostname': "newwithreverse", 'value': "1.2.3.10"}
+TESTS[5] = {'hostname': "newwithreverse.example.com", 'value': "1.2.3.10"}
 known_dns['chk']['test']['fwd']['newwithreverse.example.com'] = ['1.2.3.10', 'A']
 known_dns['chk']['test']['rev']['1.2.3.10'] = 'newwithreverse.example.com'
 known_dns['ver']['test']['fwd']['newwithreverse.example.com'] = ['1.2.3.10', 'A']
 known_dns['ver']['test']['rev']['1.2.3.10'] = 'newwithreverse.example.com'
 known_dns['ver']['prod']['fwd']['newwithreverse.example.com'] = ['1.2.3.10', 'A']
 known_dns['ver']['prod']['rev']['1.2.3.10'] = 'newwithreverse.example.com'
-TESTS[5]['result_chk'] = {'message': 'newwithreverse => 1.2.3.10 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for newwithreverse (PROD)', 'REVERSE OK: 1.2.3.10 => newwithreverse.example.com (TEST)'], 'warnings': []}
-TESTS[5]['result_ver'] = {'message': 'newwithreverse => 1.2.3.10 (PROD)', 'result': True, 'secondary': ['REVERSE OK: 1.2.3.10 => newwithreverse.example.com (PROD)'], 'warnings': []}
+TESTS[5]['result_chk'] = {'message': 'newwithreverse.example.com => 1.2.3.10 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for newwithreverse.example.com (PROD)', 'REVERSE OK: 1.2.3.10 => newwithreverse.example.com (TEST)'], 'warnings': []}
+TESTS[5]['result_ver'] = {'message': 'newwithreverse.example.com => 1.2.3.10 (PROD)', 'result': True, 'secondary': ['REVERSE OK: 1.2.3.10 => newwithreverse.example.com (PROD)'], 'warnings': []}
 
 # test 7 - OK, but bad reverse record
 TESTS[6] = {'hostname': "newwrongreverse", 'value': "1.2.3.11"}
