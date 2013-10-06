@@ -186,9 +186,9 @@ class TestDNSTest:
         """
         Test parse exception on an input line.
         """
-        chk, parser = setup_checks
+        parser, chk = setup_checks
         line = "foo bar baz"
-        foo = dnstest.run_check_line(line, chk, parser)
+        foo = dnstest.run_check_line(line, parser, chk)
         assert foo == False
         out, err = capfd.readouterr()
         assert out == "ERROR: could not parse input line, SKIPPING: %s\n" % line
@@ -197,9 +197,9 @@ class TestDNSTest:
         """
         Test parse exception on an input line.
         """
-        chk, parser = setup_checks
+        parser, chk = setup_checks
         line = "foo bar baz"
-        foo = dnstest.run_verify_line(line, chk, parser)
+        foo = dnstest.run_verify_line(line, parser, chk)
         assert foo == False
         out, err = capfd.readouterr()
         assert out == "ERROR: could not parse input line, SKIPPING: %s\n" % line
@@ -215,21 +215,92 @@ class TestDNSTest:
         """
         Additional tests for the run_check_line function
         """
-        chk, parser = setup_checks
-        foo = dnstest.run_check_line(line, chk, parser)
+        parser, chk = setup_checks
+        foo = dnstest.run_check_line(line, parser, chk)
         assert foo == result
 
     @pytest.mark.parametrize(("line", "result"), [
             ("rename testrvl11.example.com with value 1.2.1.1 to testrvl12.example.com", {'message': 'rename testrvl11.example.com => testrvl12.example.com (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.1.1 (PROD)']}),
             ("change testrvl2.example.com to 1.2.1.2", {'message': "change testrvl2.example.com value to '1.2.1.2' (PROD)", 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.1.2 (PROD)']}),
             ('add record testrvl3 address 1.2.1.3', {'message': 'testrvl3 => 1.2.1.3 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.1.3 (PROD)']}),
-            ('remove record testrvl4.example.com', {'message': 'testrvl4.example.com removed, got status NXDOMAIN (PROD)', 'result': True, 'warnings': [], 'secondary': []})
-#            ('confirm record testrvl5.example.com', {'message': 'both test and prod returned status NXDOMAIN for name testrvl5.example.com', 'result': True, 'warnings': [], 'secondary': ["response: {'typename': 'A', 'name': 'testrvl5.example.com', 'ttl': 360, 'type': 5, 'data': '1.2.1.5', 'class': 1, 'rdlength': 14, 'classstr': 'IN'}"]})
+            ('remove record testrvl4.example.com', {'message': 'testrvl4.example.com removed, got status NXDOMAIN (PROD)', 'result': True, 'warnings': [], 'secondary': []}),
+            ('confirm record testrvl5.example.com', {'message': "prod and test servers return same response for 'testrvl5.example.com'", 'result': True, 'warnings': [], 'secondary': ["response: {'typename': 'A', 'name': 'testrvl5.example.com', 'ttl': 360, 'type': 5, 'data': '1.2.1.5', 'class': 1, 'rdlength': 14, 'classstr': 'IN'}"]})
             ])
     def test_run_verify_line(self, setup_verifies, line, result):
         """
         Additional tests for the run_verify_line function
         """
-        chk, parser = setup_verifies
-        foo = dnstest.run_verify_line(line, chk, parser)
+        parser, chk = setup_verifies
+        foo = dnstest.run_verify_line(line, parser, chk)
         assert foo == result
+
+    @pytest.fixture(scope="module")
+    def setup_parser_return_unknown_op(self):
+        """
+        Sets up test environment for tests of check methods,
+        including redefining resolve_name and lookup_reverse
+        to the appropriate methods in this class
+        """
+        config = DnstestConfig()
+        config.server_test = "test"
+        config.server_prod = "prod"
+        config.default_domain = ".example.com"
+        config.have_reverse_dns = True
+
+        parser = DnstestParser()
+        # mock the parser function to just return None
+        parser.parse_line = self.parser_return_unknown_op
+        dnstest.parser = parser
+
+        chk = DNStestChecks(config)
+        # stub
+        chk.DNS.resolve_name = self.stub_resolve_name
+        # stub
+        chk.DNS.lookup_reverse = self.stub_lookup_reverse
+        return (parser, chk)
+
+    def parser_return_unknown_op(self, line):
+        """
+        Returns unknown operation
+        """
+        return {'operation': 'unknown'}
+
+    def test_check_parser_false(self, setup_parser_return_unknown_op, capfd):
+        """
+        Test (unreachable) parser return None.
+        """
+        parser, chk = setup_parser_return_unknown_op
+
+        foo = dnstest.run_check_line("confirm foo.example.com", parser, chk)
+        assert foo == False
+        out, err = capfd.readouterr()
+        assert out == "ERROR: unknown input operation\n"
+
+    def test_verify_parser_false(self, setup_parser_return_unknown_op, capfd):
+        """
+        Test (unreachable) parser return None.
+        """
+        parser, chk = setup_parser_return_unknown_op
+
+        foo = dnstest.run_verify_line("confirm foo.example.com", parser, chk)
+        assert foo == False
+        out, err = capfd.readouterr()
+        assert out == "ERROR: unknown input operation\n"
+
+    @pytest.mark.parametrize(("result", "output"), [
+            ({'message': 'cnametestonly => foobar (PROD)', 'result': True, 'secondary': [], 'warnings': []}, "OK: cnametestonly => foobar (PROD)\n"),
+            ({'message': 'cnametestonly => foobar (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for cnametestonly (PROD)'], 'warnings': []}, "OK: cnametestonly => foobar (TEST)\n\tPROD server returns NXDOMAIN for cnametestonly (PROD)\n"),
+            ({'message': 'rename testrvl11.example.com => testrvl12.example.com (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.1.1 (PROD)']}, "OK: rename testrvl11.example.com => testrvl12.example.com (PROD)\n\tREVERSE NG: no reverse DNS appears to be set for 1.2.1.1 (PROD)\n"),
+            ({'message': 'newhostname => 1.2.3.1 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for newhostname (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.1 (TEST)']}, "OK: newhostname => 1.2.3.1 (TEST)\n\tPROD server returns NXDOMAIN for newhostname (PROD)\n\tREVERSE NG: got status NXDOMAIN for name 1.2.3.1 (TEST)\n"),
+            ({'message': 'new name existinghostname returned valid result from prod server (PROD)', 'result': False, 'secondary': [], 'warnings': []}, "**NG: new name existinghostname returned valid result from prod server (PROD)\n"),
+            ({'message': 'addtest4 resolves to 1.2.3.1 instead of 1.2.3.5 (TEST)', 'result': False, 'secondary': ['PROD server returns NXDOMAIN for addtest4 (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.5 (TEST)']}, "**NG: addtest4 resolves to 1.2.3.1 instead of 1.2.3.5 (TEST)\n\tPROD server returns NXDOMAIN for addtest4 (PROD)\n\tREVERSE NG: got status NXDOMAIN for name 1.2.3.5 (TEST)\n"),
+            ({'message': 'addtest4 resolves to 1.2.3.13 instead of 1.2.3.5 (PROD)', 'result': False, 'secondary': [], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.5 (PROD)']}, "**NG: addtest4 resolves to 1.2.3.13 instead of 1.2.3.5 (PROD)\n\tREVERSE NG: got status NXDOMAIN for name 1.2.3.5 (PROD)\n"),
+            ])
+    def test_format_test_output(self, setup_checks, capfd, result, output):
+        """
+        Test output formatting of test results.
+        """
+        parser, chk = setup_checks
+        foo = dnstest.format_test_output(result)
+        out, err = capfd.readouterr()
+        assert out == output
