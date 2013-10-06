@@ -432,7 +432,7 @@ class DNStestChecks:
         qp = self.DNS.resolve_name(name, self.config.server_prod)
         if 'status' in qt:
             if not 'status' in qp:
-                res['message'] = "test server returned status %s for name %s, but prod returned valid answer of %s" % (qt['status'], n, qp['answer']['value'])
+                res['message'] = "test server returned status %s for name %s, but prod returned valid answer of %s" % (qt['status'], n, qp['answer']['data'])
                 res['result'] = False
                 return res
             if qp['status'] == qt['status']:
@@ -440,7 +440,7 @@ class DNStestChecks:
                 res['result'] = True
                 return res
         if 'status' in qp and 'status' not in qt:
-            res['message'] = "prod server returned status %s for name %s, but test returned valid answer of %s" % (qp['status'], n, qt['answer']['value'])
+            res['message'] = "prod server returned status %s for name %s, but test returned valid answer of %s" % (qp['status'], n, qt['answer']['data'])
             res['result'] = False
             return res
 
