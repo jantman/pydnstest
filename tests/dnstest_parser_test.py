@@ -54,6 +54,18 @@ class TestLanguageParsing:
         ("change entry foobar.hosts.example.com to 172.16.132.10", {'operation': 'change', 'hostname': 'foobar.hosts.example.com', 'value': '172.16.132.10'}),
         ("change name foobar to foobar.hosts.example.com", {'operation': 'change', 'hostname': 'foobar', 'value': 'foobar.hosts.example.com'}),
         ("change name foobar to foobar.example.com", {'operation': 'change', 'hostname': 'foobar', 'value': 'foobar.example.com'}),
+        ("confirm foo.example.com", {'operation': 'confirm', 'hostname': 'foo.example.com'}),
+        ("confirm record foo.example.com", {'operation': 'confirm', 'hostname': 'foo.example.com'}),
+        ("confirm entry foo.example.com", {'operation': 'confirm', 'hostname': 'foo.example.com'}),
+        ("confirm name foo.example.com", {'operation': 'confirm', 'hostname': 'foo.example.com'}),
+        ("confirm 1.2.3.4", {'operation': 'confirm', 'hostname': '1.2.3.4'}),
+        ("confirm record 1.2.3.4", {'operation': 'confirm', 'hostname': '1.2.3.4'}),
+        ("confirm entry 1.2.3.4", {'operation': 'confirm', 'hostname': '1.2.3.4'}),
+        ("confirm name 1.2.3.4", {'operation': 'confirm', 'hostname': '1.2.3.4'}),
+        ("confirm foo", {'operation': 'confirm', 'hostname': 'foo'}),
+        ("confirm record foo", {'operation': 'confirm', 'hostname': 'foo'}),
+        ("confirm entry foo", {'operation': 'confirm', 'hostname': 'foo'}),
+        ("confirm name foo", {'operation': 'confirm', 'hostname': 'foo'}),
     ])
     def test_parse_should_succeed(self, line, parsed_dict):
         foo = None
