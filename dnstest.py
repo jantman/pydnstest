@@ -67,8 +67,8 @@ def run_verify_line(line, parser, chk):
     elif d['operation'] == 'change':
         return chk.verify_changed_name(d['hostname'], d['value'])
     elif d['operation'] == 'rename':
-        return chk.verify_renamed_name(d['hostname'], d['value'])
-    elif d['opetation'] == 'confirm':
+        return chk.verify_renamed_name(d['hostname'], d['newname'], d['value'])
+    elif d['operation'] == 'confirm':
         return chk.confirm_name(d['hostname'])
     else:
         print "ERROR: unknown input operation"
