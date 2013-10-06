@@ -22,12 +22,7 @@ from dnstest_checks import DNStestChecks
 from dnstest_config import DnstestConfig
 from dnstest_parser import DnstestParser
 
-config = None
-parser = None
-chk = None
-
-
-def run_check_line(line):
+def run_check_line(line, parser, chk):
     """
     Parses a raw input line, runs the tests for that line,
     and returns the result of the tests.
@@ -53,7 +48,7 @@ def run_check_line(line):
         return False
 
 
-def run_verify_line(line):
+def run_verify_line(line, parser, chk):
     """
     Parses a raw input line, runs the tests for that line verifying
     against the PROD server (i.e. once the changes have gone live)
@@ -84,29 +79,21 @@ def format_test_output(res):
     """
     Prints test output in a nice textual format
     """
-    if r['result']:
-        print "OK: %s" % r['message']
+    if res['result']:
+        print "OK: %s" % res['message']
     else:
-        print "**NG: %s" % r['message']
-    for m in r['secondary']:
+        print "**NG: %s" % res['message']
+    for m in res['secondary']:
         print "\t%s" % m
-    for w in r['warnings']:
+    for w in res['warnings']:
         print "\t%s" % w
 
+def main(options):
+    """
+    main function - does everything...
 
-if __name__ == "__main__":
-    parser = optparse.OptionParser()
-    parser.add_option('-c', '--config', dest='config_file',
-                      help='path to config file (default looks for ./dnstest.ini or ~/.dnstest.ini)')
-
-    parser.add_option('-f', '--file', dest='testfile',
-                      help='path to file listing tests (default reads from STDIN)')
-
-    parser.add_option('-V', '--verify', dest='verify', default=False, action='store_true',
-                      help='verify changes against PROD server once they\'re live (default False)')
-
-    options, args = parser.parse_args()
-
+    split this out this way for testing...p
+    """
     # read in config, set variable
     config = DnstestConfig()
     if options.config_file:
@@ -141,9 +128,9 @@ if __name__ == "__main__":
         if line == "" or line[:1] == "#":
             continue
         if options.verify:
-            r = run_verify_line(line)
+            r = run_verify_line(line, parser, chk)
         else:
-            r = run_check_line(line)
+            r = run_check_line(line, parser, chk)
         if r is False:
             continue
         elif r['result']:
@@ -162,3 +149,17 @@ if __name__ == "__main__":
     if options.testfile:
         # we were reading a file, close it
         fh.close()
+
+if __name__ == "__main__":
+    p = optparse.OptionParser()
+    p.add_option('-c', '--config', dest='config_file',
+                      help='path to config file (default looks for ./dnstest.ini or ~/.dnstest.ini)')
+
+    p.add_option('-f', '--file', dest='testfile',
+                      help='path to file listing tests (default reads from STDIN)')
+
+    p.add_option('-V', '--verify', dest='verify', default=False, action='store_true',
+                      help='verify changes against PROD server once they\'re live (default False)')
+
+    options, args = p.parse_args()
+    main(options)

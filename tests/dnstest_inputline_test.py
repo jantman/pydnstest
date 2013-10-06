@@ -85,12 +85,14 @@ class TestDNSChecks:
         """
         Test end-to-end input line for adding a record
         """
-        foo = dnstest.run_check_line('add record newhostname address 1.2.3.1')
+        chk, parser = setup_checks
+        foo = dnstest.run_check_line('add record newhostname address 1.2.3.1', chk, parser)
         assert foo == {'message': 'newhostname => 1.2.3.1 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for newhostname (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.1 (TEST)']}
 
     def test_line_verify_add(self, setup_checks):
         """
         Test end-to-end input line for adding a record
         """
-        foo = dnstest.run_verify_line('add record addedhostname address 1.2.3.3')
+        chk, parser = setup_checks
+        foo = dnstest.run_verify_line('add record addedhostname address 1.2.3.3', chk, parser)
         assert foo == {'message': 'addedhostname => 1.2.3.3 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.3 (PROD)']}
