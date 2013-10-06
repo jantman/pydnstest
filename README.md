@@ -29,6 +29,7 @@ Grammar:
 * remove [record|name|entry] \<hostname_or_fqdn\>'
 * rename [record|name|entry] \<hostname_or_fqdn\> [with] [value|address|target] \<value\> to \<hostname_or_fqdn\>
 * change [record|name|entry] \<hostname_or_fqdn\> to \<hostname_fqdn_or_ip\>
+* confirm \<hostname_or_fqdn\> (checks that TEST and PROD return identical results)
 
 Sample input file:
 ```
@@ -37,6 +38,7 @@ add foo.example.com with address 1.2.3.4
 remove bar.example.com
 rename baz.example.com with value 1.2.3.5 to blam.example.com
 change quux.example.com to 1.2.3.6
+confirm blam.example.com
 ```
 
 Usage with input file:

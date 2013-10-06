@@ -7,6 +7,7 @@ Define our initial grammars:
 'remove (record|name|entry)? <hostname_or_fqdn>'
 'rename (record|name|entry)? <hostname_or_fqdn> (with ?)(value ?) <value> to <hostname_or_fqdn>'
 'change (record|name|entry)? <hostname_or_fqdn> to <hostname_fqdn_or_ip>'
+'confirm (record|name|entry)? <hostname_or_fqdn>'
 
 """
 
@@ -25,6 +26,7 @@ class DnstestParser:
     rm_op = Keyword("remove").setResultsName("operation")
     rename_op = Keyword("rename").setResultsName("operation")
     change_op = Keyword("change").setResultsName("operation")
+    confirm_op = Keyword("confirm").setResultsName("operation")
     rec_op = Or([Keyword("record"), Keyword("entry"), Keyword("name")])
     val_op = Optional(Keyword("with")) + Or([Keyword("value"), Keyword("address"), Keyword("target")])
 
@@ -38,8 +40,9 @@ class DnstestParser:
     cmd_remove = rm_op + Optional(rec_op) + hostname_or_fqdn.setResultsName("hostname")
     cmd_rename = rename_op + Suppress(Optional(rec_op)) + hostname_or_fqdn.setResultsName("hostname") + Suppress(Optional(val_op)) + hostname_fqdn_or_ip.setResultsName('value') + Suppress(Keyword("to")) + hostname_or_fqdn.setResultsName('newname')
     cmd_change = change_op + Suppress(Optional(rec_op)) + hostname_or_fqdn.setResultsName("hostname") + Suppress(Keyword("to")) + hostname_fqdn_or_ip.setResultsName('value')
+    cmd_confirm = confirm_op + Suppress(Optional(rec_op)) + hostname_or_fqdn.setResultsName("hostname")
 
-    line_parser = Or([cmd_add, cmd_remove, cmd_rename, cmd_change])
+    line_parser = Or([cmd_confirm, cmd_add, cmd_remove, cmd_rename, cmd_change])
 
     def __init__(self):
         pass

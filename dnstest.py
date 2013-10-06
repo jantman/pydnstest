@@ -46,6 +46,8 @@ def run_check_line(line):
         return chk.check_changed_name(d['hostname'], d['value'])
     elif d['operation'] == 'rename':
         return chk.check_renamed_name(d['hostname'], d['newname'], d['value'])
+    elif d['operation'] == 'confirm':
+        return chk.confirm_name(d['hostname'])
     else:
         print "ERROR: unknown input operation"
         return False
@@ -71,6 +73,8 @@ def run_verify_line(line):
         return chk.verify_changed_name(d['hostname'], d['value'])
     elif d['operation'] == 'rename':
         return chk.verify_renamed_name(d['hostname'], d['value'])
+    elif d['opetation'] == 'confirm':
+        return chk.confirm_name(d['hostname'])
     else:
         print "ERROR: unknown input operation"
         return False

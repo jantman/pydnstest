@@ -413,3 +413,56 @@ class DNStestChecks:
             res['result'] = False
             res['message'] = "%s resolves to %s instead of %s (PROD)" % (n, qp['answer']['data'], val)
         return res
+
+    def confirm_name(self, n):
+        """
+        Confirms that the given name returns the
+        same result in TEST and PROD.
+
+        @param n name
+        """
+        res = {'result': None, 'message': None, 'secondary': [], 'warnings': []}
+        name = n
+        # make sure we have a FQDN
+        if name.find('.') == -1:
+            name = name + self.config.default_domain
+
+        # resolve with both test and prod
+        qt = self.DNS.resolve_name(name, self.config.server_test)
+        qp = self.DNS.resolve_name(name, self.config.server_prod)
+        if 'status' in qt:
+            if not 'status' in qp:
+                res['message'] = "test server returned status %s for name %s, but prod returned valid answer of %s" % (qt['status'], n, qp['answer']['value'])
+                res['result'] = False
+                return res
+            if qp['status'] == qt['status']:
+                res['message'] = "both test and prod returned status %s for name %s" % (qt['status'], n)
+                res['result'] = True
+                return res
+        if 'status' in qp and 'status' not in qt:
+            res['message'] = "prod server returned status %s for name %s, but test returned valid answer of %s" % (qp['status'], n, qt['answer']['value'])
+            res['result'] = False
+            return res
+
+        # ok, both returned an ansewer. diff them.
+        same_res = True
+        for k in qt['answer']:
+            if k not in qp['answer']:
+                res['warnings'].append("NG: test response has %s of '%s'; prod response does not include %s" % (k, qt['answer'][k], k))
+                same_res = False
+            elif qt['answer'][k] != qp['answer'][k]:
+                res['warnings'].append("NG: test response has %s of '%s' but prod response has '%s'" % (k, qt['answer'][k], qp['answer'][k]))
+                same_res = False
+        for k in qp['answer']:
+            if k not in qt['answer']:
+                res['warnings'].append("NG: prod response has %s of '%s'; test response does not include %s" % (k, qp['answer'][k], k))
+                same_res = False
+
+        if same_res is False:
+            res['message'] = "prod and test servers return different responses for '%s'" % n
+            res['result'] = False
+            return res
+        res['message'] = "prod and test servers return same response for '%s'" % n
+        res['secondary'].append("response: %s" % qp['answer'])
+        res['result'] = True
+        return res
