@@ -295,7 +295,7 @@ class TestDNSTestMain:
         assert out == "ERROR: test file 'nofilehere' does not exist.\n"
         assert err == ""
 
-    def test_check_with_testfile(self, write_testfile, capfd, monkeypatch):
+    def test_check_with_testfile(self, write_testfile, save_user_config, capfd, monkeypatch):
         """
         Test with a testfile.
         """
@@ -319,7 +319,7 @@ class TestDNSTestMain:
         assert out == "OK: foobarbaz\nOK: foobarbaz\n++++ All 2 tests passed.\n"
         assert err == ""
 
-    def test_verify_with_testfile(self, write_testfile, capfd, monkeypatch):
+    def test_verify_with_testfile(self, write_testfile, save_user_config, capfd, monkeypatch):
         """
         Test with a testfile.
         """
@@ -344,9 +344,3 @@ class TestDNSTestMain:
         assert foo == None
         assert out == "OK: foobarbaz\n**NG: foofail\n++++ 1 passed / 1 FAILED.\n"
         assert err == ""
-
-    def test_optparse(self):
-        """
-
-        """
-        
