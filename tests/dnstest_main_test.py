@@ -198,7 +198,7 @@ class TestDNSTestMain:
         fh = open(fname, 'w')
         fh.write("confirm foo.jasonantman.com\n\n#foo\nconfirm bar.jasonantman.com\n")
         fh.close()
-        request.addfinalizer(self.restore_user_config)
+        request.addfinalizer(self.remove_testfile)
 
     def remove_testfile(self):
         """
