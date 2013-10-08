@@ -3,6 +3,7 @@ Logic for checking desired DNS configuration against actual configuration
 on prod and test servers.
 """
 
+import re
 from dnstest_dns import DNStestDNS
 
 
@@ -27,6 +28,7 @@ class DNStestChecks:
         """
         self.config = config
         self.DNS = DNStestDNS()
+        self.ip_regex = re.compile(r"^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}(1[0-9]{2}|2[0-4][0-9]|25[0-5]|[1-9][0-9]|[0-9]))$")
 
     def check_removed_name(self, n):
         """
@@ -39,10 +41,19 @@ class DNStestChecks:
         # make sure we have a FQDN
         if name.find('.') == -1:
             name = name + self.config.default_domain
+        # see if we have an IP address, in which case we're talking about a PTR
+        is_ip = False
+        if self.ip_regex.match(name):
+            is_ip = True
 
         # resolve with both test and prod
-        qt = self.DNS.resolve_name(name, self.config.server_test)
-        qp = self.DNS.resolve_name(name, self.config.server_prod)
+        if is_ip:
+            qt = self.DNS.lookup_reverse(name, self.config.server_test)
+            qp = self.DNS.lookup_reverse(name, self.config.server_prod)
+        else:
+            qt = self.DNS.resolve_name(name, self.config.server_test)
+            qp = self.DNS.resolve_name(name, self.config.server_prod)
+
         if 'status' in qp:
             res['result'] = False
             res['message'] = "%s got status %s from PROD - cannot remove a name that doesn't exist (PROD)" % (n, qp['status'])
@@ -54,9 +65,10 @@ class DNStestChecks:
             res['message'] = "%s removed, got status NXDOMAIN (TEST)" % (n)
             res['secondary'].append("PROD value was %s (PROD)" % qp['answer']['data'])
             # check for any leftover reverse lookups
-            rev = self.DNS.lookup_reverse(qp['answer']['data'], self.config.server_test)
-            if 'answer' in rev:
-                res['warnings'].append("REVERSE NG: %s appears to still have reverse DNS set to %s (TEST)" % (qp['answer']['data'], name))
+            if is_ip is False:
+                rev = self.DNS.lookup_reverse(qp['answer']['data'], self.config.server_test)
+                if 'answer' in rev:
+                    res['warnings'].append("REVERSE NG: %s appears to still have reverse DNS set to %s (TEST)" % (qp['answer']['data'], name))
         elif 'status' in qt:
             res['result'] = False
             res['message'] = "%s returned status %s (TEST)" % (n, qt['status'])
@@ -76,10 +88,18 @@ class DNStestChecks:
         # make sure we have a FQDN
         if name.find('.') == -1:
             name = name + self.config.default_domain
+        # see if we have an IP address, in which case we're talking about a PTR
+        is_ip = False
+        if self.ip_regex.match(name):
+            is_ip = True
 
         # resolve with both test and prod
-        qt = self.DNS.resolve_name(name, self.config.server_test)
-        qp = self.DNS.resolve_name(name, self.config.server_prod)
+        if is_ip:
+            qt = self.DNS.lookup_reverse(name, self.config.server_test)
+            qp = self.DNS.lookup_reverse(name, self.config.server_prod)
+        else:
+            qt = self.DNS.resolve_name(name, self.config.server_test)
+            qp = self.DNS.resolve_name(name, self.config.server_prod)
 
         if 'status' in qp and qp['status'] == "NXDOMAIN":
             res['result'] = True
