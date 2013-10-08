@@ -344,3 +344,9 @@ class TestDNSTestMain:
         assert foo == None
         assert out == "OK: foobarbaz\n**NG: foofail\n++++ 1 passed / 1 FAILED.\n"
         assert err == ""
+
+    def test_optparse(self):
+        """
+
+        """
+        
