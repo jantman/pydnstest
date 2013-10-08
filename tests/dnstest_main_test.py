@@ -183,6 +183,31 @@ class TestDNSTestMain:
             shutil.move(os.path.expanduser("~/.dnstest.ini.pretest"), os.path.expanduser("~/.dnstest.ini"))
         return True
 
+    def write_conf_file(self, path, contents):
+        fh = open(path, 'w')
+        fh.write(contents)
+        fh.close()
+        return
+
+    @pytest.fixture
+    def write_testfile(self, request):
+        """
+        Write a sample testfile
+        """
+        fname = "testfile.txt"
+        fh = open(fname, 'w')
+        fh.write("confirm foo.jasonantman.com\n\n#foo\nconfirm bar.jasonantman.com\n")
+        fh.close()
+        request.addfinalizer(self.restore_user_config)
+
+    def remove_testfile(self):
+        """
+        Remove the testfile
+        """
+        # teardown
+        os.remove("testfile.txt")
+        return True
+
     ###########################################
     # Done with setup, start the actual tests #
     ###########################################
@@ -205,20 +230,117 @@ class TestDNSTestMain:
 
     def test_discovered_config_file(self, save_user_config, capfd):
         """
+        Test calling main() with a discovered config file
+        """
+        opt = OptionsObject()
+        setattr(opt, "verify", False)
+        setattr(opt, "config_file", False)
+        setattr(opt, "testfile", False)
+
+        # write out an example config file
+        # this will be cleaned up by restore_user_config()
+        fpath = os.path.abspath("dnstest.ini")
+        self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\n")
+
+        dnstest.sys.stdin = ["foo bar baz"]
+        foo = None
+
+        foo = dnstest.main(opt)
+        out, err = capfd.readouterr()
+        assert foo == None
+        assert out == "ERROR: could not parse input line, SKIPPING: foo bar baz\n++++ All 0 tests passed.\n"
+        assert err == ""
+
+    def test_no_config_file(self, save_user_config, capfd):
+        """
         Test calling main() with a specified config file
         """
         opt = OptionsObject()
         setattr(opt, "verify", False)
         setattr(opt, "config_file", False)
         setattr(opt, "testfile", False)
-        #opt.config_file = "dnstest.foo"
+
         dnstest.sys.stdin = ["foo bar baz"]
         foo = None
-        # TODO - need to test that we raised SystemExit(1)
+
         with pytest.raises(SystemExit) as excinfo:
             foo = dnstest.main(opt)
-            print excinfo
+        assert excinfo.value.code == 1
         out, err = capfd.readouterr()
         assert foo == None
-        assert out == "ERROR: could not parse input line, SKIPPING: foo bar baz\n++++ All 0 tests passed.\n"
+        assert out == "ERROR: no configuration file.\n"
+        assert err == ""
+
+    def test_testfile_noexist(self, save_user_config, capfd):
+        """
+        Test with a testfile specified by not existant.
+        """
+        opt = OptionsObject()
+        setattr(opt, "verify", False)
+        setattr(opt, "config_file", False)
+        setattr(opt, "testfile", 'nofilehere')
+
+        # write out an example config file
+        # this will be cleaned up by restore_user_config()
+        fpath = os.path.abspath("dnstest.ini")
+        self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\n")
+
+        foo = None
+
+        with pytest.raises(SystemExit) as excinfo:
+            foo = dnstest.main(opt)
+        assert excinfo.value.code == 1
+        out, err = capfd.readouterr()
+        assert foo == None
+        assert out == "ERROR: test file 'nofilehere' does not exist.\n"
+        assert err == ""
+
+    def test_check_with_testfile(self, write_testfile, capfd, monkeypatch):
+        """
+        Test with a testfile.
+        """
+        def mockreturn(foo, bar, baz):
+            return {'result': True, 'message': 'foobarbaz', 'secondary': [], 'warnings': []}
+        monkeypatch.setattr(dnstest, "run_check_line", mockreturn)
+
+        opt = OptionsObject()
+        setattr(opt, "verify", False)
+        setattr(opt, "config_file", False)
+        setattr(opt, "testfile", 'testfile.txt')
+
+        # write out an example config file
+        # this will be cleaned up by restore_user_config()
+        fpath = os.path.abspath("dnstest.ini")
+        self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\n")
+
+        foo = dnstest.main(opt)
+        out, err = capfd.readouterr()
+        assert foo == None
+        assert out == "OK: foobarbaz\nOK: foobarbaz\n++++ All 2 tests passed.\n"
+        assert err == ""
+
+    def test_verify_with_testfile(self, write_testfile, capfd, monkeypatch):
+        """
+        Test with a testfile.
+        """
+        def mockreturn(foo, bar, baz):
+            if foo == "confirm bar.jasonantman.com":
+                return {'result': False, 'message': 'foofail', 'secondary': [], 'warnings': []}
+            return {'result': True, 'message': 'foobarbaz', 'secondary': [], 'warnings': []}
+        monkeypatch.setattr(dnstest, "run_verify_line", mockreturn)
+
+        opt = OptionsObject()
+        setattr(opt, "verify", True)
+        setattr(opt, "config_file", False)
+        setattr(opt, "testfile", 'testfile.txt')
+
+        # write out an example config file
+        # this will be cleaned up by restore_user_config()
+        fpath = os.path.abspath("dnstest.ini")
+        self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\n")
+
+        foo = dnstest.main(opt)
+        out, err = capfd.readouterr()
+        assert foo == None
+        assert out == "OK: foobarbaz\n**NG: foofail\n++++ 1 passed / 1 FAILED.\n"
         assert err == ""

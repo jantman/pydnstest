@@ -14,6 +14,28 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../')
 
 from dnstest_dns import DNStestDNS
+import DNS
+
+class AnswerObject(object):
+    pass
+
+
+class EmptyAnswer(object):
+
+    def req(self):
+        A = AnswerObject()
+        b = ['one', 'two']
+        setattr(A, 'answers', b)
+        return A
+
+
+class MultipleAnswer(object):
+
+    def req(self):
+        A = AnswerObject()
+        b = []
+        setattr(A, 'answers', b)
+        return A
 
 
 class TestDNS:
@@ -93,4 +115,25 @@ class TestDNS:
         result = {'status': 'REFUSED'}
 
         foo = test_DNS.lookup_reverse(query, server)
+        assert foo == result
+
+    def test_multiple_answer(self, test_DNS, monkeypatch):
+        """
+        Test for something that returns multiple answers.
+        """
+
+        query = "foo.example.com"
+        server = "ns.example.com"
+        result = {'answer': 'one'}
+
+        def mockreturn(name=None, server=None, qtype=None, port=None):
+            if qtype == "CNAME":
+                a = EmptyAnswer()
+                return a
+            a = MultipleAnswer()
+            return a
+
+        monkeypatch.setattr(DNS, "Request", mockreturn)
+
+        foo = test_DNS.resolve_name(query, server)
         assert foo == result
