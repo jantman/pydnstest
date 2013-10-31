@@ -150,7 +150,10 @@ def main(options):
         # we were reading a file, close it
         fh.close()
 
-if __name__ == "__main__":
+def parse_opts():
+    """
+    Runs OptionParser and calls main() with the resulting options.
+    """
     p = optparse.OptionParser()
     p.add_option('-c', '--config', dest='config_file',
                       help='path to config file (default looks for ./dnstest.ini or ~/.dnstest.ini)')
@@ -163,3 +166,7 @@ if __name__ == "__main__":
 
     options, args = p.parse_args()
     main(options)
+
+
+if __name__ == "__main__":
+    parse_opts()
