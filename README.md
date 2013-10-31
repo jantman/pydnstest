@@ -20,7 +20,7 @@ Installation
 It's recommended that you clone the git repository and install into a virtual environment.
 If you want to install some other way, that's fine, but you'll have to figure it out on your own.
 
-```
+```bash
 git clone https://github.com/jantman/pydnstest.git
 virtualenv2 pydnstest
 cd pydnstest && source bin/activate
@@ -66,24 +66,24 @@ confirm blam.example.com
 ```
 
 Usage with input file:
-```
+```bash
 cd pydnstest
 source bin/activate
 ./dnstest.py -f dnstests.txt
 ```
 
 Verify once in prod:
-```
+```bash
 ./dnstest.py -V -f dnstests.txt
 ```
 
 Read from stdin:
-```
+```bash
 cat dnstests.txt | ./dnstest.py
 ```
 
 Run one quick test:
-```
+```bash
 echo "add host.example.com with address 192.168.0.1" | ./dnstest.py
 ```
 
@@ -101,7 +101,7 @@ Development
 Installation for development
 ----------------------------
 
-```
+```bash
 git clone https://github.com/jantman/pydnstest.git
 virtualenv2 pydnstest
 cd pydnstest && source bin/activate
