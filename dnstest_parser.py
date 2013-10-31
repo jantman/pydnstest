@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 Input line parsing for pydnstest.
 
