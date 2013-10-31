@@ -100,6 +100,7 @@ TESTS[9]['result_chk'] = {'message': '1.2.3.9 removed, got status NXDOMAIN (TEST
 TESTS[10] = {'hostname': "1.2.3.10"}
 TESTS[10]['result_ver'] = {'message': '1.2.3.10 removed, got status NXDOMAIN (PROD)', 'result': True, 'secondary': [], 'warnings': []}
 
+
 class TestDNSCheckRemove:
     """
     Test DNS checks, using stubbed name resolution methods that return static values.

@@ -205,12 +205,12 @@ class TestDNSTest:
         assert out == "ERROR: could not parse input line, SKIPPING: %s\n" % line
 
     @pytest.mark.parametrize(("line", "result"), [
-            ("rename testrcl11.example.com with value 1.2.1.1 to testrcl12.example.com", {'message': 'rename testrcl11.example.com => testrcl12.example.com (TEST)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.1.1 (TEST)']}),
-            ("change testrcl2.example.com to 1.2.1.2", {'message': "change testrcl2.example.com from '1.2.1.3' to '1.2.1.2' (TEST)", 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.1.2 (TEST)']}),
-            ('add record testrcl3 address 1.2.1.3', {'message': 'testrcl3 => 1.2.1.3 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for testrcl3 (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.1.3 (TEST)']}),
-            ('remove record testrcl4.example.com', {'message': 'testrcl4.example.com removed, got status NXDOMAIN (TEST)', 'result': True, 'warnings': [], 'secondary': ['PROD value was 1.2.1.4 (PROD)']}),
-            ('confirm record testrcl5.example.com', {'message': "prod and test servers return same response for 'testrcl5.example.com'", 'result': True, 'warnings': [], 'secondary': ["response: {'typename': 'A', 'name': 'testrcl5.example.com', 'ttl': 360, 'type': 5, 'data': '1.2.1.5', 'class': 1, 'rdlength': 14, 'classstr': 'IN'}"]})
-            ])
+        ("rename testrcl11.example.com with value 1.2.1.1 to testrcl12.example.com", {'message': 'rename testrcl11.example.com => testrcl12.example.com (TEST)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.1.1 (TEST)']}),
+        ("change testrcl2.example.com to 1.2.1.2", {'message': "change testrcl2.example.com from '1.2.1.3' to '1.2.1.2' (TEST)", 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.1.2 (TEST)']}),
+        ('add record testrcl3 address 1.2.1.3', {'message': 'testrcl3 => 1.2.1.3 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for testrcl3 (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.1.3 (TEST)']}),
+        ('remove record testrcl4.example.com', {'message': 'testrcl4.example.com removed, got status NXDOMAIN (TEST)', 'result': True, 'warnings': [], 'secondary': ['PROD value was 1.2.1.4 (PROD)']}),
+        ('confirm record testrcl5.example.com', {'message': "prod and test servers return same response for 'testrcl5.example.com'", 'result': True, 'warnings': [], 'secondary': ["response: {'typename': 'A', 'name': 'testrcl5.example.com', 'ttl': 360, 'type': 5, 'data': '1.2.1.5', 'class': 1, 'rdlength': 14, 'classstr': 'IN'}"]})
+    ])
     def test_run_check_line(self, setup_checks, line, result):
         """
         Additional tests for the run_check_line function
@@ -220,12 +220,12 @@ class TestDNSTest:
         assert foo == result
 
     @pytest.mark.parametrize(("line", "result"), [
-            ("rename testrvl11.example.com with value 1.2.1.1 to testrvl12.example.com", {'message': 'rename testrvl11.example.com => testrvl12.example.com (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.1.1 (PROD)']}),
-            ("change testrvl2.example.com to 1.2.1.2", {'message': "change testrvl2.example.com value to '1.2.1.2' (PROD)", 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.1.2 (PROD)']}),
-            ('add record testrvl3 address 1.2.1.3', {'message': 'testrvl3 => 1.2.1.3 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.1.3 (PROD)']}),
-            ('remove record testrvl4.example.com', {'message': 'testrvl4.example.com removed, got status NXDOMAIN (PROD)', 'result': True, 'warnings': [], 'secondary': []}),
-            ('confirm record testrvl5.example.com', {'message': "prod and test servers return same response for 'testrvl5.example.com'", 'result': True, 'warnings': [], 'secondary': ["response: {'typename': 'A', 'name': 'testrvl5.example.com', 'ttl': 360, 'type': 5, 'data': '1.2.1.5', 'class': 1, 'rdlength': 14, 'classstr': 'IN'}"]})
-            ])
+        ("rename testrvl11.example.com with value 1.2.1.1 to testrvl12.example.com", {'message': 'rename testrvl11.example.com => testrvl12.example.com (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.1.1 (PROD)']}),
+        ("change testrvl2.example.com to 1.2.1.2", {'message': "change testrvl2.example.com value to '1.2.1.2' (PROD)", 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.1.2 (PROD)']}),
+        ('add record testrvl3 address 1.2.1.3', {'message': 'testrvl3 => 1.2.1.3 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.1.3 (PROD)']}),
+        ('remove record testrvl4.example.com', {'message': 'testrvl4.example.com removed, got status NXDOMAIN (PROD)', 'result': True, 'warnings': [], 'secondary': []}),
+        ('confirm record testrvl5.example.com', {'message': "prod and test servers return same response for 'testrvl5.example.com'", 'result': True, 'warnings': [], 'secondary': ["response: {'typename': 'A', 'name': 'testrvl5.example.com', 'ttl': 360, 'type': 5, 'data': '1.2.1.5', 'class': 1, 'rdlength': 14, 'classstr': 'IN'}"]})
+    ])
     def test_run_verify_line(self, setup_verifies, line, result):
         """
         Additional tests for the run_verify_line function
@@ -288,14 +288,14 @@ class TestDNSTest:
         assert out == "ERROR: unknown input operation\n"
 
     @pytest.mark.parametrize(("result", "output"), [
-            ({'message': 'cnametestonly => foobar (PROD)', 'result': True, 'secondary': [], 'warnings': []}, "OK: cnametestonly => foobar (PROD)\n"),
-            ({'message': 'cnametestonly => foobar (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for cnametestonly (PROD)'], 'warnings': []}, "OK: cnametestonly => foobar (TEST)\n\tPROD server returns NXDOMAIN for cnametestonly (PROD)\n"),
-            ({'message': 'rename testrvl11.example.com => testrvl12.example.com (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.1.1 (PROD)']}, "OK: rename testrvl11.example.com => testrvl12.example.com (PROD)\n\tREVERSE NG: no reverse DNS appears to be set for 1.2.1.1 (PROD)\n"),
-            ({'message': 'newhostname => 1.2.3.1 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for newhostname (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.1 (TEST)']}, "OK: newhostname => 1.2.3.1 (TEST)\n\tPROD server returns NXDOMAIN for newhostname (PROD)\n\tREVERSE NG: got status NXDOMAIN for name 1.2.3.1 (TEST)\n"),
-            ({'message': 'new name existinghostname returned valid result from prod server (PROD)', 'result': False, 'secondary': [], 'warnings': []}, "**NG: new name existinghostname returned valid result from prod server (PROD)\n"),
-            ({'message': 'addtest4 resolves to 1.2.3.1 instead of 1.2.3.5 (TEST)', 'result': False, 'secondary': ['PROD server returns NXDOMAIN for addtest4 (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.5 (TEST)']}, "**NG: addtest4 resolves to 1.2.3.1 instead of 1.2.3.5 (TEST)\n\tPROD server returns NXDOMAIN for addtest4 (PROD)\n\tREVERSE NG: got status NXDOMAIN for name 1.2.3.5 (TEST)\n"),
-            ({'message': 'addtest4 resolves to 1.2.3.13 instead of 1.2.3.5 (PROD)', 'result': False, 'secondary': [], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.5 (PROD)']}, "**NG: addtest4 resolves to 1.2.3.13 instead of 1.2.3.5 (PROD)\n\tREVERSE NG: got status NXDOMAIN for name 1.2.3.5 (PROD)\n"),
-            ])
+        ({'message': 'cnametestonly => foobar (PROD)', 'result': True, 'secondary': [], 'warnings': []}, "OK: cnametestonly => foobar (PROD)\n"),
+        ({'message': 'cnametestonly => foobar (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for cnametestonly (PROD)'], 'warnings': []}, "OK: cnametestonly => foobar (TEST)\n\tPROD server returns NXDOMAIN for cnametestonly (PROD)\n"),
+        ({'message': 'rename testrvl11.example.com => testrvl12.example.com (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.1.1 (PROD)']}, "OK: rename testrvl11.example.com => testrvl12.example.com (PROD)\n\tREVERSE NG: no reverse DNS appears to be set for 1.2.1.1 (PROD)\n"),
+        ({'message': 'newhostname => 1.2.3.1 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for newhostname (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.1 (TEST)']}, "OK: newhostname => 1.2.3.1 (TEST)\n\tPROD server returns NXDOMAIN for newhostname (PROD)\n\tREVERSE NG: got status NXDOMAIN for name 1.2.3.1 (TEST)\n"),
+        ({'message': 'new name existinghostname returned valid result from prod server (PROD)', 'result': False, 'secondary': [], 'warnings': []}, "**NG: new name existinghostname returned valid result from prod server (PROD)\n"),
+        ({'message': 'addtest4 resolves to 1.2.3.1 instead of 1.2.3.5 (TEST)', 'result': False, 'secondary': ['PROD server returns NXDOMAIN for addtest4 (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.5 (TEST)']}, "**NG: addtest4 resolves to 1.2.3.1 instead of 1.2.3.5 (TEST)\n\tPROD server returns NXDOMAIN for addtest4 (PROD)\n\tREVERSE NG: got status NXDOMAIN for name 1.2.3.5 (TEST)\n"),
+        ({'message': 'addtest4 resolves to 1.2.3.13 instead of 1.2.3.5 (PROD)', 'result': False, 'secondary': [], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.5 (PROD)']}, "**NG: addtest4 resolves to 1.2.3.13 instead of 1.2.3.5 (PROD)\n\tREVERSE NG: got status NXDOMAIN for name 1.2.3.5 (PROD)\n"),
+    ])
     def test_format_test_output(self, setup_checks, capfd, result, output):
         """
         Test output formatting of test results.

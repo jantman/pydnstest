@@ -16,6 +16,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../')
 from dnstest_dns import DNStestDNS
 import DNS
 
+
 class AnswerObject(object):
     pass
 
