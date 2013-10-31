@@ -37,12 +37,12 @@ it in a text editor. Change the values of the following attributes to the
 correct ones for your environment (this is an ini-style file, parsed with
 Python's ConfigParser module):
 * in the [servers] section:
-** __prod__: the IP of your production/live DNS server
-** __test__: the IP of your test/staging DNS server
+  * __prod__: the IP of your production/live DNS server
+  * __test__: the IP of your test/staging DNS server
 * in the [defaults] section:
-** __have_reverse_dns__: True if you want to check for reverse DNS by default,
-False otherwise
-** __domain__: the default domain (i.e. ".example.com") to append to any input
+  * __have_reverse_dns__: True if you want to check for reverse DNS by
+  default, False otherwise
+  * __domain__: the default domain (i.e. ".example.com") to append to any input
 which appears to be a hostname (i.e. not a FQDN or an IP address)
 
 Usage
