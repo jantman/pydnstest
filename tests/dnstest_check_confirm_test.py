@@ -77,7 +77,8 @@ known_dns['test']['fwd']['hostname_test7.example.com'] = {'name': 'hostname_test
 known_dns['prod']['fwd']['hostname_test7.example.com'] = {'name': 'hostname_test7.example.com', 'data': '1.2.8.1', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
 TESTS[7] = {'hostname': "hostname_test7", 'result': {'message': "prod and test servers return same response for 'hostname_test7'", 'result': True, 'secondary': ["response: {'typename': 'A', 'name': 'hostname_test7.example.com', 'ttl': 360, 'type': 1, 'data': '1.2.8.1', 'class': 1, 'rdlength': 4, 'classstr': 'IN'}"], 'warnings': []}}
 
-
+# test 8 - both return NXDOMAIN
+TESTS[8] = {'hostname': 'hostname_test8', 'result': {'message': 'both test and prod returned status NXDOMAIN for name hostname_test8', 'result': True, 'secondary': [], 'warnings': []}}
 
 class TestDNSCheckConfirm:
     """
