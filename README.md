@@ -5,6 +5,11 @@ Python script for testing DNS changes (add, remove, rename, change records)
 against a staging DNS server, verifying the same changes against production,
 or confirming that a record returns the same result in both environments.
 
+__Note - while the code is 100% covered by tests, this is a young project, and
+I'm not sure that every code path has been executed in a live environment. As
+such, until I can confirm that, I'd recommend repeating the same tests
+manually for critical applications (like... say... everything in DNS...)__
+
 Requirements
 ------------
 * Python2 (currently tested with 2.7; other versions coming soon...)
