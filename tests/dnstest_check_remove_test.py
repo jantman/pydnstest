@@ -91,6 +91,14 @@ TESTS[7]['result_ver'] = {'message': 'newhostname removed, got status NXDOMAIN (
 
 # test 8 - SERVFAIL on prod server (verify)
 
+# test 9 - OK removal of IP (reverse DNS record)
+TESTS[9] = {'hostname': "1.2.3.9"}
+known_dns['chk']['prod']['rev']['1.2.3.9'] = 'test9.example.com'
+TESTS[9]['result_chk'] = {'message': '1.2.3.9 removed, got status NXDOMAIN (TEST)', 'result': True, 'secondary': ['PROD value was test9.example.com (PROD)'], 'warnings': []}
+
+# test 10 - OK verify removal of IP (reverse DNS record)
+TESTS[10] = {'hostname': "1.2.3.10"}
+TESTS[10]['result_ver'] = {'message': '1.2.3.10 removed, got status NXDOMAIN (PROD)', 'result': True, 'secondary': [], 'warnings': []}
 
 class TestDNSCheckRemove:
     """
