@@ -82,6 +82,14 @@ Run one quick test:
 echo "add host.example.com with address 192.168.0.1" | ./dnstest.py
 ```
 
+Bugs and Feature Requests
+-------------------------
+
+Bug reports and feature requests are happily accepted via the [GitHub Issue
+Tracker](https://github.com/jantman/pydnstest/issues). Pull requests are
+welcome. Issues that don't have an accompanying pull request will be worked on
+as my time and priority allows.
+
 Development
 ===========
 
@@ -95,10 +103,10 @@ cd pydnstest && source bin/activate
 pip install -r requirements_test.txt
 ```
 
-Coding Style
-------------
+Guidelines
+----------
 * pep8 compliant with some exceptions (see pytest.ini)
-* 100% test coverage with pytest
+* 100% test coverage with pytest (with valid tests)
 
 Testing
 -------
