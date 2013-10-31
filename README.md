@@ -5,6 +5,8 @@ Python script for testing DNS changes (add, remove, rename, change records)
 against a staging DNS server, verifying the same changes against production,
 or confirming that a record returns the same result in both environments.
 
+pydnstest is licensed under the GNU Affero General Public License version 3.
+
 __Note - while the code is 100% covered by tests, this is a young project, and
 I'm not sure that every code path has been executed in a live environment. As
 such, until I can confirm that, I'd recommend repeating the same tests
@@ -94,6 +96,18 @@ Bug reports and feature requests are happily accepted via the [GitHub Issue
 Tracker](https://github.com/jantman/pydnstest/issues). Pull requests are
 welcome. Issues that don't have an accompanying pull request will be worked on
 as my time and priority allows.
+
+License
+-------
+
+pydnstest is licensed under the [GNU Affero General Public
+License](http://www.gnu.org/licenses/agpl-3.0.html) version 3, with the
+additional term that the Copyright and Authors attributions may not be removed
+or otherwise altered, except to add the Author attribution of a contributor to
+the work. (Additional Terms pursuant to Section 7b of the AGPL v3).
+
+I chose AGPL mostly because I want this software to continue to evolve and
+benefit from community involvement and improvement.
 
 Development
 ===========
