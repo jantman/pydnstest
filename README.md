@@ -14,7 +14,6 @@ Installation
 ------------
 It's recommended that you clone the git repository and install into a virtual environment.
 If you want to install some other way, that's fine, but you'll have to figure it out on your own.
-pip installation should be coming soon...
 
 ```
 git clone https://github.com/jantman/pydnstest.git
@@ -22,6 +21,24 @@ virtualenv2 pydnstest
 cd pydnstest && source bin/activate
 pip install -r requirements.txt
 ```
+
+pip installation should be coming soon...
+
+Configuration
+-------------
+Copy `dnstest.ini.example` to `dnstest.ini` or `~/.dnstest.ini` (or another
+location, which you can tell dnstest.py about with the `-f` option) and open
+it in a text editor. Change the values of the following attributes to the
+correct ones for your environment (this is an ini-style file, parsed with
+Python's ConfigParser module):
+* in the [servers] section:
+** __prod__: the IP of your production/live DNS server
+** __test__: the IP of your test/staging DNS server
+* in the [defaults] section:
+** __have_reverse_dns__: True if you want to check for reverse DNS by default,
+False otherwise
+** __domain__: the default domain (i.e. ".example.com") to append to any input
+which appears to be a hostname (i.e. not a FQDN or an IP address)
 
 Usage
 -----
@@ -65,13 +82,30 @@ Run one quick test:
 echo "add host.example.com with address 192.168.0.1" | ./dnstest.py
 ```
 
+Development
+===========
+
+Installation for development
+----------------------------
+
+```
+git clone https://github.com/jantman/pydnstest.git
+virtualenv2 pydnstest
+cd pydnstest && source bin/activate
+pip install -r requirements_test.txt
+```
+
+Coding Style
+------------
+* pep8 compliant with some exceptions (see pytest.ini)
+* 100% test coverage with pytest
+
 Testing
 -------
 Testing is done via [pytest](http://pytest.org/latest/) and currently
 encompasses testing for both the input language parsing, and the DNS testing
 logic (via stubbing the DNS lookup methods and returning known results). 
 
-* `pip install -r requirements_test.txt`
 * `py.test`
 * If you want to see code coverage: `py.test --cov-report term-missing --cov-report html --cov=. tests/`
 ** this produces two coverage reports - a summary on STDOUT and a full report in the htmlcov/ directory
