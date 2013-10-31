@@ -56,6 +56,7 @@ from dnstest_config import DnstestConfig
 from dnstest_parser import DnstestParser
 from version import VERSION
 
+
 def run_check_line(line, parser, chk):
     """
     Parses a raw input line, runs the tests for that line,
@@ -190,7 +191,10 @@ def parse_opts():
     """
     Runs OptionParser and calls main() with the resulting options.
     """
-    p = optparse.OptionParser()
+    usage = "%prog [-h|--help] [--version] [-c|--config path_to_config] [-f|--file path_to_test_file] [-V|--verify]"
+    usage += "\n\npydnstest %s - <https://github.com/jantman/pydnstest/>" % VERSION
+    usage += "\nlicensed under the GNU Affero General Public License - see LICENSE.txt"
+    p = optparse.OptionParser(usage=usage, version="pydnstest %s" % VERSION)
     p.add_option('-c', '--config', dest='config_file',
                  help='path to config file (default looks for ./dnstest.ini or ~/.dnstest.ini)')
 
