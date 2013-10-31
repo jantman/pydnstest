@@ -1,11 +1,13 @@
 pydnstest
 =========
 
-Python script for testing DNS changes (add, remove, change records) against a staging DNS server.
+Python script for testing DNS changes (add, remove, rename, change records)
+against a staging DNS server, verifying the same changes against production,
+or confirming that a record returns the same result in both environments.
 
 Requirements
 ------------
-* Python2
+* Python2 (currently tested with 2.7; other versions coming soon...)
 * Python [VirtualEnv](http://www.virtualenv.org/) (your OS/distribution should have packages for these)
 
 Installation
@@ -78,3 +80,4 @@ logic (via stubbing the DNS lookup methods and returning known results).
 ToDo
 ----
 * Add interactive mode for DNS testing - input one line and show result
+* Support py26 and py33, maybe even py24 if possible
