@@ -132,6 +132,7 @@ known_dns['ver']['prod']['fwd']['changetest9.example.com'] = ['changetest9cname.
 TESTS[9]['result_chk'] = {'message': "change changetest9.example.com from '1.2.3.13' to 'changetest9cname.example.com' (TEST)", 'result': True, 'secondary': [], 'warnings': []}
 TESTS[9]['result_ver'] = {'message': "change changetest9.example.com value to 'changetest9cname.example.com' (PROD)", 'result': True, 'secondary': [], 'warnings': []}
 
+
 class TestDNSCheckChange:
     """
     Test DNS checks, using stubbed name resolution methods that return static values.

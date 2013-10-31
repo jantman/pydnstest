@@ -89,6 +89,7 @@ TESTS[9] = {'hostname': 'hostname_test9', 'result': {'message': 'both test and p
 known_dns['prod']['fwd']['hostname_test10.example.com'] = {'status': 'SERVFAIL'}
 TESTS[10] = {'hostname': 'hostname_test10', 'result': {'message': 'test server returned status NXDOMAIN for name hostname_test10, but prod returned status SERVFAIL', 'result': False, 'secondary': [], 'warnings': []}}
 
+
 class TestDNSCheckConfirm:
     """
     Test DNS checks, using stubbed name resolution methods that return static values.
@@ -139,7 +140,7 @@ class TestDNSCheckConfirm:
         return a dict that looks like the return value from dnstest.lookup_reverse
         but either returns one of a hard-coded group of dicts, or an error.
         """
-        
+
         if name in known_dns[to_server]['rev'] and known_dns[to_server]['rev'][name] == "SERVFAIL":
             return {'status': 'SERVFAIL'}
         elif name in known_dns[to_server]['rev']:

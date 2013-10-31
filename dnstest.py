@@ -22,6 +22,7 @@ from dnstest_checks import DNStestChecks
 from dnstest_config import DnstestConfig
 from dnstest_parser import DnstestParser
 
+
 def run_check_line(line, parser, chk):
     """
     Parses a raw input line, runs the tests for that line,
@@ -88,6 +89,7 @@ def format_test_output(res):
     for w in res['warnings']:
         print "\t%s" % w
 
+
 def main(options):
     """
     main function - does everything...
@@ -150,19 +152,20 @@ def main(options):
         # we were reading a file, close it
         fh.close()
 
+
 def parse_opts():
     """
     Runs OptionParser and calls main() with the resulting options.
     """
     p = optparse.OptionParser()
     p.add_option('-c', '--config', dest='config_file',
-                      help='path to config file (default looks for ./dnstest.ini or ~/.dnstest.ini)')
+                 help='path to config file (default looks for ./dnstest.ini or ~/.dnstest.ini)')
 
     p.add_option('-f', '--file', dest='testfile',
-                      help='path to file listing tests (default reads from STDIN)')
+                 help='path to file listing tests (default reads from STDIN)')
 
     p.add_option('-V', '--verify', dest='verify', default=False, action='store_true',
-                      help='verify changes against PROD server once they\'re live (default False)')
+                 help='verify changes against PROD server once they\'re live (default False)')
 
     options, args = p.parse_args()
     main(options)
