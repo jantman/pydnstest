@@ -80,6 +80,15 @@ TESTS[7] = {'hostname': "hostname_test7", 'result': {'message': "prod and test s
 # test 8 - both return NXDOMAIN
 TESTS[8] = {'hostname': 'hostname_test8', 'result': {'message': 'both test and prod returned status NXDOMAIN for name hostname_test8', 'result': True, 'secondary': [], 'warnings': []}}
 
+# test 9 - both return SERVFAIL
+known_dns['test']['fwd']['hostname_test9.example.com'] = {'status': 'SERVFAIL'}
+known_dns['prod']['fwd']['hostname_test9.example.com'] = {'status': 'SERVFAIL'}
+TESTS[9] = {'hostname': 'hostname_test9', 'result': {'message': 'both test and prod returned status SERVFAIL for name hostname_test9', 'result': True, 'secondary': [], 'warnings': []}}
+
+# test 10 - prod SERVFAIL and test NXDOMAIN
+known_dns['prod']['fwd']['hostname_test10.example.com'] = {'status': 'SERVFAIL'}
+TESTS[10] = {'hostname': 'hostname_test10', 'result': {'message': 'test server returned status NXDOMAIN for name hostname_test10, but prod returned status SERVFAIL', 'result': True, 'secondary': [], 'warnings': []}}
+
 class TestDNSCheckConfirm:
     """
     Test DNS checks, using stubbed name resolution methods that return static values.
@@ -116,8 +125,8 @@ class TestDNSCheckConfirm:
         but either returns one of a hard-coded group of dicts, or an error.
         """
 
-        if query in known_dns[to_server]['fwd'] and 'status' in known_dns[to_server]['fwd']:
-            return {'status': known_dns[to_server]['fwd']['status']}
+        if query in known_dns[to_server]['fwd'] and 'status' in known_dns[to_server]['fwd'][query]:
+            return {'status': known_dns[to_server]['fwd'][query]['status']}
         elif query in known_dns[to_server]['fwd']:
             return {'answer': known_dns[to_server]['fwd'][query]}
         else:
