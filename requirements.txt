@@ -1,3 +1,2 @@
 pydns==2.3.6
 pyparsing==1.5.7
-wsgiref==0.1.2
