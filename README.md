@@ -1,7 +1,7 @@
 pydnstest
 =========
 
-Python script for testing DNS changes (add, remove, rename, change records)
+Python tool for testing DNS changes (add, remove, rename, change records)
 against a staging DNS server, verifying the same changes against production,
 or confirming that a record returns the same result in both environments.
 
