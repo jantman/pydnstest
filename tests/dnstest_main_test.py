@@ -344,3 +344,16 @@ class TestDNSTestMain:
         assert foo == None
         assert out == "OK: foobarbaz\n**NG: foofail\n++++ 1 passed / 1 FAILED.\n"
         assert err == ""
+
+    def test_options(self, monkeypatch):
+        """
+        Test the parse_opts option parsing method
+        """
+        def mockreturn(options):
+            print dir(options)
+            assert options.verify == True
+            assert options.config_file == "configfile"
+            assert options.testfile == "mytestfile"
+        monkeypatch.setattr(dnstest, "main", mockreturn)
+        sys.argv = ['dnstest.py', '-c', 'configfile', '-f', 'mytestfile', '-V']
+        x = dnstest.parse_opts()
