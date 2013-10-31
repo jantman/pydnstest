@@ -87,7 +87,7 @@ TESTS[9] = {'hostname': 'hostname_test9', 'result': {'message': 'both test and p
 
 # test 10 - prod SERVFAIL and test NXDOMAIN
 known_dns['prod']['fwd']['hostname_test10.example.com'] = {'status': 'SERVFAIL'}
-TESTS[10] = {'hostname': 'hostname_test10', 'result': {'message': 'test server returned status NXDOMAIN for name hostname_test10, but prod returned status SERVFAIL', 'result': True, 'secondary': [], 'warnings': []}}
+TESTS[10] = {'hostname': 'hostname_test10', 'result': {'message': 'test server returned status NXDOMAIN for name hostname_test10, but prod returned status SERVFAIL', 'result': False, 'secondary': [], 'warnings': []}}
 
 class TestDNSCheckConfirm:
     """
