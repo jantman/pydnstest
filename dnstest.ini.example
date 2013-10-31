@@ -6,7 +6,7 @@ prod: 1.2.3.4
 test: 1.2.3.5
 
 [defaults]
-# whether or not we should have reverse DNS for valid A records
+# whether or not we should have reverse DNS for valid A records, True or False
 have_reverse_dns: True
 
 # set this to your default domain, to be appended to requests that aren't a FQDN
