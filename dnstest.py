@@ -54,7 +54,7 @@ from pyparsing import ParseException
 from dnstest_checks import DNStestChecks
 from dnstest_config import DnstestConfig
 from dnstest_parser import DnstestParser
-
+from version import VERSION
 
 def run_check_line(line, parser, chk):
     """
@@ -176,9 +176,9 @@ def main(options):
 
     msg = ""
     if failed == 0:
-        msg = "All %d tests passed." % passed
+        msg = "All %d tests passed. (pydnstest %s)" % (passed, VERSION)
     else:
-        msg = "%d passed / %d FAILED." % (passed, failed)
+        msg = "%d passed / %d FAILED. (pydnstest %s)" % (passed, failed, VERSION)
     print "++++ %s" % msg
 
     if options.testfile:

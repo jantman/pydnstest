@@ -47,6 +47,7 @@ from dnstest_checks import DNStestChecks
 from dnstest_config import DnstestConfig
 import dnstest
 from dnstest_parser import DnstestParser
+from version import VERSION as pydnstest_version
 
 """
 This dict stores the DNS results that our DNS-mocking functions will return.
@@ -262,7 +263,7 @@ class TestDNSTestMain:
         foo = dnstest.main(opt)
         out, err = capfd.readouterr()
         assert foo == None
-        assert out == "ERROR: could not parse input line, SKIPPING: foo bar baz\n++++ All 0 tests passed.\n"
+        assert out == "ERROR: could not parse input line, SKIPPING: foo bar baz\n++++ All 0 tests passed. (pydnstest %s)\n" % pydnstest_version
         assert err == ""
 
     def test_discovered_config_file(self, save_user_config, capfd):
@@ -285,7 +286,7 @@ class TestDNSTestMain:
         foo = dnstest.main(opt)
         out, err = capfd.readouterr()
         assert foo == None
-        assert out == "ERROR: could not parse input line, SKIPPING: foo bar baz\n++++ All 0 tests passed.\n"
+        assert out == "ERROR: could not parse input line, SKIPPING: foo bar baz\n++++ All 0 tests passed. (pydnstest %s)\n" % pydnstest_version
         assert err == ""
 
     def test_no_config_file(self, save_user_config, capfd):
@@ -353,7 +354,7 @@ class TestDNSTestMain:
         foo = dnstest.main(opt)
         out, err = capfd.readouterr()
         assert foo == None
-        assert out == "OK: foobarbaz\nOK: foobarbaz\n++++ All 2 tests passed.\n"
+        assert out == "OK: foobarbaz\nOK: foobarbaz\n++++ All 2 tests passed. (pydnstest %s)\n" % pydnstest_version
         assert err == ""
 
     def test_verify_with_testfile(self, write_testfile, save_user_config, capfd, monkeypatch):
@@ -379,7 +380,7 @@ class TestDNSTestMain:
         foo = dnstest.main(opt)
         out, err = capfd.readouterr()
         assert foo == None
-        assert out == "OK: foobarbaz\n**NG: foofail\n++++ 1 passed / 1 FAILED.\n"
+        assert out == "OK: foobarbaz\n**NG: foofail\n++++ 1 passed / 1 FAILED. (pydnstest %s)\n" % pydnstest_version
         assert err == ""
 
     def test_options(self, monkeypatch):
