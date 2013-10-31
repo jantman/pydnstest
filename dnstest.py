@@ -125,7 +125,7 @@ def main(options):
         line = line.strip()
         if not line:
             continue
-        if line == "" or line[:1] == "#":
+        if line[:1] == "#":
             continue
         if options.verify:
             r = run_verify_line(line, parser, chk)
