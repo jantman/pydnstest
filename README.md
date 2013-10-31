@@ -12,6 +12,7 @@ Installation
 ------------
 It's recommended that you clone the git repository and install into a virtual environment.
 If you want to install some other way, that's fine, but you'll have to figure it out on your own.
+pip installation should be coming soon...
 
 ```
 git clone https://github.com/jantman/pydnstest.git
@@ -33,7 +34,6 @@ Grammar:
 
 Sample input file:
 ```
-jantman@jarvis$ cat dnstests.txt 
 add foo.example.com with address 1.2.3.4
 remove bar.example.com
 rename baz.example.com with value 1.2.3.5 to blam.example.com
@@ -78,6 +78,3 @@ logic (via stubbing the DNS lookup methods and returning known results).
 ToDo
 ----
 * Add interactive mode for DNS testing - input one line and show result
-* lots more testing
-* Figure out how to test command line options - config override
-* doctest
