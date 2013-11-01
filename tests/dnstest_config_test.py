@@ -48,6 +48,7 @@ import os
 # conditional imports for packages with different names in python 2 and 3
 if sys.version_info.major == 3:
     import configparser as ConfigParser
+    from configparser import ParsingError
 else:
     import ConfigParser
 
