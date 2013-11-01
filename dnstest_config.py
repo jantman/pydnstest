@@ -40,6 +40,8 @@ Jason Antman <jason@jasonantman.com> <http://www.jasonantman.com>
 
 import os.path
 import sys
+
+# conditional imports for packages with different names in python 2 and 3
 if sys.version_info.major == 3:
     import configparser as ConfigParser
 else:

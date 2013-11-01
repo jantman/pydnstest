@@ -44,7 +44,12 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../')
 import shutil
 import os.path
 import os
-from ConfigParser import ParsingError
+
+# conditional imports for packages with different names in python 2 and 3
+if sys.version_info.major == 3:
+    import configparser as ConfigParser
+else:
+    import ConfigParser
 
 from dnstest_config import DnstestConfig
 
