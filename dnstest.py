@@ -65,7 +65,7 @@ def run_check_line(line, parser, chk):
     try:
         d = parser.parse_line(line)
     except ParseException:
-        print "ERROR: could not parse input line, SKIPPING: %s" % line
+        print("ERROR: could not parse input line, SKIPPING: %s" % line)
         return False
 
     if d['operation'] == 'add':
@@ -79,7 +79,7 @@ def run_check_line(line, parser, chk):
     elif d['operation'] == 'confirm':
         return chk.confirm_name(d['hostname'])
     else:
-        print "ERROR: unknown input operation"
+        print("ERROR: unknown input operation")
         return False
 
 
@@ -92,7 +92,7 @@ def run_verify_line(line, parser, chk):
     try:
         d = parser.parse_line(line)
     except ParseException:
-        print "ERROR: could not parse input line, SKIPPING: %s" % line
+        print("ERROR: could not parse input line, SKIPPING: %s" % line)
         return False
 
     if d['operation'] == 'add':
@@ -106,7 +106,7 @@ def run_verify_line(line, parser, chk):
     elif d['operation'] == 'confirm':
         return chk.confirm_name(d['hostname'])
     else:
-        print "ERROR: unknown input operation"
+        print("ERROR: unknown input operation")
         return False
 
 
@@ -115,13 +115,13 @@ def format_test_output(res):
     Prints test output in a nice textual format
     """
     if res['result']:
-        print "OK: %s" % res['message']
+        print("OK: %s" % res['message'])
     else:
-        print "**NG: %s" % res['message']
+        print("**NG: %s" % res['message'])
     for m in res['secondary']:
-        print "\t%s" % m
+        print("\t%s" % m)
     for w in res['warnings']:
-        print "\t%s" % w
+        print("\t%s" % w)
 
 
 def main(options):
@@ -137,7 +137,7 @@ def main(options):
     else:
         conf_file = config.find_config_file()
     if conf_file is None:
-        print "ERROR: no configuration file."
+        print("ERROR: no configuration file.")
         sys.exit(1)
     config.load_config(conf_file)
 
@@ -147,7 +147,7 @@ def main(options):
     # if no other options, read from stdin
     if options.testfile:
         if not os.path.exists(options.testfile):
-            print "ERROR: test file '%s' does not exist." % options.testfile
+            print("ERROR: test file '%s' does not exist." % options.testfile)
             sys.exit(1)
         fh = open(options.testfile, 'r')
     else:
@@ -180,7 +180,7 @@ def main(options):
         msg = "All %d tests passed. (pydnstest %s)" % (passed, VERSION)
     else:
         msg = "%d passed / %d FAILED. (pydnstest %s)" % (passed, failed, VERSION)
-    print "++++ %s" % msg
+    print("++++ %s" % msg)
 
     if options.testfile:
         # we were reading a file, close it
