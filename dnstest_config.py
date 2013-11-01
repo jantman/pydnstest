@@ -40,7 +40,10 @@ Jason Antman <jason@jasonantman.com> <http://www.jasonantman.com>
 
 import os.path
 import sys
-import ConfigParser
+if sys.version_info.major == 3:
+    import configparser as ConfigParser
+else:
+    import ConfigParser
 
 
 class DnstestConfig():
