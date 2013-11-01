@@ -14,7 +14,7 @@ manually for critical applications (like... say... everything in DNS...)__
 
 Requirements
 ------------
-* Python2 (currently tested with 2.7; other versions coming soon...)
+* Python 2.6 or greater. Tested with 2.6, 2.7 and 3.3
 * Python [VirtualEnv](http://www.virtualenv.org/) (your OS/distribution should have packages for these)
 
 Installation
@@ -24,7 +24,7 @@ If you want to install some other way, that's fine, but you'll have to figure it
 
 ```bash
 git clone https://github.com/jantman/pydnstest.git
-virtualenv2 pydnstest
+virtualenv pydnstest
 cd pydnstest && source bin/activate
 pip install -r requirements.txt
 ```
