@@ -109,10 +109,6 @@ class TestLanguageParsing:
         try:
             p = DnstestParser()
             foo = p.parse_line(line).asDict()
-        except ParseException, err:
-            print err.line
-            print " " * (err.column - 1) + "^"
-            print err
         assert foo == parsed_dict
 
     @pytest.mark.parametrize("line", [

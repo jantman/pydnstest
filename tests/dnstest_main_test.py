@@ -388,7 +388,6 @@ class TestDNSTestMain:
         Test the parse_opts option parsing method
         """
         def mockreturn(options):
-            print dir(options)
             assert options.verify == True
             assert options.config_file == "configfile"
             assert options.testfile == "mytestfile"
