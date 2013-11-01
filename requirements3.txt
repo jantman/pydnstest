@@ -1,2 +1,2 @@
-py3dns==2.3.6
-pyparsing==1.5.7
+py3dns==3.0.4
+pyparsing==2.0.1
