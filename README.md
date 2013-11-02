@@ -14,8 +14,18 @@ manually for critical applications (like... say... everything in DNS...)__
 
 Requirements
 ------------
-* Python 2.6 or greater. Tested with 2.6, 2.7 and 3.3
-* Python [VirtualEnv](http://www.virtualenv.org/) (your OS/distribution should have packages for these)
+* Python
+** 2.4 - unknown
+** 2.6 - unknown
+** 2.7 - fully supported (most development is on 2.7)
+** 3.1 - unknown
+** 3.2 - tests pass
+** 3.3 - unknown
+* Python [VirtualEnv](http://www.virtualenv.org/) and `pip` (recommended
+installation method; your OS/distribution should have packages for these)
+* *or* Python and the following packages:
+** [pydns](https://pypi.python.org/pypi/pydns) (python2) or [py3dns](https://pypi.python.org/pypi/py3dns) (python3)
+** [pyparsing](https://pypi.python.org/pypi/pyparsing)
 
 Installation
 ------------
@@ -132,6 +142,8 @@ Testing
 Testing is done via [pytest](http://pytest.org/latest/) and currently
 encompasses testing for both the input language parsing, and the DNS testing
 logic (via stubbing the DNS lookup methods and returning known results). 
+
+I'm currently in the process of converting the project to use [tox](http://tox.readthedocs.org/en/latest/#)
 
 * `py.test`
 * If you want to see code coverage: `py.test --cov-report term-missing --cov-report html --cov=. tests/`
