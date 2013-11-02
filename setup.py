@@ -1,6 +1,9 @@
 from distutils.core import setup
 from sys import version_info
+from dnstest.version import VERSION
 
+# different requirements for py2x and py3x
+# will this work right? I have no idea...
 if version_info.major == 3:
     pyver_requires=[
         "py3dns==3.0.4",
@@ -14,7 +17,7 @@ else:
 
 setup(
     name='pydnstest',
-    version='0.1.0',
+    version=VERSION,
     author='Jason Antman',
     author_email='jason@jasonantman.com',
     packages=['pydnstest', 'pydnstest.test'],
