@@ -81,22 +81,22 @@ Usage with input file:
 ```bash
 cd pydnstest
 source bin/activate
-./dnstest.py -f dnstests.txt
+bin/dnstest -f dnstests.txt
 ```
 
 Verify once in prod:
 ```bash
-./dnstest.py -V -f dnstests.txt
+bin/dnstest -V -f dnstests.txt
 ```
 
 Read from stdin:
 ```bash
-cat dnstests.txt | ./dnstest.py
+cat dnstests.txt | bin/dnstest
 ```
 
 Run one quick test:
 ```bash
-echo "add host.example.com with address 192.168.0.1" | ./dnstest.py
+echo "add host.example.com with address 192.168.0.1" | bin/dnstest
 ```
 
 Bugs and Feature Requests
