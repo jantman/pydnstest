@@ -109,6 +109,9 @@ class TestLanguageParsing:
         try:
             p = DnstestParser()
             foo = p.parse_line(line).asDict()
+        except ParseException:
+            # assert will fail, no need to do anything here
+            pass
         assert foo == parsed_dict
 
     @pytest.mark.parametrize("line", [
