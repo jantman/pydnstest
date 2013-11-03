@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 pydnstest
 Tool to test DNS changes on a staging DNS server, comparing to a current
@@ -206,7 +205,3 @@ def parse_opts():
 
     options, args = p.parse_args()
     main(options)
-
-
-if __name__ == "__main__":
-    parse_opts()
