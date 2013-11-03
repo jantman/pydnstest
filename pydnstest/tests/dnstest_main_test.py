@@ -97,7 +97,7 @@ class TestDNSTestMain:
         config.have_reverse_dns = True
 
         parser = DnstestParser()
-        dnstest.parser = parser
+        pydnstest.parser = parser
 
         chk = DNStestChecks(config)
         # stub
@@ -120,7 +120,7 @@ class TestDNSTestMain:
         config.have_reverse_dns = True
 
         parser = DnstestParser()
-        dnstest.parser = parser
+        pydnstest.parser = parser
 
         chk = DNStestChecks(config)
         # stub
@@ -133,7 +133,7 @@ class TestDNSTestMain:
         """
         DNS stub method
 
-        return a dict that looks like the return value from dnstest.resolve_name
+        return a dict that looks like the return value from pydnstest.resolve_name
         but either returns one of a hard-coded group of dicts, or an error.
         """
 
@@ -148,7 +148,7 @@ class TestDNSTestMain:
         """
         DNS stub method
 
-        return a dict that looks like the return value from dnstest.lookup_reverse
+        return a dict that looks like the return value from pydnstest.lookup_reverse
         but either returns one of a hard-coded group of dicts, or an error.
         """
 
@@ -163,7 +163,7 @@ class TestDNSTestMain:
         """
         DNS stub method
 
-        return a dict that looks like the return value from dnstest.resolve_name
+        return a dict that looks like the return value from pydnstest.resolve_name
         but either returns one of a hard-coded group of dicts, or an error.
         """
 
@@ -178,7 +178,7 @@ class TestDNSTestMain:
         """
         DNS stub method
 
-        return a dict that looks like the return value from dnstest.lookup_reverse
+        return a dict that looks like the return value from pydnstest.lookup_reverse
         but either returns one of a hard-coded group of dicts, or an error.
         """
 
@@ -257,9 +257,8 @@ class TestDNSTestMain:
         setattr(opt, "verify", False)
         setattr(opt, "config_file", "dnstest.foo")
         setattr(opt, "testfile", False)
-        #opt.config_file = "dnstest.foo"
-        dnstest.sys.stdin = ["foo bar baz"]
-        foo = dnstest.main(opt)
+        pydnstest.sys.stdin = ["foo bar baz"]
+        foo = pydnstest.main(opt)
         out, err = capfd.readouterr()
         assert foo == None
         assert out == "ERROR: could not parse input line, SKIPPING: foo bar baz\n++++ All 0 tests passed. (pydnstest %s)\n" % pydnstest_version
@@ -279,10 +278,10 @@ class TestDNSTestMain:
         fpath = os.path.abspath("dnstest.ini")
         self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\n")
 
-        dnstest.sys.stdin = ["foo bar baz"]
+        pydnstest.sys.stdin = ["foo bar baz"]
         foo = None
 
-        foo = dnstest.main(opt)
+        foo = pydnstest.main(opt)
         out, err = capfd.readouterr()
         assert foo == None
         assert out == "ERROR: could not parse input line, SKIPPING: foo bar baz\n++++ All 0 tests passed. (pydnstest %s)\n" % pydnstest_version
@@ -297,11 +296,11 @@ class TestDNSTestMain:
         setattr(opt, "config_file", False)
         setattr(opt, "testfile", False)
 
-        dnstest.sys.stdin = ["foo bar baz"]
+        pydnstest.sys.stdin = ["foo bar baz"]
         foo = None
 
         with pytest.raises(SystemExit) as excinfo:
-            foo = dnstest.main(opt)
+            foo = pydnstest.main(opt)
         assert excinfo.value.code == 1
         out, err = capfd.readouterr()
         assert foo == None
@@ -325,7 +324,7 @@ class TestDNSTestMain:
         foo = None
 
         with pytest.raises(SystemExit) as excinfo:
-            foo = dnstest.main(opt)
+            foo = pydnstest.main(opt)
         assert excinfo.value.code == 1
         out, err = capfd.readouterr()
         assert foo == None
@@ -350,7 +349,7 @@ class TestDNSTestMain:
         fpath = os.path.abspath("dnstest.ini")
         self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\n")
 
-        foo = dnstest.main(opt)
+        foo = pydnstest.main(opt)
         out, err = capfd.readouterr()
         assert foo == None
         assert out == "OK: foobarbaz\nOK: foobarbaz\n++++ All 2 tests passed. (pydnstest %s)\n" % pydnstest_version
@@ -376,7 +375,7 @@ class TestDNSTestMain:
         fpath = os.path.abspath("dnstest.ini")
         self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\n")
 
-        foo = dnstest.main(opt)
+        foo = pydnstest.main(opt)
         out, err = capfd.readouterr()
         assert foo == None
         assert out == "OK: foobarbaz\n**NG: foofail\n++++ 1 passed / 1 FAILED. (pydnstest %s)\n" % pydnstest_version
@@ -391,5 +390,5 @@ class TestDNSTestMain:
             assert options.config_file == "configfile"
             assert options.testfile == "mytestfile"
         monkeypatch.setattr(dnstest, "main", mockreturn)
-        sys.argv = ['dnstest.py', '-c', 'configfile', '-f', 'mytestfile', '-V']
-        x = dnstest.parse_opts()
+        sys.argv = ['pydnstest', '-c', 'configfile', '-f', 'mytestfile', '-V']
+        x = pydnstest.parse_opts()

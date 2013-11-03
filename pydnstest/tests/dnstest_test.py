@@ -123,7 +123,7 @@ class TestDNSTest:
         config.have_reverse_dns = True
 
         parser = DnstestParser()
-        dnstest.parser = parser
+        pydnstest.parser = parser
 
         chk = DNStestChecks(config)
         # stub
@@ -146,7 +146,7 @@ class TestDNSTest:
         config.have_reverse_dns = True
 
         parser = DnstestParser()
-        dnstest.parser = parser
+        pydnstest.parser = parser
 
         chk = DNStestChecks(config)
         # stub
@@ -159,7 +159,7 @@ class TestDNSTest:
         """
         DNS stub method
 
-        return a dict that looks like the return value from dnstest.resolve_name
+        return a dict that looks like the return value from pydnstest.resolve_name
         but either returns one of a hard-coded group of dicts, or an error.
         """
 
@@ -174,7 +174,7 @@ class TestDNSTest:
         """
         DNS stub method
 
-        return a dict that looks like the return value from dnstest.lookup_reverse
+        return a dict that looks like the return value from pydnstest.lookup_reverse
         but either returns one of a hard-coded group of dicts, or an error.
         """
 
@@ -189,7 +189,7 @@ class TestDNSTest:
         """
         DNS stub method
 
-        return a dict that looks like the return value from dnstest.resolve_name
+        return a dict that looks like the return value from pydnstest.resolve_name
         but either returns one of a hard-coded group of dicts, or an error.
         """
 
@@ -204,7 +204,7 @@ class TestDNSTest:
         """
         DNS stub method
 
-        return a dict that looks like the return value from dnstest.lookup_reverse
+        return a dict that looks like the return value from pydnstest.lookup_reverse
         but either returns one of a hard-coded group of dicts, or an error.
         """
 
@@ -287,7 +287,7 @@ class TestDNSTest:
         parser = DnstestParser()
         # mock the parser function to just return None
         parser.parse_line = self.parser_return_unknown_op
-        dnstest.parser = parser
+        pydnstest.parser = parser
 
         chk = DNStestChecks(config)
         # stub

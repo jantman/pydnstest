@@ -78,24 +78,24 @@ class TestDNSChecks:
         config.server_prod = "prod_server_stub"
         config.default_domain = ".example.com"
         config.have_reverse_dns = True
-        dnstest.config = config
+        pydnstest.config = config
 
         parser = DnstestParser()
-        dnstest.parser = parser
+        pydnstest.parser = parser
 
         chk = DNStestChecks(config)
         # stub
         chk.DNS.resolve_name = self.stub_resolve_name
         # stub
         chk.DNS.lookup_reverse = self.stub_lookup_reverse
-        dnstest.chk = chk
+        pydnstest.chk = chk
         return (parser, chk)
 
     def stub_resolve_name(self, query, to_server, to_port=53):
         """
         stub method
 
-        return a dict that looks like the return value from dnstest.resolve_name
+        return a dict that looks like the return value from pydnstest.resolve_name
         but either returns one of a hard-coded group of dicts, or an error.
         """
 
@@ -108,7 +108,7 @@ class TestDNSChecks:
         """
         stub method
 
-        return a dict that looks like the return value from dnstest.lookup_reverse
+        return a dict that looks like the return value from pydnstest.lookup_reverse
         but either returns one of a hard-coded group of dicts, or an error.
         """
 
@@ -122,7 +122,7 @@ class TestDNSChecks:
         Test end-to-end input line for adding a record
         """
         chk, parser = setup_checks
-        foo = dnstest.run_check_line('add record newhostname address 1.2.3.1', chk, parser)
+        foo = pydnstest.run_check_line('add record newhostname address 1.2.3.1', chk, parser)
         assert foo == {'message': 'newhostname => 1.2.3.1 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for newhostname (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.1 (TEST)']}
 
     def test_line_verify_add(self, setup_checks):
@@ -130,5 +130,5 @@ class TestDNSChecks:
         Test end-to-end input line for adding a record
         """
         chk, parser = setup_checks
-        foo = dnstest.run_verify_line('add record addedhostname address 1.2.3.3', chk, parser)
+        foo = pydnstest.run_verify_line('add record addedhostname address 1.2.3.3', chk, parser)
         assert foo == {'message': 'addedhostname => 1.2.3.3 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.3.3 (PROD)']}

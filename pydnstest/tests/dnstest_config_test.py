@@ -50,6 +50,7 @@ if sys.version_info.major == 3:
     from configparser import ParsingError
 else:
     import ConfigParser
+    from ConfigParser import ParsingError
 
 from pydnstest.config import DnstestConfig
 

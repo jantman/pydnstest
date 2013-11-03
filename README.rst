@@ -138,13 +138,19 @@ Development
 Installation for development
 ----------------------------
 
+1. Fork the `pydnstest <https://github.com/jantman/pydnstest>`_ repository on GitHub
+2. Create a new branch off of master in your fork.
+
 .. code-block:: bash
 
-    git clone https://github.com/jantman/pydnstest.git
     virtualenv pydnstest
     cd pydnstest && source bin/activate
-    pip install -r requirements.txt
+    pip install -e git+git@github.com:YOURNAME/pydnstest.git@BRANCHNAME#egg=pydnstest
     pip install -r requirements_test.txt
+    cd src/pydnstest
+
+The git clone you're now in will probably be checked out to a specific commit,
+so you may want to ``git checkout BRANCHNAME``.
 
 Guidelines
 ----------
