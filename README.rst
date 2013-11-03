@@ -16,16 +16,19 @@ Requirements
 ------------
 
 * Python
- * 2.4 - unknown
- * 2.6 - unknown
- * 2.7 - fully supported (most development is on 2.7)
- * 3.1 - unknown
- * 3.2 - tests pass
- * 3.3 - unknown
+
+  * 2.4 - unknown
+  * 2.6 - unknown
+  * 2.7 - fully supported (most development is on 2.7)
+  * 3.1 - unknown
+  * 3.2 - tests pass
+  * 3.3 - unknown
+
 * Python `VirtualEnv <http://www.virtualenv.org/>`_ and ``pip`` (recommended installation method; your OS/distribution should have packages for these)
 * *or* the following packages:
- * `pydns <https://pypi.python.org/pypi/pydns>`_ (python2) or `py3dns <https://pypi.python.org/pypi/py3dns>`_ (python3)
- * `pyparsing <https://pypi.python.org/pypi/pyparsing>`_
+
+  * `pydns <https://pypi.python.org/pypi/pydns>`_ (python2) or `py3dns <https://pypi.python.org/pypi/py3dns>`_ (python3)
+  * `pyparsing <https://pypi.python.org/pypi/pyparsing>`_
 
 Installation
 ------------
@@ -52,11 +55,14 @@ correct ones for your environment (this is an ini-style file, parsed with
 Python's ConfigParser module):
 
 * in the ``[servers]`` section:
- * ``prod``: the IP of your production/live DNS server
- * ``test``: the IP of your test/staging DNS server
+
+  * ``prod``: the IP of your production/live DNS server
+  * ``test``: the IP of your test/staging DNS server
+
 * in the ``[defaults]`` section:
- * ``have_reverse_dns``: True if you want to check for reverse DNS by default, False otherwise
- * ``domain``: the default domain (i.e. ".example.com") to append to any input which appears to be a hostname (i.e. not a FQDN or an IP address)
+
+  * ``have_reverse_dns``: True if you want to check for reverse DNS by default, False otherwise
+  * ``domain``: the default domain (i.e. ".example.com") to append to any input which appears to be a hostname (i.e. not a FQDN or an IP address)
 
 Usage
 -----
@@ -169,11 +175,13 @@ I'm currently in the process of converting the project to use `tox <http://tox.r
 
 * ``py.test``
 * If you want to see code coverage: ``py.test --cov-report term-missing --cov-report html --cov=.``
- * this produces two coverage reports - a summary on STDOUT and a full report in the ``htmlcov/`` directory
+
+  * this produces two coverage reports - a summary on STDOUT and a full report in the ``htmlcov/`` directory
+
 *  If you want to check pep8 compliance: ``py.test --pep8`` (should be done before any pull requests or merges)
 
 ToDo
 ----
 
-*  Add interactive mode for DNS testing - input one line and show result
-*  Support py26 through py33, maybe even py24 if possible
+* Add interactive mode for DNS testing - input one line and show result
+* Support py26 through py33, maybe even py24 if possible
