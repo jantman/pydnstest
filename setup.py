@@ -5,12 +5,12 @@ from pydnstest.version import VERSION
 # different requirements for py2x and py3x
 # will this work right? I have no idea...
 if version_info.major == 3:
-    pyver_requires=[
+    pyver_requires = [
         "py3dns==3.0.4",
         "pyparsing==2.0.1",
     ]
 else:
-    pyver_requires=[
+    pyver_requires = [
         "pydns==2.3.6",
         "pyparsing==1.5.7",
     ]

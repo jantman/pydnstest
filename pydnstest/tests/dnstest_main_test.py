@@ -257,8 +257,8 @@ class TestDNSTestMain:
         setattr(opt, "verify", False)
         setattr(opt, "config_file", "dnstest.foo")
         setattr(opt, "testfile", False)
-        pydnstest.sys.stdin = ["foo bar baz"]
-        foo = pydnstest.main(opt)
+        pydnstest.main.sys.stdin = ["foo bar baz"]
+        foo = pydnstest.main.main(opt)
         out, err = capfd.readouterr()
         assert foo == None
         assert out == "ERROR: could not parse input line, SKIPPING: foo bar baz\n++++ All 0 tests passed. (pydnstest %s)\n" % pydnstest_version
@@ -278,10 +278,10 @@ class TestDNSTestMain:
         fpath = os.path.abspath("dnstest.ini")
         self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\n")
 
-        pydnstest.sys.stdin = ["foo bar baz"]
+        pydnstest.main.sys.stdin = ["foo bar baz"]
         foo = None
 
-        foo = pydnstest.main(opt)
+        foo = pydnstest.main.main(opt)
         out, err = capfd.readouterr()
         assert foo == None
         assert out == "ERROR: could not parse input line, SKIPPING: foo bar baz\n++++ All 0 tests passed. (pydnstest %s)\n" % pydnstest_version
@@ -296,11 +296,11 @@ class TestDNSTestMain:
         setattr(opt, "config_file", False)
         setattr(opt, "testfile", False)
 
-        pydnstest.sys.stdin = ["foo bar baz"]
+        pydnstest.main.sys.stdin = ["foo bar baz"]
         foo = None
 
         with pytest.raises(SystemExit) as excinfo:
-            foo = pydnstest.main(opt)
+            foo = pydnstest.main.main(opt)
         assert excinfo.value.code == 1
         out, err = capfd.readouterr()
         assert foo == None
@@ -324,7 +324,7 @@ class TestDNSTestMain:
         foo = None
 
         with pytest.raises(SystemExit) as excinfo:
-            foo = pydnstest.main(opt)
+            foo = pydnstest.main.main(opt)
         assert excinfo.value.code == 1
         out, err = capfd.readouterr()
         assert foo == None
@@ -337,7 +337,7 @@ class TestDNSTestMain:
         """
         def mockreturn(foo, bar, baz):
             return {'result': True, 'message': 'foobarbaz', 'secondary': [], 'warnings': []}
-        monkeypatch.setattr(dnstest, "run_check_line", mockreturn)
+        monkeypatch.setattr(pydnstest.main, "run_check_line", mockreturn)
 
         opt = OptionsObject()
         setattr(opt, "verify", False)
@@ -349,7 +349,7 @@ class TestDNSTestMain:
         fpath = os.path.abspath("dnstest.ini")
         self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\n")
 
-        foo = pydnstest.main(opt)
+        foo = pydnstest.main.main(opt)
         out, err = capfd.readouterr()
         assert foo == None
         assert out == "OK: foobarbaz\nOK: foobarbaz\n++++ All 2 tests passed. (pydnstest %s)\n" % pydnstest_version
@@ -363,7 +363,7 @@ class TestDNSTestMain:
             if foo == "confirm bar.jasonantman.com":
                 return {'result': False, 'message': 'foofail', 'secondary': [], 'warnings': []}
             return {'result': True, 'message': 'foobarbaz', 'secondary': [], 'warnings': []}
-        monkeypatch.setattr(dnstest, "run_verify_line", mockreturn)
+        monkeypatch.setattr(pydnstest.main, "run_verify_line", mockreturn)
 
         opt = OptionsObject()
         setattr(opt, "verify", True)
@@ -375,7 +375,7 @@ class TestDNSTestMain:
         fpath = os.path.abspath("dnstest.ini")
         self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\n")
 
-        foo = pydnstest.main(opt)
+        foo = pydnstest.main.main(opt)
         out, err = capfd.readouterr()
         assert foo == None
         assert out == "OK: foobarbaz\n**NG: foofail\n++++ 1 passed / 1 FAILED. (pydnstest %s)\n" % pydnstest_version
@@ -389,6 +389,6 @@ class TestDNSTestMain:
             assert options.verify == True
             assert options.config_file == "configfile"
             assert options.testfile == "mytestfile"
-        monkeypatch.setattr(dnstest, "main", mockreturn)
+        monkeypatch.setattr(pydnstest.main, "main", mockreturn)
         sys.argv = ['pydnstest', '-c', 'configfile', '-f', 'mytestfile', '-V']
-        x = pydnstest.parse_opts()
+        x = pydnstest.main.parse_opts()
