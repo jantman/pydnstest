@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 from sys import version_info
 from pydnstest.version import VERSION
 
