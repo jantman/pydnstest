@@ -18,6 +18,18 @@ else:
 with open('README.rst') as file:
     long_description = file.read()
 
+classifiers = [
+    'Development Status :: 4 - Beta',
+    'Environment :: Console',
+    'Intended Audience :: System Administrators',
+    'Intended Audience :: Information Technology',
+    'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)',
+    'Natural Language :: English',
+    'Operating System :: POSIX',
+    'Programming Language :: Python',
+    'Topic :: Internet :: Name Service (DNS)'
+]
+
 setup(
     name='pydnstest',
     version=VERSION,
@@ -26,8 +38,10 @@ setup(
     packages=['pydnstest', 'pydnstest.tests'],
     scripts=['bin/pydnstest'],
     url='http://github.com/jantman/pydnstest/',
-    license='LICENSE.txt',
+    license='AGPLv3+',
     description='Tool to test DNS changes on a staging server and verify in production',
     long_description=long_description,
-    install_requires=pyver_requires
+    install_requires=pyver_requires,
+    keywords="dns testing pydns",
+    classifiers=classifiers
 )
