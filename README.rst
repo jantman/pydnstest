@@ -146,8 +146,8 @@ Installation for development
     virtualenv pydnstest
     cd pydnstest && source bin/activate
     pip install -e git+git@github.com:YOURNAME/pydnstest.git@BRANCHNAME#egg=pydnstest
-    pip install -r requirements_test.txt
     cd src/pydnstest
+    pip install -r requirements_test.txt
 
 The git clone you're now in will probably be checked out to a specific commit,
 so you may want to ``git checkout BRANCHNAME``.
