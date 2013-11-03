@@ -40,7 +40,6 @@ Jason Antman <jason@jasonantman.com> <http://www.jasonantman.com>
 import pytest
 import sys
 import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../')
 import shutil
 import os.path
 import os
@@ -52,7 +51,7 @@ if sys.version_info.major == 3:
 else:
     import ConfigParser
 
-from dnstest_config import DnstestConfig
+from pydnstest.config import DnstestConfig
 
 
 class TestConfigMethods:

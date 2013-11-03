@@ -42,10 +42,10 @@ import pytest
 import sys
 import os
 
-from dnstest.checks import DNStestChecks
-from dnstest.config import DnstestConfig
-import dnstest
-from dnstest.parser import DnstestParser
+from pydnstest.checks import DNStestChecks
+from pydnstest.config import DnstestConfig
+import pydnstest.main
+from pydnstest.parser import DnstestParser
 
 """
 This dict stores the DNS results that our DNS-mocking functions will return.
@@ -225,7 +225,7 @@ class TestDNSTest:
         """
         parser, chk = setup_checks
         line = "foo bar baz"
-        foo = dnstest.run_check_line(line, parser, chk)
+        foo = main.run_check_line(line, parser, chk)
         assert foo == False
         out, err = capfd.readouterr()
         assert out == "ERROR: could not parse input line, SKIPPING: %s\n" % line
@@ -236,7 +236,7 @@ class TestDNSTest:
         """
         parser, chk = setup_checks
         line = "foo bar baz"
-        foo = dnstest.run_verify_line(line, parser, chk)
+        foo = main.run_verify_line(line, parser, chk)
         assert foo == False
         out, err = capfd.readouterr()
         assert out == "ERROR: could not parse input line, SKIPPING: %s\n" % line
@@ -253,7 +253,7 @@ class TestDNSTest:
         Additional tests for the run_check_line function
         """
         parser, chk = setup_checks
-        foo = dnstest.run_check_line(line, parser, chk)
+        foo = main.run_check_line(line, parser, chk)
         assert foo == result
 
     @pytest.mark.parametrize(("line", "result"), [
@@ -268,7 +268,7 @@ class TestDNSTest:
         Additional tests for the run_verify_line function
         """
         parser, chk = setup_verifies
-        foo = dnstest.run_verify_line(line, parser, chk)
+        foo = main.run_verify_line(line, parser, chk)
         assert foo == result
 
     @pytest.fixture(scope="module")
@@ -308,7 +308,7 @@ class TestDNSTest:
         """
         parser, chk = setup_parser_return_unknown_op
 
-        foo = dnstest.run_check_line("confirm foo.example.com", parser, chk)
+        foo = main.run_check_line("confirm foo.example.com", parser, chk)
         assert foo == False
         out, err = capfd.readouterr()
         assert out == "ERROR: unknown input operation\n"
@@ -319,7 +319,7 @@ class TestDNSTest:
         """
         parser, chk = setup_parser_return_unknown_op
 
-        foo = dnstest.run_verify_line("confirm foo.example.com", parser, chk)
+        foo = main.run_verify_line("confirm foo.example.com", parser, chk)
         assert foo == False
         out, err = capfd.readouterr()
         assert out == "ERROR: unknown input operation\n"
@@ -338,6 +338,6 @@ class TestDNSTest:
         Test output formatting of test results.
         """
         parser, chk = setup_checks
-        foo = dnstest.format_test_output(result)
+        foo = main.format_test_output(result)
         out, err = capfd.readouterr()
         assert out == output

@@ -47,9 +47,8 @@ Jason Antman <jason@jasonantman.com> <http://www.jasonantman.com>
 import pytest
 import sys
 import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../')
 
-from dnstest_dns import DNStestDNS
+from pydnstest.dns import DNStestDNS
 import DNS
 
 
