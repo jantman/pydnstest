@@ -1,6 +1,6 @@
 from distutils.core import setup
 from sys import version_info
-from dnstest.version import VERSION
+from pydnstest.version import VERSION
 
 # different requirements for py2x and py3x
 # will this work right? I have no idea...
@@ -20,8 +20,8 @@ setup(
     version=VERSION,
     author='Jason Antman',
     author_email='jason@jasonantman.com',
-    packages=['pydnstest', 'pydnstest.test'],
-    scripts=['bin/dnstest'],
+    packages=['pydnstest', 'pydnstest.tests'],
+    scripts=['bin/pydnstest'],
     url='http://github.com/jantman/pydnstest/',
     license='LICENSE.txt',
     description='Tool to test DNS changes on a staging server and verify in production',
