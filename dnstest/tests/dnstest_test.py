@@ -41,12 +41,11 @@ Jason Antman <jason@jasonantman.com> <http://www.jasonantman.com>
 import pytest
 import sys
 import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../')
 
-from dnstest_checks import DNStestChecks
-from dnstest_config import DnstestConfig
+from dnstest.checks import DNStestChecks
+from dnstest.config import DnstestConfig
 import dnstest
-from dnstest_parser import DnstestParser
+from dnstest.parser import DnstestParser
 
 """
 This dict stores the DNS results that our DNS-mocking functions will return.
