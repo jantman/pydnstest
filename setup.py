@@ -15,6 +15,9 @@ else:
         "pyparsing==1.5.7",
     ]
 
+with open('README.rst') as file:
+    long_description = file.read()
+
 setup(
     name='pydnstest',
     version=VERSION,
@@ -25,6 +28,6 @@ setup(
     url='http://github.com/jantman/pydnstest/',
     license='LICENSE.txt',
     description='Tool to test DNS changes on a staging server and verify in production',
-    long_description='Python tool for testing DNS changes (add, remove, rename, change records) against a staging DNS server, verifying the same changes against production, or confirming that a record returns the same result in both environments.',
+    long_description=long_description,
     install_requires=pyver_requires
 )
