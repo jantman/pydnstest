@@ -50,10 +50,10 @@ import optparse
 import os.path
 from pyparsing import ParseException
 
-from dnstest_checks import DNStestChecks
-from dnstest_config import DnstestConfig
-from dnstest_parser import DnstestParser
-from version import VERSION
+from pydnstest.checks import DNStestChecks
+from pydnstest.config import DnstestConfig
+from pydnstest.parser import DnstestParser
+from pydnstest.version import VERSION
 
 
 def run_check_line(line, parser, chk):

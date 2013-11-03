@@ -38,7 +38,7 @@ Jason Antman <jason@jasonantman.com> <http://www.jasonantman.com>
 """
 
 import re
-from dnstest_dns import DNStestDNS
+from pydnstest.dns import DNStestDNS
 
 
 class DNStestChecks:
