@@ -168,7 +168,7 @@ logic (via stubbing the DNS lookup methods and returning known results).
 I'm currently in the process of converting the project to use `tox <http://tox.readthedocs.org/en/latest/#>`_
 
 * ``py.test``
-* If you want to see code coverage: ``py.test --cov-report term-missing --cov-report html --cov=. tests/``
+* If you want to see code coverage: ``py.test --cov-report term-missing --cov-report html --cov=.``
  * this produces two coverage reports - a summary on STDOUT and a full report in the ``htmlcov/`` directory
 *  If you want to check pep8 compliance: ``py.test --pep8`` (should be done before any pull requests or merges)
 
