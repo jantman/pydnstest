@@ -39,6 +39,7 @@ Jason Antman <jason@jasonantman.com> <http://www.jasonantman.com>
 
 import re
 from pydnstest.dns import DNStestDNS
+from pydnstest.util import dns_dict_to_string
 
 
 class DNStestChecks:
@@ -521,6 +522,6 @@ class DNStestChecks:
             res['result'] = False
             return res
         res['message'] = "prod and test servers return same response for '%s'" % n
-        res['secondary'].append("response: %s" % qp['answer'])
+        res['secondary'].append("response: %s" % dns_dict_to_string(qp['answer']))
         res['result'] = True
         return res
