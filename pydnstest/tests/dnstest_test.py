@@ -246,7 +246,7 @@ class TestDNSTest:
         ("change testrcl2.example.com to 1.2.1.2", {'message': "change testrcl2.example.com from '1.2.1.3' to '1.2.1.2' (TEST)", 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.1.2 (TEST)']}),
         ('add record testrcl3 address 1.2.1.3', {'message': 'testrcl3 => 1.2.1.3 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for testrcl3 (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.1.3 (TEST)']}),
         ('remove record testrcl4.example.com', {'message': 'testrcl4.example.com removed, got status NXDOMAIN (TEST)', 'result': True, 'warnings': [], 'secondary': ['PROD value was 1.2.1.4 (PROD)']}),
-        ('confirm record testrcl5.example.com', {'message': "prod and test servers return same response for 'testrcl5.example.com'", 'result': True, 'warnings': [], 'secondary': ["response: {'typename': 'A', 'name': 'testrcl5.example.com', 'ttl': 360, 'type': 5, 'data': '1.2.1.5', 'class': 1, 'rdlength': 14, 'classstr': 'IN'}"]})
+        ('confirm record testrcl5.example.com', {'message': "prod and test servers return same response for 'testrcl5.example.com'", 'result': True, 'warnings': [], 'secondary': ["response: {'class': 1, 'classstr': 'IN', 'data': '1.2.1.5', 'name': 'testrcl5.example.com', 'rdlength': 14, 'ttl': 360, 'type': 5, 'typename': 'A'}"]})
     ])
     def test_run_check_line(self, setup_checks, line, result):
         """
@@ -261,7 +261,7 @@ class TestDNSTest:
         ("change testrvl2.example.com to 1.2.1.2", {'message': "change testrvl2.example.com value to '1.2.1.2' (PROD)", 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.1.2 (PROD)']}),
         ('add record testrvl3 address 1.2.1.3', {'message': 'testrvl3 => 1.2.1.3 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.1.3 (PROD)']}),
         ('remove record testrvl4.example.com', {'message': 'testrvl4.example.com removed, got status NXDOMAIN (PROD)', 'result': True, 'warnings': [], 'secondary': []}),
-        ('confirm record testrvl5.example.com', {'message': "prod and test servers return same response for 'testrvl5.example.com'", 'result': True, 'warnings': [], 'secondary': ["response: {'typename': 'A', 'name': 'testrvl5.example.com', 'ttl': 360, 'type': 5, 'data': '1.2.1.5', 'class': 1, 'rdlength': 14, 'classstr': 'IN'}"]})
+        ('confirm record testrvl5.example.com', {'message': "prod and test servers return same response for 'testrvl5.example.com'", 'result': True, 'warnings': [], 'secondary': ["response: {'class': 1, 'classstr': 'IN', 'data': '1.2.1.5', 'name': 'testrvl5.example.com', 'rdlength': 14, 'ttl': 360, 'type': 5, 'typename': 'A'}"]})
     ])
     def test_run_verify_line(self, setup_verifies, line, result):
         """
