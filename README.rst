@@ -22,7 +22,7 @@ Requirements
   * 2.7 - fully supported (most development is on 2.7)
   * 3.1 - unknown
   * 3.2 - tests pass
-  * 3.3 - unknown
+  * 3.3 - should work, but tests fail because of dict randomization
 
 * Python `VirtualEnv <http://www.virtualenv.org/>`_ and ``pip`` (recommended installation method; your OS/distribution should have packages for these)
 * *or* the following packages:
