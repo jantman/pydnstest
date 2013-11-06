@@ -12,3 +12,8 @@ install:
   - pip install tox
 
 script: tox
+
+notifications:
+  email:
+    on_success: always
+    on_failure: always
