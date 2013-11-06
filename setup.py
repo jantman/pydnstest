@@ -2,9 +2,7 @@ from setuptools import setup
 from sys import version_info
 from pydnstest.version import VERSION
 
-# different requirements for py2x and py3x
-# will this work right? I have no idea...
-if version_info.major == 3:
+if version_info[0] == 3:
     pyver_requires = [
         "py3dns==3.0.4",
         "pyparsing==2.0.1",
