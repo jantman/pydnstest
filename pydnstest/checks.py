@@ -517,6 +517,9 @@ class DNStestChecks:
                 res['warnings'].append("NG: prod response has %s of '%s'; test response does not include %s" % (k, qp['answer'][k], k))
                 same_res = False
 
+        # for testing
+        res['warnings'] = sorted(res['warnings'])
+
         if same_res is False:
             res['message'] = "prod and test servers return different responses for '%s'" % n
             res['result'] = False

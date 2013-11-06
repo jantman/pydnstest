@@ -101,7 +101,7 @@ TESTS[4] = {'hostname': 'hostname_test4', 'result': {'message': "prod and test s
 # test 5 - both return answer, test and prod have differing values for 2 keys
 known_dns['test']['fwd']['hostname_test5.example.com'] = {'name': 'hostname_test5.example.com', 'data': '1.2.8.1', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
 known_dns['prod']['fwd']['hostname_test5.example.com'] = {'name': 'hostname_test5.example.com', 'data': '1.2.8.2', 'typename': 'A', 'classstr': 'IN', 'ttl': 900, 'type': 1, 'class': 1, 'rdlength': 4}
-TESTS[5] = {'hostname': 'hostname_test5', 'result': {'message': "prod and test servers return different responses for 'hostname_test5'", 'result': False, 'secondary': [], 'warnings': ["NG: test response has ttl of '360' but prod response has '900'", "NG: test response has data of '1.2.8.1' but prod response has '1.2.8.2'"]}}
+TESTS[5] = {'hostname': 'hostname_test5', 'result': {'message': "prod and test servers return different responses for 'hostname_test5'", 'result': False, 'secondary': [], 'warnings': ["NG: test response has data of '1.2.8.1' but prod response has '1.2.8.2'", "NG: test response has ttl of '360' but prod response has '900'"]}}
 
 # test 6 - both return answer, prod includes key not in test
 known_dns['test']['fwd']['hostname_test6.example.com'] = {'name': 'hostname_test6.example.com', 'data': '1.2.8.1', 'typename': 'A', 'classstr': 'IN', 'type': 1, 'class': 1, 'rdlength': 4}
