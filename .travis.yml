@@ -1,0 +1,14 @@
+language: python
+
+env:
+  - TOXENV=py26
+  - TOXENV=py27
+  - TOXENV=py32
+  - TOXENV=py33
+
+install:
+  - git config --global user.email "travisci@jasonantman.com"
+  - git config --global user.name "pydnstest-travis"
+  - pip install tox
+
+script: tox
