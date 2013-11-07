@@ -5,6 +5,8 @@ env:
   - TOXENV=py27
   - TOXENV=py32
   - TOXENV=py33
+  - TOXENV=docs
+  - TOXENV=pypy
 
 install:
   - git config --global user.email "travisci@jasonantman.com"

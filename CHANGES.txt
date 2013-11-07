@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.2.1 (2013-11-06)
+------------------
+
+* fix README.rst markup error
+* add doc parsing tests
+
 0.2.0 (2013-11-06)
 ------------------
 

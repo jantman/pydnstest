@@ -31,11 +31,11 @@ Installation
 ------------
 
 It's recommended that you install into a virtual environment (virtualenv /
-venv). See the `virtualenv usage documentation <http://www.virtualenv.org/en/latest/#usage>`_
+venv). See the `virtualenv usage documentation <http://www.virtualenv.org/en/latest/>`_
 for information on how to create a venv. If you really want to install
 system-wide, you can (using sudo).
 
-.. code-block:: shell
+.. code-block:: bash
 
     pip install pydnstest
 
@@ -86,7 +86,8 @@ omit the first two lines (``cd ~/venv_dir`` and ``source bin/activate``).
 Grammar
 ^^^^^^^
 
-.. code-block::
+.. code-block:: bash
+
     add [record|name|entry] <hostname_or_fqdn> [with ][value|address|target] <hostname_fqdn_or_ip>
     remove [record|name|entry] <hostname_or_fqdn>
     rename [record|name|entry] <hostname_or_fqdn> [with] [value|address|target] <value> to <hostname_or_fqdn>
@@ -96,7 +97,7 @@ Grammar
 Sample input file
 ^^^^^^^^^^^^^^^^^
 
-.. code-block::
+.. code-block:: bash
 
     add foo.example.com with address 1.2.3.4
     remove bar.example.com
@@ -109,7 +110,7 @@ Usage with input file
 
 Write a test file with the following content, at ~/inputfile.txt:
 
-.. code-block::
+.. code-block:: bash
 
     add record newhost.example.com with address 10.188.8.90
     add record newhost-console.example.com with address 10.188.15.90
@@ -183,8 +184,7 @@ benefit from community involvement and improvement.
 Development
 ===========
 
-Installation for development
-----------------------------
+To install for development:
 
 1. Fork the `pydnstest <https://github.com/jantman/pydnstest>`_ repository on GitHub
 2. Create a new branch off of master in your fork.
