@@ -9,5 +9,5 @@ test: 1.2.3.5
 # whether or not we should have reverse DNS for valid A records, True or False
 have_reverse_dns: True
 
-# set this to your default domain, to be appended to requests that aren't a FQDN
+# set this to your default domain, to be appended to input names that are only a hostname, not a FQDN
 domain: .example.com
