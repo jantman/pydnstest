@@ -137,7 +137,7 @@ def main(options):
         conf_file = config.find_config_file()
     if conf_file is None:
         print("ERROR: no configuration file.")
-        sys.exit(1)
+        raise SystemExit(1)
     config.load_config(conf_file)
 
     parser = DnstestParser()
@@ -147,7 +147,7 @@ def main(options):
     if options.testfile:
         if not os.path.exists(options.testfile):
             print("ERROR: test file '%s' does not exist." % options.testfile)
-            sys.exit(1)
+            raise SystemExit(1)
         fh = open(options.testfile, 'r')
     else:
         # read from stdin
