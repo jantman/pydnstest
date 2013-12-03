@@ -66,7 +66,8 @@ class DnstestConfig():
         """
         return a dictionary of all configuration options.
         """
-        d = {'servers': {'prod': self.server_prod, 'test': self.server_test}, 'have_reverse_dns': self.have_reverse_dns, 'default_domain': self.default_domain}
+        d = {'servers': {'prod': self.server_prod, 'test': self.server_test},
+             'have_reverse_dns': self.have_reverse_dns, 'default_domain': self.default_domain, 'ignore_ttl': self.ignore_ttl}
         return d
 
     def find_config_file(self):

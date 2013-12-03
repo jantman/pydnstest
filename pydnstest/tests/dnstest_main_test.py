@@ -281,10 +281,6 @@ class TestDNSTestMain:
         Test calling main() with a discovered config file
         """
         opt = OptionsObject()
-        setattr(opt, "verify", False)
-        setattr(opt, "config_file", False)
-        setattr(opt, "testfile", False)
-        setattr(opt, "ignorettl", False)
 
         # write out an example config file
         # this will be cleaned up by restore_user_config()
@@ -305,10 +301,6 @@ class TestDNSTestMain:
         Test calling main() with a specified config file
         """
         opt = OptionsObject()
-        setattr(opt, "verify", False)
-        setattr(opt, "config_file", False)
-        setattr(opt, "testfile", False)
-        setattr(opt, "ignorettl", False)
 
         pydnstest.main.sys.stdin = ["foo bar baz"]
         foo = None
@@ -326,10 +318,7 @@ class TestDNSTestMain:
         Test with a testfile specified by not existant.
         """
         opt = OptionsObject()
-        setattr(opt, "verify", False)
-        setattr(opt, "config_file", False)
         setattr(opt, "testfile", 'nofilehere')
-        setattr(opt, "ignorettl", False)
 
         # write out an example config file
         # this will be cleaned up by restore_user_config()
@@ -355,10 +344,7 @@ class TestDNSTestMain:
         monkeypatch.setattr(pydnstest.main, "run_check_line", mockreturn)
 
         opt = OptionsObject()
-        setattr(opt, "verify", False)
-        setattr(opt, "config_file", False)
         setattr(opt, "testfile", 'testfile.txt')
-        setattr(opt, "ignorettl", False)
 
         # write out an example config file
         # this will be cleaned up by restore_user_config()
@@ -383,9 +369,7 @@ class TestDNSTestMain:
 
         opt = OptionsObject()
         setattr(opt, "verify", True)
-        setattr(opt, "config_file", False)
         setattr(opt, "testfile", 'testfile.txt')
-        setattr(opt, "ignorettl", False)
 
         # write out an example config file
         # this will be cleaned up by restore_user_config()
