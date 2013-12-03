@@ -148,6 +148,7 @@ def main(options):
     chk = DNStestChecks(config)
 
     if options.sleep:
+        config.sleep = options.sleep
         print("Note - will sleep %g seconds between lines" % options.sleep)
 
     # if no other options, read from stdin
@@ -180,8 +181,8 @@ def main(options):
         else:
             failed = failed + 1
         format_test_output(r)
-        if options.sleep:
-            sleep(options.sleep)
+        if config.sleep is not None and config.sleep > 0.0:
+            sleep(config.sleep)
 
     msg = ""
     if failed == 0:

@@ -119,7 +119,8 @@ class TestConfigMethods:
         assert dc.have_reverse_dns == True
         assert dc.ignore_ttl == False
         assert dc.sleep == 0.0
-        assert dc.asDict() == {'default_domain': '.example.com', 'have_reverse_dns': True, 'servers': {'prod': '1.2.3.4', 'test': '1.2.3.5'}, 'ignore_ttl': False}
+        assert dc.asDict() == {'default_domain': '.example.com', 'have_reverse_dns': True,
+                               'servers': {'prod': '1.2.3.4', 'test': '1.2.3.5'}, 'ignore_ttl': False, 'sleep': 0.0}
 
     def test_parse_bad_config_file(self, save_user_config):
         fpath = os.path.abspath("dnstest.ini")
