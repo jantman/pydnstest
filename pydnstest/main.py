@@ -147,6 +147,9 @@ def main(options):
     parser = DnstestParser()
     chk = DNStestChecks(config)
 
+    if options.sleep:
+        print("Note - will sleep %g seconds between lines" % options.sleep)
+
     # if no other options, read from stdin
     if options.testfile:
         if not os.path.exists(options.testfile):
