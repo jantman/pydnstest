@@ -140,6 +140,9 @@ def main(options):
         raise SystemExit(1)
     config.load_config(conf_file)
 
+    if options.ignorettl:
+        config.ignore_ttl = True
+
     parser = DnstestParser()
     chk = DNStestChecks(config)
 
@@ -207,6 +210,9 @@ def parse_opts():
 
     p.add_option('-s', '--sleep', dest='sleep', action='store', type='float',
                  help='optionally, a decimal number of seconds to sleep between queries')
+
+    p.add_option('--ignore-ttl', dest='ignorettl', default=False, action='store_true',
+                 help='when comparing responses, ignore the TTL value')
 
     options, args = p.parse_args()
     main(options)

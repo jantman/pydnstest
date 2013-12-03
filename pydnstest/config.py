@@ -54,6 +54,7 @@ class DnstestConfig():
     server_test = ""
     have_reverse_dns = True
     default_domain = ""
+    ignore_ttl = False
 
     def __init__(self):
         """
@@ -109,5 +110,10 @@ class DnstestConfig():
             self.have_reverse_dns = Config.getboolean("defaults", "have_reverse_dns")
         except:
             self.have_reverse_dns = True
+
+        try:
+            self.ignore_ttl = Config.getboolean("defaults", "ignore_ttl")
+        except:
+            self.ignore_ttl = False
 
         return True

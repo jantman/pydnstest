@@ -11,3 +11,6 @@ have_reverse_dns: True
 
 # set this to your default domain, to be appended to input names that are only a hostname, not a FQDN
 domain: .example.com
+
+# set to 'True' to ignore the TTL value when comparing DNS responses
+ignore_ttl: False

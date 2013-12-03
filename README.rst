@@ -63,6 +63,9 @@ Python's ConfigParser module):
     
     # set this to your default domain, to be appended to input names that are only a hostname, not a FQDN
     domain: .example.com
+    
+    # set to 'True' to ignore the TTL value when comparing DNS responses
+    ignore_ttl: False
 
 * in the ``[servers]`` section:
 
@@ -73,6 +76,7 @@ Python's ConfigParser module):
 
   * ``have_reverse_dns``: True if you want to check for reverse DNS by default, False otherwise
   * ``domain``: the default domain (i.e. ".example.com") to append to any input which appears to be a hostname (i.e. not a FQDN or an IP address)
+  * ``ignore_ttl``: True if you want to ignore the 'ttl' attribute when comparing responses from prod and test servers
 
 Usage
 -----
