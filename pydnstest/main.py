@@ -49,6 +49,7 @@ import sys
 import optparse
 import os.path
 from pyparsing import ParseException
+from time import sleep
 
 from pydnstest.checks import DNStestChecks
 from pydnstest.config import DnstestConfig
@@ -177,7 +178,7 @@ def main(options):
             failed = failed + 1
         format_test_output(r)
         if options.sleep:
-            time.sleep(options.sleep)
+            sleep(options.sleep)
 
     msg = ""
     if failed == 0:
