@@ -173,6 +173,8 @@ def main(options):
         else:
             failed = failed + 1
         format_test_output(r)
+        if options.sleep:
+            time.sleep(options.sleep)
 
     msg = ""
     if failed == 0:
@@ -202,6 +204,9 @@ def parse_opts():
 
     p.add_option('-V', '--verify', dest='verify', default=False, action='store_true',
                  help='verify changes against PROD server once they\'re live (default False)')
+
+    p.add_option('-s', '--sleep', dest='sleep', action='store', type='float',
+                 help='optionally, a decimal number of seconds to sleep between queries')
 
     options, args = p.parse_args()
     main(options)
