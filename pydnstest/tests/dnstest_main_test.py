@@ -71,7 +71,19 @@ known_dns['ver']['test']['fwd']['testrvl5.example.com'] = ['1.2.1.5', 'A']
 
 
 class OptionsObject(object):
-    pass
+    """
+    object to mock optparse return object
+    """
+
+    def __init__(self):
+        """
+        preseed with default values
+        """
+        self.verify = False
+        self.config_file = None
+        self.testfile = None
+        self.ignorettl = False
+        self.sleep = None
 
 
 class TestDNSTestMain:
@@ -95,6 +107,7 @@ class TestDNSTestMain:
         config.server_prod = "prod"
         config.default_domain = ".example.com"
         config.have_reverse_dns = True
+        config.ignore_ttl = False
 
         parser = DnstestParser()
         pydnstest.parser = parser
@@ -118,6 +131,7 @@ class TestDNSTestMain:
         config.server_prod = "prod"
         config.default_domain = ".example.com"
         config.have_reverse_dns = True
+        config.ignore_ttl = False
 
         parser = DnstestParser()
         pydnstest.parser = parser
@@ -254,9 +268,7 @@ class TestDNSTestMain:
         Test calling main() with a specified config file
         """
         opt = OptionsObject()
-        setattr(opt, "verify", False)
         setattr(opt, "config_file", "dnstest.foo")
-        setattr(opt, "testfile", False)
         pydnstest.main.sys.stdin = ["foo bar baz"]
         foo = pydnstest.main.main(opt)
         out, err = capfd.readouterr()
@@ -272,11 +284,12 @@ class TestDNSTestMain:
         setattr(opt, "verify", False)
         setattr(opt, "config_file", False)
         setattr(opt, "testfile", False)
+        setattr(opt, "ignorettl", False)
 
         # write out an example config file
         # this will be cleaned up by restore_user_config()
         fpath = os.path.abspath("dnstest.ini")
-        self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\n")
+        self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\nignore_ttl: False\n")
 
         pydnstest.main.sys.stdin = ["foo bar baz"]
         foo = None
@@ -295,6 +308,7 @@ class TestDNSTestMain:
         setattr(opt, "verify", False)
         setattr(opt, "config_file", False)
         setattr(opt, "testfile", False)
+        setattr(opt, "ignorettl", False)
 
         pydnstest.main.sys.stdin = ["foo bar baz"]
         foo = None
@@ -315,11 +329,12 @@ class TestDNSTestMain:
         setattr(opt, "verify", False)
         setattr(opt, "config_file", False)
         setattr(opt, "testfile", 'nofilehere')
+        setattr(opt, "ignorettl", False)
 
         # write out an example config file
         # this will be cleaned up by restore_user_config()
         fpath = os.path.abspath("dnstest.ini")
-        self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\n")
+        self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\nignore_ttl: False\n")
 
         foo = None
 
@@ -343,11 +358,12 @@ class TestDNSTestMain:
         setattr(opt, "verify", False)
         setattr(opt, "config_file", False)
         setattr(opt, "testfile", 'testfile.txt')
+        setattr(opt, "ignorettl", False)
 
         # write out an example config file
         # this will be cleaned up by restore_user_config()
         fpath = os.path.abspath("dnstest.ini")
-        self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\n")
+        self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\nignore_ttl: False\n")
 
         foo = pydnstest.main.main(opt)
         out, err = capfd.readouterr()
@@ -369,11 +385,12 @@ class TestDNSTestMain:
         setattr(opt, "verify", True)
         setattr(opt, "config_file", False)
         setattr(opt, "testfile", 'testfile.txt')
+        setattr(opt, "ignorettl", False)
 
         # write out an example config file
         # this will be cleaned up by restore_user_config()
         fpath = os.path.abspath("dnstest.ini")
-        self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\n")
+        self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\nignore_ttl: False\n")
 
         foo = pydnstest.main.main(opt)
         out, err = capfd.readouterr()
@@ -389,6 +406,34 @@ class TestDNSTestMain:
             assert options.verify == True
             assert options.config_file == "configfile"
             assert options.testfile == "mytestfile"
+            assert options.ignorettl == False
         monkeypatch.setattr(pydnstest.main, "main", mockreturn)
         sys.argv = ['pydnstest', '-c', 'configfile', '-f', 'mytestfile', '-V']
+        x = pydnstest.main.parse_opts()
+
+    def test_options_sleep(self, monkeypatch):
+        """
+        Test the parse_opts option parsing method, with the sleep option
+        """
+        def mockreturn(options):
+            assert options.verify == True
+            assert options.config_file == "configfile"
+            assert options.testfile == "mytestfile"
+            assert options.ignorettl == False
+            assert options.sleep == 0.01
+        monkeypatch.setattr(pydnstest.main, "main", mockreturn)
+        sys.argv = ['pydnstest', '-c', 'configfile', '-f', 'mytestfile', '-V', '--sleep', '0.01']
+        x = pydnstest.main.parse_opts()
+
+    def test_options_ignorettl(self, monkeypatch):
+        """
+        Test the parse_opts option parsing method, with the ignorettl option
+        """
+        def mockreturn(options):
+            assert options.verify == True
+            assert options.config_file == "configfile"
+            assert options.testfile == "mytestfile"
+            assert options.ignorettl == True
+        monkeypatch.setattr(pydnstest.main, "main", mockreturn)
+        sys.argv = ['pydnstest', '-c', 'configfile', '-f', 'mytestfile', '-V', '--ignore-ttl']
         x = pydnstest.main.parse_opts()

@@ -215,7 +215,7 @@ def parse_opts():
     p.add_option('-s', '--sleep', dest='sleep', action='store', type='float',
                  help='optionally, a decimal number of seconds to sleep between queries')
 
-    p.add_option('--ignore-ttl', dest='ignorettl', default=False, action='store_true',
+    p.add_option('-t', '--ignore-ttl', dest='ignorettl', default=False, action='store_true',
                  help='when comparing responses, ignore the TTL value')
 
     options, args = p.parse_args()
