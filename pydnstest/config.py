@@ -55,6 +55,7 @@ class DnstestConfig():
     have_reverse_dns = True
     default_domain = ""
     ignore_ttl = False
+    sleep = 0.0
 
     def __init__(self):
         """
@@ -67,7 +68,8 @@ class DnstestConfig():
         return a dictionary of all configuration options.
         """
         d = {'servers': {'prod': self.server_prod, 'test': self.server_test},
-             'have_reverse_dns': self.have_reverse_dns, 'default_domain': self.default_domain, 'ignore_ttl': self.ignore_ttl}
+             'have_reverse_dns': self.have_reverse_dns, 'default_domain': self.default_domain,
+             'ignore_ttl': self.ignore_ttl, 'sleep': 0.0}
         return d
 
     def find_config_file(self):
@@ -116,5 +118,10 @@ class DnstestConfig():
             self.ignore_ttl = Config.getboolean("defaults", "ignore_ttl")
         except:
             self.ignore_ttl = False
+
+        try:
+            self.sleep = Config.getfloat("defaults", "sleep")
+        except:
+            self.sleep = 0.0
 
         return True

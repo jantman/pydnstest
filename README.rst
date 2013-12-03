@@ -66,6 +66,9 @@ Python's ConfigParser module):
     
     # set to 'True' to ignore the TTL value when comparing DNS responses
     ignore_ttl: False
+    
+    # set to the (float) number of seconds to sleep between DNS tests
+    sleep: 0.0
 
 * in the ``[servers]`` section:
 
