@@ -7,6 +7,7 @@ env:
   - TOXENV=py33
   - TOXENV=docs
   - TOXENV=pypy
+  - TOXENV=cov
 
 install:
   - git config --global user.email "travisci@jasonantman.com"

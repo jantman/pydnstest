@@ -1,6 +1,16 @@
 Changelog
 =========
 
+0.2.2 (????)
+------------
+
+* add 'sleep' cli and config file option to sleep X seconds
+  between tests
+* add cli and config option to ignore TTL when comparing
+  responses from DNS servers
+* add coverage reports to tox and travis-ci
+
+
 0.2.1 (2013-11-06)
 ------------------
 

@@ -230,6 +230,6 @@ fail, as is the case with any live network tests.
   * ``pip install tox``
   * ``tox``
 
-* If you want to see code coverage: ``py.test --cov-report term-missing --cov-report html --cov=.``
+* If you want to see code coverage: ``tox -e cov``
 
   * this produces two coverage reports - a summary on STDOUT and a full report in the ``htmlcov/`` directory
