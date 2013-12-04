@@ -503,6 +503,11 @@ class DNStestChecks:
             res['result'] = False
             return res
 
+        # remove ttl if we want to ignore it
+        if self.config.ignore_ttl:
+            qp['answer'].pop('ttl', None)
+            qt['answer'].pop('ttl', None)
+
         # ok, both returned an ansewer. diff them.
         same_res = True
         for k in qt['answer']:
