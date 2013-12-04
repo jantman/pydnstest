@@ -9,6 +9,7 @@ Changelog
 * add cli and config option to ignore TTL when comparing
   responses from DNS servers
 * add coverage reports to tox and travis-ci
+* fix pep8 tests and remove superfluous double test run from tox
 
 
 0.2.1 (2013-11-06)
