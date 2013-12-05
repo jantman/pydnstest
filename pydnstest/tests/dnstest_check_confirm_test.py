@@ -125,6 +125,11 @@ TESTS[9] = {'hostname': 'hostname_test9', 'result': {'message': 'both test and p
 known_dns['prod']['fwd']['hostname_test10.example.com'] = {'status': 'SERVFAIL'}
 TESTS[10] = {'hostname': 'hostname_test10', 'result': {'message': 'test server returned status NXDOMAIN for name hostname_test10, but prod returned status SERVFAIL', 'result': False, 'secondary': [], 'warnings': []}}
 
+# test 11 - OK, same, one-character subdomain
+known_dns['test']['fwd']['m.example.com'] = {'name': 'm.example.com', 'data': '1.2.11.1', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
+known_dns['prod']['fwd']['m.example.com'] = {'name': 'm.example.com', 'data': '1.2.11.1', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
+TESTS[7] = {'hostname': "m.example.com", 'result': {'message': "prod and test servers return same response for 'm.example.com'", 'result': True, 'secondary': ["response: {'class': 1, 'classstr': 'IN', 'data': '1.2.11.1', 'name': 'm.example.com', 'rdlength': 4, 'ttl': 360, 'type': 1, 'typename': 'A'}"], 'warnings': []}}
+
 
 class TestDNSCheckConfirm:
     """

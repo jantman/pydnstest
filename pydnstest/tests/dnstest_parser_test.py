@@ -54,6 +54,7 @@ class TestLanguageParsing:
     'remove (record|name|entry)? <hostname_or_fqdn>'
     'rename (record|name|entry)? <hostname_or_fqdn> (with ?)(value ?) <value> to <hostname_or_fqdn>'
     'change (record|name|entry)? <hostname_or_fqdn> to <hostname_fqdn_or_ip>'
+    'confirm <hostname_or_fqdn>'
     """
 
     @pytest.mark.parametrize(("line", "parsed_dict"), [
@@ -102,12 +103,15 @@ class TestLanguageParsing:
         ("confirm record foo", {'operation': 'confirm', 'hostname': 'foo'}),
         ("confirm entry foo", {'operation': 'confirm', 'hostname': 'foo'}),
         ("confirm name foo", {'operation': 'confirm', 'hostname': 'foo'}),
+        ("confirm m.example.com", {'operation': 'confirm', 'hostname': 'm.example.com'}),
+        ("confirm foo.m.example.com", {'operation': 'confirm', 'hostname': 'foo.m.example.com'}),
+        ("confirm m", {'operation': 'confirm', 'hostname': 'm'}),
     ])
     def test_parse_should_succeed(self, line, parsed_dict):
         foo = None
         try:
             p = DnstestParser()
-            foo = p.parse_line(line).asDict()
+            foo = p.parse_line(line)
         except ParseException:
             # assert will fail, no need to do anything here
             pass

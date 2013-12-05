@@ -84,6 +84,10 @@ known_dns['chk']['prod']['fwd']['testrcl4.example.com'] = ['1.2.1.4', 'A']
 known_dns['chk']['prod']['fwd']['testrcl5.example.com'] = ['1.2.1.5', 'A']
 known_dns['chk']['test']['fwd']['testrcl5.example.com'] = ['1.2.1.5', 'A']
 
+# 6
+known_dns['chk']['prod']['fwd']['m.example.com'] = ['1.2.1.6', 'A']
+known_dns['chk']['test']['fwd']['m.example.com'] = ['1.2.1.6', 'A']
+
 # test_run_verify_line
 # 1
 known_dns['ver']['test']['fwd']['testrvl12.example.com'] = ['1.2.1.1', 'A']
@@ -102,6 +106,10 @@ known_dns['ver']['prod']['fwd']['testrvl3.example.com'] = ['1.2.1.3', 'A']
 # 5
 known_dns['ver']['prod']['fwd']['testrvl5.example.com'] = ['1.2.1.5', 'A']
 known_dns['ver']['test']['fwd']['testrvl5.example.com'] = ['1.2.1.5', 'A']
+
+# 6
+known_dns['ver']['prod']['fwd']['m.example.com'] = ['1.2.1.6', 'A']
+known_dns['ver']['test']['fwd']['m.example.com'] = ['1.2.1.6', 'A']
 
 
 class TestDNSTest:
@@ -246,7 +254,8 @@ class TestDNSTest:
         ("change testrcl2.example.com to 1.2.1.2", {'message': "change testrcl2.example.com from '1.2.1.3' to '1.2.1.2' (TEST)", 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.1.2 (TEST)']}),
         ('add record testrcl3 address 1.2.1.3', {'message': 'testrcl3 => 1.2.1.3 (TEST)', 'result': True, 'secondary': ['PROD server returns NXDOMAIN for testrcl3 (PROD)'], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.1.3 (TEST)']}),
         ('remove record testrcl4.example.com', {'message': 'testrcl4.example.com removed, got status NXDOMAIN (TEST)', 'result': True, 'warnings': [], 'secondary': ['PROD value was 1.2.1.4 (PROD)']}),
-        ('confirm record testrcl5.example.com', {'message': "prod and test servers return same response for 'testrcl5.example.com'", 'result': True, 'warnings': [], 'secondary': ["response: {'class': 1, 'classstr': 'IN', 'data': '1.2.1.5', 'name': 'testrcl5.example.com', 'rdlength': 14, 'ttl': 360, 'type': 5, 'typename': 'A'}"]})
+        ('confirm record testrcl5.example.com', {'message': "prod and test servers return same response for 'testrcl5.example.com'", 'result': True, 'warnings': [], 'secondary': ["response: {'class': 1, 'classstr': 'IN', 'data': '1.2.1.5', 'name': 'testrcl5.example.com', 'rdlength': 14, 'ttl': 360, 'type': 5, 'typename': 'A'}"]}),
+        ('confirm record m.example.com', {'message': "prod and test servers return same response for 'm.example.com'", 'result': True, 'warnings': [], 'secondary': ["response: {'class': 1, 'classstr': 'IN', 'data': '1.2.1.6', 'name': 'm.example.com', 'rdlength': 14, 'ttl': 360, 'type': 5, 'typename': 'A'}"]})
     ])
     def test_run_check_line(self, setup_checks, line, result):
         """
@@ -261,7 +270,8 @@ class TestDNSTest:
         ("change testrvl2.example.com to 1.2.1.2", {'message': "change testrvl2.example.com value to '1.2.1.2' (PROD)", 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: no reverse DNS appears to be set for 1.2.1.2 (PROD)']}),
         ('add record testrvl3 address 1.2.1.3', {'message': 'testrvl3 => 1.2.1.3 (PROD)', 'result': True, 'secondary': [], 'warnings': ['REVERSE NG: got status NXDOMAIN for name 1.2.1.3 (PROD)']}),
         ('remove record testrvl4.example.com', {'message': 'testrvl4.example.com removed, got status NXDOMAIN (PROD)', 'result': True, 'warnings': [], 'secondary': []}),
-        ('confirm record testrvl5.example.com', {'message': "prod and test servers return same response for 'testrvl5.example.com'", 'result': True, 'warnings': [], 'secondary': ["response: {'class': 1, 'classstr': 'IN', 'data': '1.2.1.5', 'name': 'testrvl5.example.com', 'rdlength': 14, 'ttl': 360, 'type': 5, 'typename': 'A'}"]})
+        ('confirm record testrvl5.example.com', {'message': "prod and test servers return same response for 'testrvl5.example.com'", 'result': True, 'warnings': [], 'secondary': ["response: {'class': 1, 'classstr': 'IN', 'data': '1.2.1.5', 'name': 'testrvl5.example.com', 'rdlength': 14, 'ttl': 360, 'type': 5, 'typename': 'A'}"]}),
+        ('confirm record m.example.com', {'message': "prod and test servers return same response for 'm.example.com'", 'result': True, 'warnings': [], 'secondary': ["response: {'class': 1, 'classstr': 'IN', 'data': '1.2.1.6', 'name': 'm.example.com', 'rdlength': 14, 'ttl': 360, 'type': 5, 'typename': 'A'}"]})
     ])
     def test_run_verify_line(self, setup_verifies, line, result):
         """
