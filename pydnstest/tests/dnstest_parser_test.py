@@ -106,6 +106,10 @@ class TestLanguageParsing:
         ("confirm m.example.com", {'operation': 'confirm', 'hostname': 'm.example.com'}),
         ("confirm foo.m.example.com", {'operation': 'confirm', 'hostname': 'foo.m.example.com'}),
         ("confirm m", {'operation': 'confirm', 'hostname': 'm'}),
+        ("confirm m._foo.example.com", {'operation': 'confirm', 'hostname': 'm._foo.example.com'}),
+        ("confirm _bar.example.com", {'operation': 'confirm', 'hostname': '_bar.example.com'}),
+        ("add record _foobar.example.com address 1.2.3.4", {'operation': 'add', 'hostname': '_foobar.example.com', 'value': '1.2.3.4'}),
+        ("add record foobar._discover.example.com target blam", {'operation': 'add', 'hostname': 'foobar._discover.example.com', 'value': 'blam'})
     ])
     def test_parse_should_succeed(self, line, parsed_dict):
         foo = None

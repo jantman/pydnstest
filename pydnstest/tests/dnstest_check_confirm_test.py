@@ -128,8 +128,17 @@ TESTS[10] = {'hostname': 'hostname_test10', 'result': {'message': 'test server r
 # test 11 - OK, same, one-character subdomain
 known_dns['test']['fwd']['m.example.com'] = {'name': 'm.example.com', 'data': '1.2.11.1', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
 known_dns['prod']['fwd']['m.example.com'] = {'name': 'm.example.com', 'data': '1.2.11.1', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
-TESTS[7] = {'hostname': "m.example.com", 'result': {'message': "prod and test servers return same response for 'm.example.com'", 'result': True, 'secondary': ["response: {'class': 1, 'classstr': 'IN', 'data': '1.2.11.1', 'name': 'm.example.com', 'rdlength': 4, 'ttl': 360, 'type': 1, 'typename': 'A'}"], 'warnings': []}}
+TESTS[11] = {'hostname': "m.example.com", 'result': {'message': "prod and test servers return same response for 'm.example.com'", 'result': True, 'secondary': ["response: {'class': 1, 'classstr': 'IN', 'data': '1.2.11.1', 'name': 'm.example.com', 'rdlength': 4, 'ttl': 360, 'type': 1, 'typename': 'A'}"], 'warnings': []}}
 
+# test 12 - OK, leading _ in hostname
+known_dns['test']['fwd']['_discover.example.com'] = {'name': '_discover.example.com', 'data': '1.2.12.1', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
+known_dns['prod']['fwd']['_discover.example.com'] = {'name': '_discover.example.com', 'data': '1.2.12.1', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
+TESTS[12] = {'hostname': "_discover.example.com", 'result': {'message': "prod and test servers return same response for '_discover.example.com'", 'result': True, 'secondary': ["response: {'class': 1, 'classstr': 'IN', 'data': '1.2.12.1', 'name': '_discover.example.com', 'rdlength': 4, 'ttl': 360, 'type': 1, 'typename': 'A'}"], 'warnings': []}}
+
+# test 12 - OK, leading _ in domain component
+known_dns['test']['fwd']['foobar._discover.example.com'] = {'name': 'foobar._discover.example.com', 'data': '1.2.13.1', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
+known_dns['prod']['fwd']['foobar._discover.example.com'] = {'name': 'foobar._discover.example.com', 'data': '1.2.13.1', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
+TESTS[13] = {'hostname': "foobar._discover.example.com", 'result': {'message': "prod and test servers return same response for 'foobar._discover.example.com'", 'result': True, 'secondary': ["response: {'class': 1, 'classstr': 'IN', 'data': '1.2.13.1', 'name': 'foobar._discover.example.com', 'rdlength': 4, 'ttl': 360, 'type': 1, 'typename': 'A'}"], 'warnings': []}}
 
 class TestDNSCheckConfirm:
     """
