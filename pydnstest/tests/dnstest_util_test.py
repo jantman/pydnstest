@@ -1,5 +1,6 @@
 """
-pydnstest utility methods
+pydnstest
+tests for util.py
 
 The latest version of this package is available at:
 <https://github.com/jantman/pydnstest>
@@ -37,34 +38,30 @@ Jason Antman <jason@jasonantman.com> <http://www.jasonantman.com>
 
 """
 
+import pytest
 
-def dns_dict_to_string(d):
+from pydnstest.util import dns_dict_to_string
+
+
+class TestDNSUtil:
     """
-    returns a key-ordered string representation of a dictionary
-
-    note that this implementation is only intended to work with
-    the types that we see in the return dict from our DNS
-    query methods.
-
-    starting in python 3.3, by default __hash__() values are
-    salted with a random value for security. As a result,
-    just running str(dictionary) will produce a non-repeatable
-    result. For testing, we need to have the few places that
-    include the DNS query result dict in a string to be repeatable.
-
-    @param d dictionary
-    @return string
+    Tests util.py
     """
-    s = "{"
-    for key in sorted(d):
-        v = None
-        if isinstance(d[key], dict):
-            v = dns_dict_to_string(d[key])
-        if isinstance(d[key], str):
-            v = "'%s'" % d[key]
-        else:
-            v = str(d[key])
-        s = s + ("'%s': %s, " % (key, v))
-    s = s.strip(", ")
-    s = s + "}"
-    return s
+
+    def test_dns_dict_to_string(self):
+        """
+        Test with a simple dict
+        """
+        d = {'a': 'vala', 'b': 'valb', 'c': 'valc'}
+        s = "{'a': 'vala', 'b': 'valb', 'c': 'valc'}"
+        foo = dns_dict_to_string(d)
+        assert foo == s
+
+    def test_dns_dict_to_string_deep(self):
+        """
+        Test with a deep dict
+        """
+        d = {'a': 'vala', 'b': 'valb', 'c': {'ca': 'valca', 'cb': 'valcb'}}
+        s = "{'a': 'vala', 'b': 'valb', 'c': {'ca': 'valca', 'cb': 'valcb'}}"
+        foo = dns_dict_to_string(d)
+        assert foo == s
