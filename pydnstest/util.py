@@ -60,7 +60,7 @@ def dns_dict_to_string(d):
         v = None
         if isinstance(d[key], dict):
             v = dns_dict_to_string(d[key])
-        if isinstance(d[key], str):
+        elif isinstance(d[key], str):
             v = "'%s'" % d[key]
         else:
             v = str(d[key])

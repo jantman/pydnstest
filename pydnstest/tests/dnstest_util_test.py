@@ -52,7 +52,7 @@ class TestDNSUtil:
         """
         Test with a simple dict
         """
-        d = {'a': 'vala', 'b': 'valb', 'c': 'valc'}
+        d = {'a': 'vala', 'c': 'valc', 'b': 'valb'}
         s = "{'a': 'vala', 'b': 'valb', 'c': 'valc'}"
         foo = dns_dict_to_string(d)
         assert foo == s
@@ -61,7 +61,7 @@ class TestDNSUtil:
         """
         Test with a deep dict
         """
-        d = {'a': 'vala', 'b': 'valb', 'c': {'ca': 'valca', 'cb': 'valcb'}}
-        s = "{'a': 'vala', 'b': 'valb', 'c': {'ca': 'valca', 'cb': 'valcb'}}"
+        d = {'a': 'vala', 'c': {'cc': 'valcc', 'ca': 'valca', 'cb': 'valcb'}, 'b': 'valb'}
+        s = "{'a': 'vala', 'b': 'valb', 'c': {'ca': 'valca', 'cb': 'valcb', 'cc': 'valcc'}}"
         foo = dns_dict_to_string(d)
         assert foo == s
