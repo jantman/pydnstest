@@ -140,6 +140,15 @@ known_dns['test']['fwd']['foobar._discover.example.com'] = {'name': 'foobar._dis
 known_dns['prod']['fwd']['foobar._discover.example.com'] = {'name': 'foobar._discover.example.com', 'data': '1.2.13.1', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
 TESTS[13] = {'hostname': "foobar._discover.example.com", 'result': {'message': "prod and test servers return same response for 'foobar._discover.example.com'", 'result': True, 'secondary': ["response: {'class': 1, 'classstr': 'IN', 'data': '1.2.13.1', 'name': 'foobar._discover.example.com', 'rdlength': 4, 'ttl': 360, 'type': 1, 'typename': 'A'}"], 'warnings': []}}
 
+# test 13 - TTLs differ
+known_dns['test']['fwd']['badttl.example.com'] = {'name': 'badttl.example.com', 'data': '1.2.13.1', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
+known_dns['prod']['fwd']['badttl.example.com'] = {'name': 'badttl.example.com', 'data': '1.2.13.1', 'typename': 'A', 'classstr': 'IN', 'ttl': 60, 'type': 1, 'class': 1, 'rdlength': 4}
+TESTS[13] = {'hostname': "badttl.example.com", 'result': {'message': "prod and test servers return different responses for 'badttl.example.com'", 'result': False, 'secondary': [], 'warnings': ["NG: test response has ttl of '360' but prod response has '60'"]}}
+
+# test_ignorettl data
+known_dns['test']['fwd']['ignorettl.example.com'] = {'name': 'ignorettl.example.com', 'data': '1.2.14.1', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
+known_dns['prod']['fwd']['ignorettl.example.com'] = {'name': 'ignorettl.example.com', 'data': '1.2.14.1', 'typename': 'A', 'classstr': 'IN', 'ttl': 60, 'type': 1, 'class': 1, 'rdlength': 4}
+
 
 class TestDNSCheckConfirm:
     """
@@ -161,6 +170,27 @@ class TestDNSCheckConfirm:
         config.server_prod = "prod"
         config.default_domain = ".example.com"
         config.have_reverse_dns = True
+
+        chk = DNStestChecks(config)
+        # stub
+        chk.DNS.resolve_name = self.stub_resolve_name
+        # stub
+        chk.DNS.lookup_reverse = self.stub_lookup_reverse
+        return chk
+
+    @pytest.fixture(scope="module")
+    def setup_ignorettl(self):
+        """
+        Sets up test environment for tests of check methods,
+        including redefining resolve_name and lookup_reverse
+        to the appropriate methods in this class
+        """
+        config = DnstestConfig()
+        config.server_test = "test"
+        config.server_prod = "prod"
+        config.default_domain = ".example.com"
+        config.have_reverse_dns = True
+        config.ignore_ttl = True
 
         chk = DNStestChecks(config)
         # stub
@@ -218,3 +248,11 @@ class TestDNSCheckConfirm:
         """
         foo = setup.confirm_name(hostname)
         assert foo == result
+
+    def test_ignorettl(self, setup_ignorettl):
+        """
+        Test the ignore_ttl config option
+        """
+        r = {'message': "prod and test servers return same response for 'ignorettl.example.com'", 'result': True, 'secondary': ["response: {'class': 1, 'classstr': 'IN', 'data': '1.2.14.1', 'name': 'ignorettl.example.com', 'rdlength': 4, 'type': 1, 'typename': 'A'}"], 'warnings': []}
+        foo = setup_ignorettl.confirm_name("ignorettl.example.com")
+        assert foo == r
