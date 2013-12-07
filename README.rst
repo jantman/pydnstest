@@ -246,8 +246,9 @@ Release Checklist
 7. Upload package to testpypi, confirm that README.rst renders correctly.
 
    * Make sure your ~/.pypirc file is correct
-   * ``python setup.py upload -r https://testpypi.python.org/pypi``
-   * Check that the README renders at https://testpypi.python.org/pypi/murl
+   * ``python setup.py register -r https://testpypi.python.org/pypi``
+   * ``python setup.py sdist upload -r https://testpypi.python.org/pypi``
+   * Check that the README renders at https://testpypi.python.org/pypi/pydnstest
 
 8. Squash merge the release\_ branch to master, push to GitHub.
 9. Tag the release in Git, push tag to GitHub:
