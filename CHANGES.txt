@@ -1,16 +1,20 @@
 Changelog
 =========
 
-0.2.2 (????)
-------------
+0.2.2 (2013-12-07)
+------------------
 
-* add 'sleep' cli and config file option to sleep X seconds
+* (issue #2) add 'sleep' cli and config file option to sleep X seconds
   between tests
-* add cli and config option to ignore TTL when comparing
+* (issue #3) add cli and config option to ignore TTL when comparing
   responses from DNS servers
+* (issue #5) document release procedure
+* (issue #4) support one-character hostnames
+* (issue #8) support leading underscore in hostnames
 * add coverage reports to tox and travis-ci
 * fix pep8 tests and remove superfluous double test run from tox
-
+* fix coverage report excluded lines
+* add test coverage for util module
 
 0.2.1 (2013-11-06)
 ------------------
