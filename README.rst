@@ -1,6 +1,12 @@
 pydnstest
 =========
 
+.. image:: https://pypip.in/v/pydnstest/badge.png
+   :target: https://crate.io/packages/pydnstest
+
+.. image:: https://pypip.in/d/pydnstest/badge.png
+   :target: https://crate.io/packages/pydnstest
+
 Python tool for testing DNS changes (add, remove, rename, change records)
 against a staging DNS server, verifying the same changes against production,
 or confirming that a record returns the same result in both environments.
@@ -14,27 +20,25 @@ manually for critical applications (like... say... everything in DNS...)** I
 expect this to change quite soon, and am happy to receive both bug reports and
 confirmations that everything works.
 
-.. image:: https://pypip.in/v/pydnstest/badge.png
-   :target: https://crate.io/packages/pydnstest
-
-.. image:: https://pypip.in/d/pydnstest/badge.png
-   :target: https://crate.io/packages/pydnstest
-
 master branch:
 
 .. image:: https://secure.travis-ci.org/jantman/pydnstest.png?branch=master
    :target: http://travis-ci.org/jantman/pydnstest
+   :alt: travis-ci for master branch
 
 .. image:: https://coveralls.io/repos/jantman/pydnstest/badge.png?branch=master
    :target: https://coveralls.io/r/jantman/pydnstest?branch=master
+   :alt: coverage report for master branch
 
 develop branch:
 
 .. image:: https://secure.travis-ci.org/jantman/pydnstest.png?branch=develop
    :target: http://travis-ci.org/jantman/pydnstest
+   :alt: travis-ci for develop branch
 
 .. image:: https://coveralls.io/repos/jantman/pydnstest/badge.png?branch=develop
    :target: https://coveralls.io/r/jantman/pydnstest?branch=develop
+   :alt: coverage report for develop branch
 
 Requirements
 ------------
