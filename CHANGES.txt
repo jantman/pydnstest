@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.2.3 ()
+--------
+
+* (issue #6) add grammar to --help usage output
+* add develop branch build status image to README.rst
+* update release procedure documentation
+* (issue #12) add postional argument passthru support for tox to pytest
+
 0.2.2 (2013-12-07)
 ------------------
 
