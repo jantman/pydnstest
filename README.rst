@@ -244,7 +244,7 @@ fail, as is the case with any live network tests.
 Release Checklist
 -----------------
 
-1. Start a release\_ branch.
+1. Start a merge all changes to the develop branch.
 2. Confirm that there are CHANGES.txt entries for all major changes.
 3. Ensure that Travis tests passing in all environments.
 4. Ensure that test coverage is no less than the last release (ideally, 100%).
@@ -257,7 +257,7 @@ Release Checklist
    * ``python setup.py sdist upload -r https://testpypi.python.org/pypi``
    * Check that the README renders at https://testpypi.python.org/pypi/pydnstest
 
-8. Squash merge the release\_ branch to master, push to GitHub.
+8. Squash merge the develop branch to master, push to GitHub.
 9. Tag the release in Git, push tag to GitHub:
 
    * tag the release. for now the message is quite simple: ``git tag -a vX.Y.Z -m 'X.Y.Z released YYYY-MM-DD'``
@@ -265,6 +265,6 @@ Release Checklist
 
 11. Upload package to live pypi:
 
-    * ``python setup.py upload``
+    * ``python setup.py sdist upload``
 
 10. make sure any GH issues fixed in the release are closed
