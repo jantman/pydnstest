@@ -9,4 +9,6 @@ exclude_lines =
     # this cant ever be run by py.test, but it just calls one function,
     # so ignore it
     if __name__ == .__main__.:
-    if sys.version_info[0] == 3:
+
+    # cov runs in a py2x env, so ignore the py3 specific lines too
+    if sys.version_info\[0\] == 3:
