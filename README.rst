@@ -14,6 +14,12 @@ manually for critical applications (like... say... everything in DNS...)** I
 expect this to change quite soon, and am happy to receive both bug reports and
 confirmations that everything works.
 
+.. image:: https://pypip.in/v/pydnstest/badge.png
+   :target: https://crate.io/packages/pydnstest
+
+.. image:: https://pypip.in/d/pydnstest/badge.png
+   :target: https://crate.io/packages/pydnstest
+
 master branch:
 
 .. image:: https://secure.travis-ci.org/jantman/pydnstest.png?branch=master
