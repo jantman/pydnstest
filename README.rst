@@ -241,6 +241,8 @@ fail, as is the case with any live network tests.
 
   * this produces two coverage reports - a summary on STDOUT and a full report in the ``htmlcov/`` directory
 
+* If you want to pass additional arguments to pytest, add them to the tox command line after "--". i.e., for verbose pytext output on py27 tests: ``tox -e py27 -- -v``
+
 Release Checklist
 -----------------
 
