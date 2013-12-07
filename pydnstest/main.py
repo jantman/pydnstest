@@ -203,6 +203,12 @@ def parse_opts():
     usage = "%prog [-h|--help] [--version] [-c|--config path_to_config] [-f|--file path_to_test_file] [-V|--verify]"
     usage += "\n\npydnstest %s - <https://github.com/jantman/pydnstest/>" % VERSION
     usage += "\nlicensed under the GNU Affero General Public License - see LICENSE.txt"
+    usage += "\nGrammar:\n\n"
+    usage += "add [record|name|entry] <hostname_or_fqdn> [with ][value|address|target] <hostname_fqdn_or_ip>\n"
+    usage += "remove [record|name|entry] <hostname_or_fqdn>\n"
+    usage += "rename [record|name|entry] <hostname_or_fqdn> [with] [value|address|target] <value> to <hostname_or_fqdn>\n"
+    usage += "change [record|name|entry] <hostname_or_fqdn> to <hostname_fqdn_or_ip>\n"
+    usage += "confirm <hostname_or_fqdn> (checks that TEST and PROD return identical results)\n"
     p = optparse.OptionParser(usage=usage, version="pydnstest %s" % VERSION)
     p.add_option('-c', '--config', dest='config_file',
                  help='path to config file (default looks for ./dnstest.ini or ~/.dnstest.ini)')
