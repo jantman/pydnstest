@@ -233,3 +233,30 @@ fail, as is the case with any live network tests.
 * If you want to see code coverage: ``tox -e cov``
 
   * this produces two coverage reports - a summary on STDOUT and a full report in the ``htmlcov/`` directory
+
+Release Checklist
+-----------------
+
+1. Start a release_ branch.
+2. Confirm that there are CHANGES.txt entries for all major changes.
+3. Ensure that Travis tests passing in all environments.
+4. Ensure that test coverage is no less than the last release (ideally, 100%).
+5. Increment the version number in pydnstest/version.py and add version and release date to CHANGES.txt, then push to GitHub.
+6. Confirm that README.rst renders correctly on GitHub.
+7. Upload package to testpypi, confirm that README.rst renders correctly.
+
+   * Make sure your ~/.pypirc file is correct
+   * ``python setup.py upload -r https://testpypi.python.org/pypi``
+   * Check that the README renders at https://testpypi.python.org/pypi/murl
+
+8. Squash merge the release_ branch to master, push to GitHub.
+9. Tag the release in Git, push tag to GitHub:
+
+   * tag the release. for now the message is quite simple: ``git tag -a vX.Y.Z -m 'X.Y.Z released YYYY-MM-DD'``
+   * push the tag to GitHub: ``git push origin vX.Y.Z``
+
+11. Upload package to live pypi:
+
+    * ``python setup.py upload``
+
+10. make sure any GH issues fixed in the release are closed
