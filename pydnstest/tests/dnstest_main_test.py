@@ -382,6 +382,58 @@ class TestDNSTestMain:
         assert out == "OK: foobarbaz\n**NG: foofail\n++++ 1 passed / 1 FAILED. (pydnstest %s)\n" % pydnstest_version
         assert err == ""
 
+    def test_verify_with_sleep(self, write_testfile, save_user_config, capfd, monkeypatch):
+        """
+        Test with a testfile.
+        """
+        def mockreturn(foo, bar, baz):
+            if foo == "confirm bar.jasonantman.com":
+                return {'result': False, 'message': 'foofail', 'secondary': [], 'warnings': []}
+            return {'result': True, 'message': 'foobarbaz', 'secondary': [], 'warnings': []}
+        monkeypatch.setattr(pydnstest.main, "run_verify_line", mockreturn)
+
+        opt = OptionsObject()
+        setattr(opt, "verify", True)
+        setattr(opt, "testfile", 'testfile.txt')
+        setattr(opt, "sleep", 0.001)
+
+        # write out an example config file
+        # this will be cleaned up by restore_user_config()
+        fpath = os.path.abspath("dnstest.ini")
+        self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\nignore_ttl: False\n")
+
+        foo = pydnstest.main.main(opt)
+        out, err = capfd.readouterr()
+        assert foo == None
+        assert out == "Note - will sleep 0.001 seconds between lines\nOK: foobarbaz\n**NG: foofail\n++++ 1 passed / 1 FAILED. (pydnstest %s)\n" % pydnstest_version
+        assert err == ""
+
+    def test_verify_with_ignorettl(self, write_testfile, save_user_config, capfd, monkeypatch):
+        """
+        Test with a testfile.
+        """
+        def mockreturn(foo, bar, baz):
+            if foo == "confirm bar.jasonantman.com":
+                return {'result': False, 'message': 'foofail', 'secondary': [], 'warnings': []}
+            return {'result': True, 'message': 'foobarbaz', 'secondary': [], 'warnings': []}
+        monkeypatch.setattr(pydnstest.main, "run_verify_line", mockreturn)
+
+        opt = OptionsObject()
+        setattr(opt, "verify", True)
+        setattr(opt, "testfile", 'testfile.txt')
+        setattr(opt, "ignorettl", True)
+
+        # write out an example config file
+        # this will be cleaned up by restore_user_config()
+        fpath = os.path.abspath("dnstest.ini")
+        self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\nignore_ttl: False\n")
+
+        foo = pydnstest.main.main(opt)
+        out, err = capfd.readouterr()
+        assert foo == None
+        assert out == "OK: foobarbaz\n**NG: foofail\n++++ 1 passed / 1 FAILED. (pydnstest %s)\n" % pydnstest_version
+        assert err == ""
+
     def test_options(self, monkeypatch):
         """
         Test the parse_opts option parsing method
