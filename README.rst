@@ -14,7 +14,14 @@ manually for critical applications (like... say... everything in DNS...)** I
 expect this to change quite soon, and am happy to receive both bug reports and
 confirmations that everything works.
 
+master branch:
+
 .. image:: https://secure.travis-ci.org/jantman/pydnstest.png?branch=master
+   :target: http://travis-ci.org/jantman/pydnstest
+
+develop branch:
+
+.. image:: https://secure.travis-ci.org/jantman/pydnstest.png?branch=develop
    :target: http://travis-ci.org/jantman/pydnstest
 
 Requirements
