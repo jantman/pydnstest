@@ -19,10 +19,16 @@ master branch:
 .. image:: https://secure.travis-ci.org/jantman/pydnstest.png?branch=master
    :target: http://travis-ci.org/jantman/pydnstest
 
+.. image:: https://coveralls.io/repos/jantman/pydnstest/badge.png?branch=master
+   :target: https://coveralls.io/r/jantman/pydnstest?branch=master
+
 develop branch:
 
 .. image:: https://secure.travis-ci.org/jantman/pydnstest.png?branch=develop
    :target: http://travis-ci.org/jantman/pydnstest
+
+.. image:: https://coveralls.io/repos/jantman/pydnstest/badge.png?branch=develop
+   :target: https://coveralls.io/r/jantman/pydnstest?branch=develop
 
 Requirements
 ------------
