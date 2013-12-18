@@ -25,6 +25,7 @@ classifiers = [
     'Natural Language :: English',
     'Operating System :: POSIX',
     'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
     'Topic :: Internet :: Name Service (DNS)'
 ]
 
