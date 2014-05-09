@@ -314,7 +314,7 @@ class TestDNSTestMain:
         assert excinfo.value.code == 1
         out, err = capfd.readouterr()
         assert foo == None
-        assert out == "ERROR: no configuration file.\n"
+        assert out == "ERROR: no configuration file found. Run with --promptconfig to build one interactively, or --example-config for an example.\n"
         assert err == ""
 
     def test_testfile_noexist(self, save_user_config, capfd):
@@ -551,5 +551,7 @@ class TestDNSTestMain:
         prompt_config_mock = mock.MagicMock()
 
         with mock.patch('pydnstest.main.DnstestConfig.prompt_config', prompt_config_mock):
-            pydnstest.main.main(opt)
-        assert prompt_config_mock.call_count == 2
+            # after promptconfig runs main() will try to find the config file on disk, and error out if it doesn't exist
+            with pytest.raises(SystemExit):
+                pydnstest.main.main(opt)
+        assert prompt_config_mock.call_count == 1

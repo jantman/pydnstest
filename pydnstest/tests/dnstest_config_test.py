@@ -172,3 +172,8 @@ blarg
         assert dc.have_reverse_dns == True
         assert dc.ignore_ttl == False
         assert dc.sleep == 0.0
+
+    def test_promptconfig(self, save_user_config):
+        dc = DnstestConfig()
+        # how do we handle interactive input in testing?
+        dc.prompt_config()

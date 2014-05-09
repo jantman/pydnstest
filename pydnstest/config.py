@@ -178,4 +178,8 @@ sleep: {sleep}
         interactively prompt the user through generating a configuration file
         and writing it to disk
         """
-        pass
+        fpath = os.path.abspath(os.path.expanduser("~/.dnstest.ini"))
+        # write out the config
+        with open(fpath, 'w') as fh:
+            fh.write(self.to_string())
+        print("Configuration written to: {fpath}".format(fpath=fpath))

@@ -137,12 +137,16 @@ def main(options):
         print(config.to_string())
         raise SystemExit(0)
 
+    if options.promptconfig:
+        # interactively build a configuration file
+        config.prompt_config()
+
     if options.config_file:
         conf_file = options.config_file
     else:
         conf_file = config.find_config_file()
     if conf_file is None:
-        print("ERROR: no configuration file.")
+        print("ERROR: no configuration file found. Run with --promptconfig to build one interactively, or --example-config for an example.")
         raise SystemExit(1)
     config.load_config(conf_file)
 
