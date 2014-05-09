@@ -161,3 +161,14 @@ blarg
         dc.sleep = 0.0
         result = dc.to_string()
         assert result == expected
+
+    def test_set_example_values(self):
+        """ test converting the example config to a string """
+        dc = DnstestConfig()
+        dc.set_example_values()
+        assert dc.server_prod == '1.2.3.4'
+        assert dc.server_test == '1.2.3.5'
+        assert dc.default_domain == '.example.com'
+        assert dc.have_reverse_dns == True
+        assert dc.ignore_ttl == False
+        assert dc.sleep == 0.0

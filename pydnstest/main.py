@@ -132,6 +132,11 @@ def main(options):
     """
     # read in config, set variable
     config = DnstestConfig()
+    if options.exampleconf:
+        config.set_example_values()
+        print(config.to_string())
+        raise SystemExit(0)
+
     if options.config_file:
         conf_file = options.config_file
     else:
@@ -224,6 +229,9 @@ def parse_opts():
 
     p.add_option('-t', '--ignore-ttl', dest='ignorettl', default=False, action='store_true',
                  help='when comparing responses, ignore the TTL value')
+
+    p.add_option('--example-config', dest='exampleconf', default=False, action='store_true',
+                 help='print an example configuration file and exit')
 
     options, args = p.parse_args()
     main(options)

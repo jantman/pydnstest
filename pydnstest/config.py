@@ -126,6 +126,17 @@ class DnstestConfig():
 
         return True
 
+    def set_example_values(self):
+        """
+        Set config contents to example values.
+        """
+        self.server_prod = '1.2.3.4'
+        self.server_test = '1.2.3.5'
+        self.have_reverse_dns = True
+        self.default_domain = '.example.com'
+        self.ignore_ttl = False
+        self.sleep = 0.0
+
     def to_string(self):
         """
         Convert the current configuration to an ini-style string,

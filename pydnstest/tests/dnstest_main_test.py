@@ -84,6 +84,7 @@ class OptionsObject(object):
         self.testfile = None
         self.ignorettl = False
         self.sleep = None
+        self.exampleconf = False
 
 
 class TestDNSTestMain:
@@ -473,3 +474,33 @@ class TestDNSTestMain:
         monkeypatch.setattr(pydnstest.main, "main", mockreturn)
         sys.argv = ['pydnstest', '-c', 'configfile', '-f', 'mytestfile', '-V', '--ignore-ttl']
         x = pydnstest.main.parse_opts()
+
+    def test_options_exampleconf(self, monkeypatch):
+        """
+        Test the parse_opts option parsing method, with the exampleconf
+        """
+        def mockreturn(options):
+            assert options.verify == True
+            assert options.config_file == "configfile"
+            assert options.testfile == "mytestfile"
+            assert options.ignorettl == True
+            assert options.exampleconf == True
+        monkeypatch.setattr(pydnstest.main, "main", mockreturn)
+        sys.argv = ['pydnstest', '-c', 'configfile', '-f', 'mytestfile', '-V', '--ignore-ttl', '--example-config']
+        x = pydnstest.main.parse_opts()
+
+    def test_exampleconf(self, save_user_config, capfd):
+        """
+        Test calling main() with options.exampleconf == True
+        """
+        fpath = os.path.abspath("dnstest.ini.example")
+        with open(fpath, 'r') as fh:
+            expected = fh.read()
+        opt = OptionsObject()
+        setattr(opt, "exampleconf", True)
+        pydnstest.main.sys.stdin = ["foo bar baz"]
+        with pytest.raises(SystemExit):
+            pydnstest.main.main(opt)
+        out, err = capfd.readouterr()
+        assert out.strip() == expected.strip()
+        assert err == ""
