@@ -172,3 +172,10 @@ sleep: {sleep}
            ignore_ttl=self.ignore_ttl,
            sleep=self.sleep)
         return s
+
+    def prompt_config(self):
+        """
+        interactively prompt the user through generating a configuration file
+        and writing it to disk
+        """
+        pass

@@ -20,6 +20,7 @@ Changelog
 * added --example-config option to print and example config file and then exit
 * added --configprint option to print current config file and then exit
 * added mock as a test dependency
+* (issue #7) added --promptconfig option to interactively build configuration file
 
 0.2.2 (2013-12-07)
 ------------------

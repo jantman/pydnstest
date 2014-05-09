@@ -41,6 +41,7 @@ import pytest
 import sys
 import os
 import shutil
+import mock
 
 from pydnstest.checks import DNStestChecks
 from pydnstest.config import DnstestConfig
@@ -86,6 +87,7 @@ class OptionsObject(object):
         self.sleep = None
         self.exampleconf = False
         self.configprint = False
+        self.promptconfig = False
 
 
 class TestDNSTestMain:
@@ -481,13 +483,9 @@ class TestDNSTestMain:
         Test the parse_opts option parsing method, with the --example-config option sent
         """
         def mockreturn(options):
-            assert options.verify == True
-            assert options.config_file == "configfile"
-            assert options.testfile == "mytestfile"
-            assert options.ignorettl == True
             assert options.exampleconf == True
         monkeypatch.setattr(pydnstest.main, "main", mockreturn)
-        sys.argv = ['pydnstest', '-c', 'configfile', '-f', 'mytestfile', '-V', '--ignore-ttl', '--example-config']
+        sys.argv = ['pydnstest', '--example-config']
         x = pydnstest.main.parse_opts()
 
     def test_exampleconf(self, save_user_config, capfd):
@@ -511,13 +509,9 @@ class TestDNSTestMain:
         Test the parse_opts option parsing method, with the --configprint option sent
         """
         def mockreturn(options):
-            assert options.verify == True
-            assert options.config_file == "configfile"
-            assert options.testfile == "mytestfile"
-            assert options.ignorettl == True
             assert options.configprint == True
         monkeypatch.setattr(pydnstest.main, "main", mockreturn)
-        sys.argv = ['pydnstest', '-c', 'configfile', '-f', 'mytestfile', '-V', '--ignore-ttl', '--configprint']
+        sys.argv = ['pydnstest', '--configprint']
         x = pydnstest.main.parse_opts()
 
     def test_configprint(self, save_user_config, capfd):
@@ -537,3 +531,25 @@ class TestDNSTestMain:
         out, err = capfd.readouterr()
         assert out.strip() == expected.strip()
         assert err == ""
+
+    def test_options_promptconfig(self, monkeypatch):
+        """
+        Test the parse_opts option parsing method, with the --promptconfig option sent
+        """
+        def mockreturn(options):
+            assert options.promptconfig == True
+        monkeypatch.setattr(pydnstest.main, "main", mockreturn)
+        sys.argv = ['pydnstest', '--promptconfig']
+        x = pydnstest.main.parse_opts()
+
+    def test_promptconfig(self, save_user_config, capfd):
+        """
+        Test calling main() with options.promptconfig == True
+        """
+        opt = OptionsObject()
+        setattr(opt, "promptconfig", True)
+        prompt_config_mock = mock.MagicMock()
+
+        with mock.patch('pydnstest.main.DnstestConfig.prompt_config', prompt_config_mock):
+            pydnstest.main.main(opt)
+        assert prompt_config_mock.call_count == 2

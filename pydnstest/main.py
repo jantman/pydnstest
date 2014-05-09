@@ -241,5 +241,8 @@ def parse_opts():
     p.add_option('--configprint', dest='configprint', default=False, action='store_true',
                  help='print the current configuration and exit')
 
+    p.add_option('--promptconfig', dest='promptconfig', default=False, action='store_true',
+                 help='interactively build a configuration file through a series of prompts')
+
     options, args = p.parse_args()
     main(options)
