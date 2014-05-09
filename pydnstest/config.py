@@ -125,3 +125,37 @@ class DnstestConfig():
             self.sleep = 0.0
 
         return True
+
+    def to_string(self):
+        """
+        Convert the current configuration to an ini-style string,
+        suitable for writing to the config file.
+
+        We do this manually (i.e. without configparser) to preserve comments.
+        """
+        s = """[servers]
+# the IP address of your production/live DNS server
+prod: {prod}
+
+# the IP address of your test/staging DNS server
+test: {test}
+
+[defaults]
+# True if you want to check ofr reverse DNS (for A records) by default, False otherwise
+have_reverse_dns: {have_reverse}
+
+# the default domain (i.e. ".example.com") to append to any input which appears to be a hostname (i.e. not a FQDN or an IP address)
+domain: {domain}
+
+# True if you want to ignore the 'ttl' attribute when comparing responses from prod and test servers
+ignore_ttl: {ignore_ttl}
+
+# a (float) number of seconds to sleep between DNS tests; default 0.0
+sleep: {sleep}
+""".format(prod=self.server_prod,
+           test=self.server_test,
+           have_reverse=str(self.have_reverse_dns),
+           domain=self.default_domain,
+           ignore_ttl=self.ignore_ttl,
+           sleep=self.sleep)
+        return s

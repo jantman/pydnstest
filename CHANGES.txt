@@ -13,6 +13,10 @@ Changelog
 * added python3 to package classifiers
 * added pypi version and download badges to README.rst
 * setup coveralls.io for coverage reports
+* (issue #7) added DnstestConfig to_string method
+* added missing description of sleep parameter in README.rst
+* updated comments in example config to be more clear
+* updated README.rst example config to match the one in the package
 
 0.2.2 (2013-12-07)
 ------------------

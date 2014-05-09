@@ -63,23 +63,23 @@ Python's ConfigParser module):
 .. code-block:: ini
 
     [servers]
-    # set your production/live DNS server address
+    # the IP address of your production/live DNS server
     prod: 1.2.3.4
     
-    # set your test/staging DNS server address
+    # the IP address of your test/staging DNS server
     test: 1.2.3.5
     
     [defaults]
-    # whether or not we should have reverse DNS for valid A records, True or False
+    # True if you want to check ofr reverse DNS (for A records) by default, False otherwise
     have_reverse_dns: True
     
-    # set this to your default domain, to be appended to input names that are only a hostname, not a FQDN
+    # the default domain (i.e. ".example.com") to append to any input which appears to be a hostname (i.e. not a FQDN or an IP address)
     domain: .example.com
     
-    # set to 'True' to ignore the TTL value when comparing DNS responses
+    # True if you want to ignore the 'ttl' attribute when comparing responses from prod and test servers
     ignore_ttl: False
     
-    # set to the (float) number of seconds to sleep between DNS tests
+    # a (float) number of seconds to sleep between DNS tests; default 0.0
     sleep: 0.0
 
 * in the ``[servers]`` section:
@@ -92,6 +92,7 @@ Python's ConfigParser module):
   * ``have_reverse_dns``: True if you want to check for reverse DNS by default, False otherwise
   * ``domain``: the default domain (i.e. ".example.com") to append to any input which appears to be a hostname (i.e. not a FQDN or an IP address)
   * ``ignore_ttl``: True if you want to ignore the 'ttl' attribute when comparing responses from prod and test servers
+  * ``sleep``: A (float) number of seconds to sleep between DNS tests; default 0.0
 
 Usage
 -----

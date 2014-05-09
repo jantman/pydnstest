@@ -146,3 +146,18 @@ blarg
         assert dc.have_reverse_dns == True
         assert dc.ignore_ttl == False
         assert dc.sleep == 0.0
+
+    def test_example_config_to_string(self):
+        """ test converting the example config to a string """
+        fpath = os.path.abspath("dnstest.ini.example")
+        with open(fpath, 'r') as fh:
+            expected = fh.read()
+        dc = DnstestConfig()
+        dc.server_prod = '1.2.3.4'
+        dc.server_test = '1.2.3.5'
+        dc.default_domain = '.example.com'
+        dc.have_reverse_dns = True
+        dc.ignore_ttl = False
+        dc.sleep = 0.0
+        result = dc.to_string()
+        assert result == expected
