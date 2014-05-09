@@ -88,10 +88,10 @@ known_dns['chk']['test']['fwd']['testrcl5.example.com'] = ['1.2.1.5', 'A']
 known_dns['chk']['prod']['fwd']['m.example.com'] = ['1.2.1.6', 'A']
 known_dns['chk']['test']['fwd']['m.example.com'] = ['1.2.1.6', 'A']
 
-#7
+# 7
 known_dns['chk']['test']['fwd']['_discover.example.com'] = ['1.2.1.7', 'A']
 
-#8
+# 8
 known_dns['chk']['test']['fwd']['foobar._discover.example.com'] = ['1.2.1.8', 'A']
 
 # test_run_verify_line
@@ -117,11 +117,11 @@ known_dns['ver']['test']['fwd']['testrvl5.example.com'] = ['1.2.1.5', 'A']
 known_dns['ver']['prod']['fwd']['m.example.com'] = ['1.2.1.6', 'A']
 known_dns['ver']['test']['fwd']['m.example.com'] = ['1.2.1.6', 'A']
 
-#7
+# 7
 known_dns['ver']['prod']['fwd']['_discover.example.com'] = ['1.2.1.7', 'A']
 known_dns['ver']['test']['fwd']['_discover.example.com'] = ['1.2.1.7', 'A']
 
-#8
+# 8
 known_dns['ver']['prod']['fwd']['foobar._discover.example.com'] = ['1.2.1.8', 'A']
 known_dns['ver']['test']['fwd']['foobar._discover.example.com'] = ['1.2.1.8', 'A']
 

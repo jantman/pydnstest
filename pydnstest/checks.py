@@ -486,7 +486,7 @@ class DNStestChecks:
         qt = self.DNS.resolve_name(name, self.config.server_test)
         qp = self.DNS.resolve_name(name, self.config.server_prod)
         if 'status' in qt:
-            if not 'status' in qp:
+            if 'status' not in qp:
                 res['message'] = "test server returned status %s for name %s, but prod returned valid answer of %s" % (qt['status'], n, qp['answer']['data'])
                 res['result'] = False
                 return res
