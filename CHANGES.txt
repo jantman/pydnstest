@@ -8,6 +8,11 @@ Changelog
 * add develop branch build status image to README.rst
 * update release procedure documentation
 * (issue #12) add postional argument passthru support for tox to pytest
+* got rid of develop branch alltogether - everything on master
+* some PEP-8 fixes and test fixes
+* added python3 to package classifiers
+* added pypi version and download badges to README.rst
+* setup coveralls.io for coverage reports
 
 0.2.2 (2013-12-07)
 ------------------
