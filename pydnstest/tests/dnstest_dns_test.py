@@ -98,7 +98,7 @@ class TestDNS:
 
         query = "linode2.jasonantman.com"
         server = "ns1.linode.com"
-        result = {'answer': {'class': 1, 'classstr': 'IN', 'data': '96.126.107.19', 'name': 'linode2.jasonantman.com', 'rdlength': 4, 'ttl': 86400, 'type': 1, 'typename': 'A'}}
+        result = {'answer': {'class': 1, 'classstr': 'IN', 'data': '96.126.107.19', 'name': 'linode2.jasonantman.com', 'rdlength': 4, 'ttl': 3600, 'type': 1, 'typename': 'A'}}
 
         foo = test_DNS.resolve_name(query, server)
         assert foo == result
@@ -110,7 +110,7 @@ class TestDNS:
 
         query = "pydnstest1.jasonantman.com"
         server = "ns1.linode.com"
-        result = {'answer': {'class': 1, 'classstr': 'IN', 'data': 'github.com', 'name': 'pydnstest1.jasonantman.com', 'rdlength': 9, 'ttl': 86400, 'type': 5, 'typename': 'CNAME'}}
+        result = {'answer': {'class': 1, 'classstr': 'IN', 'data': 'github.com', 'name': 'pydnstest1.jasonantman.com', 'rdlength': 9, 'ttl': 3600, 'type': 5, 'typename': 'CNAME'}}
 
         foo = test_DNS.resolve_name(query, server)
         assert foo == result
