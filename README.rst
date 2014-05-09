@@ -7,6 +7,15 @@ pydnstest
 .. image:: https://pypip.in/d/pydnstest/badge.png
    :target: https://crate.io/packages/pydnstest
 
+
+.. image:: https://secure.travis-ci.org/jantman/pydnstest.png?branch=master
+   :target: http://travis-ci.org/jantman/pydnstest
+   :alt: travis-ci for master branch
+
+.. image:: https://coveralls.io/repos/jantman/pydnstest/badge.png?branch=master
+   :target: https://coveralls.io/r/jantman/pydnstest?branch=master
+   :alt: coverage report for master branch
+
 Python tool for testing DNS changes (add, remove, rename, change records)
 against a staging DNS server, verifying the same changes against production,
 or confirming that a record returns the same result in both environments.
@@ -19,26 +28,6 @@ such, until I can confirm that, I'd recommend repeating the same tests
 manually for critical applications (like... say... everything in DNS...)** I
 expect this to change quite soon, and am happy to receive both bug reports and
 confirmations that everything works.
-
-master branch:
-
-.. image:: https://secure.travis-ci.org/jantman/pydnstest.png?branch=master
-   :target: http://travis-ci.org/jantman/pydnstest
-   :alt: travis-ci for master branch
-
-.. image:: https://coveralls.io/repos/jantman/pydnstest/badge.png?branch=master
-   :target: https://coveralls.io/r/jantman/pydnstest?branch=master
-   :alt: coverage report for master branch
-
-develop branch:
-
-.. image:: https://secure.travis-ci.org/jantman/pydnstest.png?branch=develop
-   :target: http://travis-ci.org/jantman/pydnstest
-   :alt: travis-ci for develop branch
-
-.. image:: https://coveralls.io/repos/jantman/pydnstest/badge.png?branch=develop
-   :target: https://coveralls.io/r/jantman/pydnstest?branch=develop
-   :alt: coverage report for develop branch
 
 Requirements
 ------------
@@ -262,7 +251,7 @@ fail, as is the case with any live network tests.
 Release Checklist
 -----------------
 
-1. Start a merge all changes to the develop branch.
+1. Cut a release branch (release_X.Y.Z) off master.
 2. Confirm that there are CHANGES.txt entries for all major changes.
 3. Ensure that Travis tests passing in all environments.
 4. Ensure that test coverage is no less than the last release (ideally, 100%).
@@ -275,7 +264,7 @@ Release Checklist
    * ``python setup.py sdist upload -r https://testpypi.python.org/pypi``
    * Check that the README renders at https://testpypi.python.org/pypi/pydnstest
 
-8. Squash merge the develop branch to master, push to GitHub.
+8. Create a pull request for the release to be merge into master. Upon successful Travis build, merge it.
 9. Tag the release in Git, push tag to GitHub:
 
    * tag the release. for now the message is quite simple: ``git tag -a vX.Y.Z -m 'X.Y.Z released YYYY-MM-DD'``
@@ -285,4 +274,4 @@ Release Checklist
 
     * ``python setup.py sdist upload``
 
-10. make sure any GH issues fixed in the release are closed
+10. make sure any GH issues fixed in the release were closed.
