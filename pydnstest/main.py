@@ -149,6 +149,11 @@ def main(options):
     if options.ignorettl:
         config.ignore_ttl = True
 
+    if options.configprint:
+        print("# {fname}".format(fname=config.conf_file))
+        print(config.to_string())
+        raise SystemExit(0)
+
     parser = DnstestParser()
     chk = DNStestChecks(config)
 
@@ -232,6 +237,9 @@ def parse_opts():
 
     p.add_option('--example-config', dest='exampleconf', default=False, action='store_true',
                  help='print an example configuration file and exit')
+
+    p.add_option('--configprint', dest='configprint', default=False, action='store_true',
+                 help='print the current configuration and exit')
 
     options, args = p.parse_args()
     main(options)

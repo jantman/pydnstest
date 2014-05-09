@@ -85,6 +85,7 @@ class OptionsObject(object):
         self.ignorettl = False
         self.sleep = None
         self.exampleconf = False
+        self.configprint = False
 
 
 class TestDNSTestMain:
@@ -477,7 +478,7 @@ class TestDNSTestMain:
 
     def test_options_exampleconf(self, monkeypatch):
         """
-        Test the parse_opts option parsing method, with the exampleconf
+        Test the parse_opts option parsing method, with the --example-config option sent
         """
         def mockreturn(options):
             assert options.verify == True
@@ -498,6 +499,38 @@ class TestDNSTestMain:
             expected = fh.read()
         opt = OptionsObject()
         setattr(opt, "exampleconf", True)
+        pydnstest.main.sys.stdin = ["foo bar baz"]
+        with pytest.raises(SystemExit):
+            pydnstest.main.main(opt)
+        out, err = capfd.readouterr()
+        assert out.strip() == expected.strip()
+        assert err == ""
+
+    def test_options_configprint(self, monkeypatch):
+        """
+        Test the parse_opts option parsing method, with the --configprint option sent
+        """
+        def mockreturn(options):
+            assert options.verify == True
+            assert options.config_file == "configfile"
+            assert options.testfile == "mytestfile"
+            assert options.ignorettl == True
+            assert options.configprint == True
+        monkeypatch.setattr(pydnstest.main, "main", mockreturn)
+        sys.argv = ['pydnstest', '-c', 'configfile', '-f', 'mytestfile', '-V', '--ignore-ttl', '--configprint']
+        x = pydnstest.main.parse_opts()
+
+    def test_configprint(self, save_user_config, capfd):
+        """
+        Test calling main() with options.configprint == True
+        """
+        fpath = os.path.abspath("dnstest.ini.example")
+        with open(fpath, 'r') as fh:
+            expected = fh.read()
+        expected = "# {fpath}\n".format(fpath=fpath) + expected
+        opt = OptionsObject()
+        setattr(opt, "configprint", True)
+        setattr(opt, "config_file", fpath)
         pydnstest.main.sys.stdin = ["foo bar baz"]
         with pytest.raises(SystemExit):
             pydnstest.main.main(opt)

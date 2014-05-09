@@ -18,6 +18,7 @@ Changelog
 * updated comments in example config to be more clear
 * updated README.rst example config to match the one in the package
 * added --example-config option to print and example config file and then exit
+* added --configprint option to print current config file and then exit
 
 0.2.2 (2013-12-07)
 ------------------

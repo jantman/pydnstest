@@ -50,6 +50,7 @@ else:
 
 class DnstestConfig():
 
+    conf_file = ''
     server_prod = ""
     server_test = ""
     have_reverse_dns = True
@@ -92,6 +93,7 @@ class DnstestConfig():
         :param conf_file: String, absolute path to the conf file to read.
         """
         Config = ConfigParser.ConfigParser()
+        self.conf_file = conf_file
         Config.read(conf_file)
 
         try:
