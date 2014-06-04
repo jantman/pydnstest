@@ -43,6 +43,7 @@ import os
 import shutil
 import os.path
 import os
+import mock
 
 # conditional imports for packages with different names in python 2 and 3
 if sys.version_info[0] == 3:
@@ -173,7 +174,58 @@ blarg
         assert dc.ignore_ttl == False
         assert dc.sleep == 0.0
 
+    def test_confirm_response_yes(self):
+        dc = DnstestConfig()
+        input_mock = mock.MagicMock()
+        input_mock.return_value = 'yes'
+        with mock.patch('__builtin__.raw_input', input_mock):
+            foo = dc.confirm_response('foo')
+        assert input_mock.call_count == 1
+        assert input_mock.call_args == mock.call("Is 'foo' correct? [y/N] ")
+        assert foo == True
+
+    def test_confirm_response_no(self):
+        dc = DnstestConfig()
+        input_mock = mock.MagicMock()
+        input_mock.return_value = "no\n"
+        with mock.patch('__builtin__.raw_input', input_mock):
+            foo = dc.confirm_response('foo')
+        assert input_mock.call_count == 1
+        assert input_mock.call_args == mock.call("Is 'foo' correct? [y/N] ")
+        assert foo == False
+
+    def test_confirm_response_empty(self):
+        dc = DnstestConfig()
+        input_mock = mock.MagicMock()
+        input_mock.return_value = "\n"
+        with mock.patch('__builtin__.raw_input', input_mock):
+            foo = dc.confirm_response('foo')
+        assert input_mock.call_count == 1
+        assert input_mock.call_args == mock.call("Is 'foo' correct? [y/N] ")
+        assert foo == False
+"""
     def test_promptconfig(self, save_user_config):
         dc = DnstestConfig()
         # how do we handle interactive input in testing?
         dc.prompt_config()
+        assert 1 == 2 # need to finish this
+
+    def test_prompt_input_valid(self):
+        input_mock = mock.MagicMock()
+        input_mock.return_value = '1.2.3.4'
+
+        dc = DnstestConfig()
+        with mock.patch('dc.raw_input', pi_mock):
+            foo = dc.prompt_input_ip()
+        assert pi_mock.call_count == 1
+        assert foo == '1.2.3.4'
+
+    def test_prompt_input_invalid(self):
+        assert 1 == 2 # need to finish this
+
+    def test_prompt_input_novalidate(self):
+        assert 1 == 2 # need to finish this
+
+    def test_prompt_input_default(self):
+        assert 1 == 2 # need to finish this
+"""

@@ -40,6 +40,7 @@ Jason Antman <jason@jasonantman.com> <http://www.jasonantman.com>
 
 import os.path
 import sys
+import re
 
 # conditional imports for packages with different names in python 2 and 3
 if sys.version_info[0] == 3:
@@ -178,8 +179,56 @@ sleep: {sleep}
         interactively prompt the user through generating a configuration file
         and writing it to disk
         """
+        # get each of the configuration elements
+        self.server_prod = prompt_input_ip()
+        self.server_test = prompt_input_ip()
+        self.have_reverse_dns = prompt_input_bool(default=True)
+        self.default_domain = prompt_input_string(default='')
+        self.ignore_ttl = prompt_input_bool(default=False)
+        self.sleep = prompt_input_float(default=0.0)
+
+        # display the full configuration string, ask for confirmation
+
         fpath = os.path.abspath(os.path.expanduser("~/.dnstest.ini"))
         # write out the config
         with open(fpath, 'w') as fh:
             fh.write(self.to_string())
         print("Configuration written to: {fpath}".format(fpath=fpath))
+
+    def prompt_input(self, prompt, default=None, validate_cb=None):
+        """
+        accept and validate interactive input of an IP addrenss
+
+        validate_cb is a callable that validates and/or munges input.
+        it returns None on no or invalid input, or the munged input value on success.
+
+        :param prompt: prompt for the user
+        :type prompt: string
+        :param default: default value, or None
+        :pararm validate_cb: callback function to validate and munge
+        :type validate_cb: callable
+        """
+        prompt_s = "{:s}: ".format(prompt)
+        if default is not None:
+            prompt_s = "{:s} (default: {:s}): ".format(prompt, default)
+        result = None
+        while result is None:
+            response = raw_input(prompt_s).strip()
+            if default is not None and response == '':
+                response = default
+            if validate_cb is not None:
+                response = validate_cb(response)
+            if response is None:
+                print("ERROR: invalid response: {:s}".format(response))
+                continue
+            if not confirm_response(response):
+                continue
+            result = response
+        return result
+
+    def confirm_response(self, s):
+        """ yes/no confirmation of a response """
+        r = raw_input("Is '{:s}' correct? [y/N] ".format(s)).strip()
+        if re.match(r'^(yes|y|true|t)$', r, re.IGNORECASE):
+            return True
+        return False
