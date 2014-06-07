@@ -105,9 +105,9 @@ And then run the tests on it:
 
 .. code-block:: bash
 
-    jantman@palantir$ cd ~/venv_dir
-    jantman@palantir$ source bin/activate
-    (venv_dir)jantman@palantir$ pydnstest -f ~/inputfile.txt
+    jantman@phoenix$ cd ~/venv_dir
+    jantman@phoenix$ source bin/activate
+    (venv_dir)jantman@phoenix$ pydnstest -f ~/inputfile.txt
     OK: newhost.example.com => 10.188.8.90 (TEST)
             PROD server returns NXDOMAIN for newhost.example.com (PROD)
             REVERSE OK: 10.188.8.90 => newhost.example.com (TEST)
@@ -124,9 +124,9 @@ After making the above changes live, verify them in production:
 
 .. code-block:: bash
 
-    jantman@palantir$ cd ~/venv_dir
-    jantman@palantir$ source bin/activate
-    (venv_dir)jantman@palantir$ pydnstest -f ~/inputfile.txt -V
+    jantman@phoenix$ cd ~/venv_dir
+    jantman@phoenix$ source bin/activate
+    (venv_dir)jantman@phoenix$ pydnstest -f ~/inputfile.txt -V
     OK: newhost.example.com => 10.188.8.90 (PROD)
             REVERSE OK: 10.188.8.90 => newhost.example.com (PROD)
     OK: newhost-console.example.com => 10.188.15.90 (PROD)
@@ -141,9 +141,9 @@ return the same result for a given name:
 
 .. code-block:: bash
 
-    jantman@palantir$ cd ~/venv_dir
-    jantman@palantir$ source bin/activate
-    (venv_dir)jantman@palantir$ echo "confirm foo.example.com" | pydnstest
+    jantman@phoenix$ cd ~/venv_dir
+    jantman@phoenix$ source bin/activate
+    (venv_dir)jantman@phoenix$ echo "confirm foo.example.com" | pydnstest
     OK: prod and test servers return same response for 'foo.example.com' 
         response: {'name': 'foo.example.com', 'data': '10.10.8.2', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
     ++++ All 1 tests passed. (pydnstest 0.1.0)
@@ -165,9 +165,9 @@ from another file, such as:
     bar       IN     A     10.10.8.3
     ;PYDNSTEST add record baz.example.com with address 10.10.8.4
     baz       IN     A     10.10.8.4
-    jantman@palantir$ cd ~/venv_dir
-    jantman@palantir$ source bin/activate
-    (venv_dir)jantman@palantir$ grep "^;PYDNSTEST" ~/tmp/sample_zone.txt | sed 's/^;PYDNSTEST //' | pydnstest
+    jantman@phoenix$ cd ~/venv_dir
+    jantman@phoenix$ source bin/activate
+    (venv_dir)jantman@phoenix$ grep "^;PYDNSTEST" ~/tmp/sample_zone.txt | sed 's/^;PYDNSTEST //' | pydnstest
     OK: prod and test servers return same response for 'foo.example.com' 
         response: {'name': 'foo.example.com', 'data': '10.10.8.2', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
     OK: prod and test servers return same response for 'bar.example.com' 
