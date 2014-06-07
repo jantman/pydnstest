@@ -225,14 +225,14 @@ sleep: {sleep}
         :pararm validate_cb: callback function to validate and munge
         :type validate_cb: callable
         """
-        prompt_s = "{:s}: ".format(prompt)
+        prompt_s = "{}: ".format(prompt)
         if default is not None:
             default_s = default
             if default is True:
                 default_s = 'y'
             elif default is False:
                 default_s = 'n'
-            prompt_s = "{:s} (default: {:s}): ".format(prompt, default_s)
+            prompt_s = "{:s} (default: {}): ".format(prompt, default_s)
         result = None
         while result is None:
             response = raw_input(prompt_s).strip()

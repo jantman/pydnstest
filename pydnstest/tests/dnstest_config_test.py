@@ -293,6 +293,25 @@ blarg
         assert validate_mock.call_args == mock.call('n')
         assert foo == False
 
+    def test_prompt_input_default_float(self):
+        input_mock = mock.MagicMock()
+        input_mock.return_value = ''
+        confirm_mock = mock.MagicMock()
+        confirm_mock.return_value = True
+        validate_mock = mock.MagicMock()
+        validate_mock.return_value = 123.456
+
+        dc = DnstestConfig()
+        with mock.patch('__builtin__.raw_input', input_mock):
+            with mock.patch('pydnstest.config.DnstestConfig.confirm_response', confirm_mock):
+                foo = dc.prompt_input("foo", default=123.456, validate_cb=validate_mock)
+        assert input_mock.call_count == 1
+        assert input_mock.call_args == mock.call("foo (default: 123.456): ")
+        assert confirm_mock.call_count == 1
+        assert validate_mock.call_count == 1
+        assert validate_mock.call_args == mock.call(123.456)
+        assert foo == 123.456
+
     def test_prompt_input_validate_success(self):
         input_mock = mock.MagicMock()
         input_mock.return_value = 'hello'
