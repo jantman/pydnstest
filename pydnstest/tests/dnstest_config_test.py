@@ -340,14 +340,163 @@ blarg
         dc = DnstestConfig()
         assert dc.validate_float(input_str) == result
 
-    def test_promptconfig(self):
+    def test_promptconfig(self, capfd):
         dc = DnstestConfig()
-        # how do we handle interactive input in testing?
-        # dc.prompt_config()
-        assert 1 == 2  # need to finish this
+        dc.conf_file = '/foo/bar/baz'
 
-    def test_promptconfig_empty_default_domain(self, save_user_config):
-        assert 1 == 2
+        def prompt_input_se(prompt, default=None, validate_cb=None):
+            ret = {
+                "Production DNS Server IP": '1.2.3.4',
+                "Test/Staging DNS Server IP": '5.6.7.8',
+                "Check for reverse DNS by default? [Y|n]": True,
+                "Default domain for hostnames (blank for none)": 'example.com',
+                "Ignore difference in TTL? [y|N]": False,
+                "Sleep between queries (s)": 0.0,
+            }
+            return ret[prompt]
+        prompt_input_mock = mock.MagicMock(side_effect=prompt_input_se)
+
+        confirm_response_mock = mock.MagicMock()
+        confirm_response_mock.return_value = True
+
+        to_string_mock = mock.MagicMock()
+        to_string_mock.return_value = 'foo bar baz'
+
+        write_mock = mock.MagicMock()
+        write_mock.return_value = True
+
+        with mock.patch('pydnstest.config.DnstestConfig.prompt_input', prompt_input_mock):
+            with mock.patch('pydnstest.config.DnstestConfig.to_string', to_string_mock):
+                with mock.patch('pydnstest.config.DnstestConfig.confirm_response', confirm_response_mock):
+                    with mock.patch('pydnstest.config.DnstestConfig.write', write_mock):
+                        dc.prompt_config()
+        assert prompt_input_mock.call_count == 6
+        assert prompt_input_mock.call_args_list == [
+            mock.call("Production DNS Server IP", validate_cb=dc.validate_ipaddr),
+            mock.call("Test/Staging DNS Server IP", validate_cb=dc.validate_ipaddr),
+            mock.call("Check for reverse DNS by default? [Y|n]", default=True, validate_cb=dc.validate_bool),
+            mock.call("Default domain for hostnames (blank for none)", default=''),
+            mock.call("Ignore difference in TTL? [y|N]", default=False, validate_cb=dc.validate_bool),
+            mock.call("Sleep between queries (s)", default=0.0, validate_cb=dc.validate_float),
+        ]
+        assert to_string_mock.call_count == 1
+        assert confirm_response_mock.call_count == 1
+        assert write_mock.call_count == 1
+        out, err = capfd.readouterr()
+        assert out == "Configuration:\n#####################\nfoo bar baz\n#####################\n\nConfiguration written to: /foo/bar/baz\n"
+        assert err == ""
+        assert dc.server_prod == '1.2.3.4'
+        assert dc.server_test == '5.6.7.8'
+        assert dc.have_reverse_dns == True
+        assert dc.default_domain == 'example.com'
+        assert dc.ignore_ttl == False
+        assert dc.sleep == 0.0
+
+    def test_promptconfig_empty_default_domain(self, capfd):
+        dc = DnstestConfig()
+        dc.conf_file = '/foo/bar/baz'
+
+        def prompt_input_se(prompt, default=None, validate_cb=None):
+            ret = {
+                "Production DNS Server IP": '1.2.3.4',
+                "Test/Staging DNS Server IP": '5.6.7.8',
+                "Check for reverse DNS by default? [Y|n]": True,
+                "Default domain for hostnames (blank for none)": '',
+                "Ignore difference in TTL? [y|N]": False,
+                "Sleep between queries (s)": 0.0,
+            }
+            return ret[prompt]
+        prompt_input_mock = mock.MagicMock(side_effect=prompt_input_se)
+
+        confirm_response_mock = mock.MagicMock()
+        confirm_response_mock.return_value = True
+
+        to_string_mock = mock.MagicMock()
+        to_string_mock.return_value = 'foo bar baz'
+
+        write_mock = mock.MagicMock()
+        write_mock.return_value = True
+
+        with mock.patch('pydnstest.config.DnstestConfig.prompt_input', prompt_input_mock):
+            with mock.patch('pydnstest.config.DnstestConfig.to_string', to_string_mock):
+                with mock.patch('pydnstest.config.DnstestConfig.confirm_response', confirm_response_mock):
+                    with mock.patch('pydnstest.config.DnstestConfig.write', write_mock):
+                        dc.prompt_config()
+        assert prompt_input_mock.call_count == 6
+        assert prompt_input_mock.call_args_list == [
+            mock.call("Production DNS Server IP", validate_cb=dc.validate_ipaddr),
+            mock.call("Test/Staging DNS Server IP", validate_cb=dc.validate_ipaddr),
+            mock.call("Check for reverse DNS by default? [Y|n]", default=True, validate_cb=dc.validate_bool),
+            mock.call("Default domain for hostnames (blank for none)", default=''),
+            mock.call("Ignore difference in TTL? [y|N]", default=False, validate_cb=dc.validate_bool),
+            mock.call("Sleep between queries (s)", default=0.0, validate_cb=dc.validate_float),
+        ]
+        assert to_string_mock.call_count == 1
+        assert confirm_response_mock.call_count == 1
+        assert write_mock.call_count == 1
+        out, err = capfd.readouterr()
+        assert out == "Configuration:\n#####################\nfoo bar baz\n#####################\n\nConfiguration written to: /foo/bar/baz\n"
+        assert err == ""
+        assert dc.server_prod == '1.2.3.4'
+        assert dc.server_test == '5.6.7.8'
+        assert dc.have_reverse_dns == True
+        assert dc.default_domain == ''
+        assert dc.ignore_ttl == False
+        assert dc.sleep == 0.0
+
+    def test_promptconfig_no_confirm(self, capfd):
+        dc = DnstestConfig()
+        dc.conf_file = '/foo/bar/baz'
+
+        def prompt_input_se(prompt, default=None, validate_cb=None):
+            ret = {
+                "Production DNS Server IP": '1.2.3.4',
+                "Test/Staging DNS Server IP": '5.6.7.8',
+                "Check for reverse DNS by default? [Y|n]": True,
+                "Default domain for hostnames (blank for none)": 'example.com',
+                "Ignore difference in TTL? [y|N]": False,
+                "Sleep between queries (s)": 0.0,
+            }
+            return ret[prompt]
+        prompt_input_mock = mock.MagicMock(side_effect=prompt_input_se)
+
+        confirm_response_mock = mock.MagicMock()
+        confirm_response_mock.return_value = False
+
+        to_string_mock = mock.MagicMock()
+        to_string_mock.return_value = 'foo bar baz'
+
+        write_mock = mock.MagicMock()
+        write_mock.return_value = True
+
+        with mock.patch('pydnstest.config.DnstestConfig.prompt_input', prompt_input_mock):
+            with mock.patch('pydnstest.config.DnstestConfig.to_string', to_string_mock):
+                with mock.patch('pydnstest.config.DnstestConfig.confirm_response', confirm_response_mock):
+                    with mock.patch('pydnstest.config.DnstestConfig.write', write_mock):
+                        with pytest.raises(SystemExit) as excinfo:
+                            dc.prompt_config()
+        assert excinfo.value.code == "Exiting on user request. No configuration written."
+        assert prompt_input_mock.call_count == 6
+        assert prompt_input_mock.call_args_list == [
+            mock.call("Production DNS Server IP", validate_cb=dc.validate_ipaddr),
+            mock.call("Test/Staging DNS Server IP", validate_cb=dc.validate_ipaddr),
+            mock.call("Check for reverse DNS by default? [Y|n]", default=True, validate_cb=dc.validate_bool),
+            mock.call("Default domain for hostnames (blank for none)", default=''),
+            mock.call("Ignore difference in TTL? [y|N]", default=False, validate_cb=dc.validate_bool),
+            mock.call("Sleep between queries (s)", default=0.0, validate_cb=dc.validate_float),
+        ]
+        assert to_string_mock.call_count == 1
+        assert confirm_response_mock.call_count == 1
+        assert write_mock.call_count == 0
+        out, err = capfd.readouterr()
+        assert out == "Configuration:\n#####################\nfoo bar baz\n#####################\n\n"
+        assert err == ""
+        assert dc.server_prod == '1.2.3.4'
+        assert dc.server_test == '5.6.7.8'
+        assert dc.have_reverse_dns == True
+        assert dc.default_domain == 'example.com'
+        assert dc.ignore_ttl == False
+        assert dc.sleep == 0.0
 
     def test_write(self, save_user_config):
         """ test writing the file to disk """
@@ -358,5 +507,5 @@ blarg
             dc.write()
         assert mock_open.call_count == 1
         fh = mock_open.return_value.__enter__.return_value
-        assert fh.call_count == 1
-        assert fh.call_args == mock.call(conf_str)
+        assert fh.write.call_count == 1
+        assert fh.write.call_args == mock.call(conf_str)
