@@ -309,7 +309,7 @@ blarg
         assert input_mock.call_args == mock.call("foo (default: 123.456): ")
         assert confirm_mock.call_count == 1
         assert validate_mock.call_count == 1
-        assert validate_mock.call_args == mock.call(123.456)
+        assert validate_mock.call_args == mock.call('123.456')
         assert foo == 123.456
 
     def test_prompt_input_validate_success(self):

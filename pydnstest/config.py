@@ -227,11 +227,12 @@ sleep: {sleep}
         """
         prompt_s = "{}: ".format(prompt)
         if default is not None:
-            default_s = default
             if default is True:
                 default_s = 'y'
             elif default is False:
                 default_s = 'n'
+            else:
+                default_s = "{}".format(default)
             prompt_s = "{:s} (default: {}): ".format(prompt, default_s)
         result = None
         while result is None:
