@@ -132,17 +132,32 @@ def main(options):
     """
     # read in config, set variable
     config = DnstestConfig()
+    if options.exampleconf:
+        config.set_example_values()
+        print(config.to_string())
+        raise SystemExit(0)
+
+    if options.promptconfig:
+        # interactively build a configuration file
+        config.prompt_config()
+        raise SystemExit(0)
+
     if options.config_file:
         conf_file = options.config_file
     else:
         conf_file = config.find_config_file()
     if conf_file is None:
-        print("ERROR: no configuration file.")
+        print("ERROR: no configuration file found. Run with --promptconfig to build one interactively, or --example-config for an example.")
         raise SystemExit(1)
     config.load_config(conf_file)
 
     if options.ignorettl:
         config.ignore_ttl = True
+
+    if options.configprint:
+        print("# {fname}".format(fname=config.conf_file))
+        print(config.to_string())
+        raise SystemExit(0)
 
     parser = DnstestParser()
     chk = DNStestChecks(config)
@@ -224,6 +239,15 @@ def parse_opts():
 
     p.add_option('-t', '--ignore-ttl', dest='ignorettl', default=False, action='store_true',
                  help='when comparing responses, ignore the TTL value')
+
+    p.add_option('--example-config', dest='exampleconf', default=False, action='store_true',
+                 help='print an example configuration file and exit')
+
+    p.add_option('--configprint', dest='configprint', default=False, action='store_true',
+                 help='print the current configuration and exit')
+
+    p.add_option('--promptconfig', dest='promptconfig', default=False, action='store_true',
+                 help='interactively build a configuration file through a series of prompts')
 
     options, args = p.parse_args()
     main(options)

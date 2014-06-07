@@ -13,6 +13,14 @@ Changelog
 * added python3 to package classifiers
 * added pypi version and download badges to README.rst
 * setup coveralls.io for coverage reports
+* (issue #7) added DnstestConfig to_string() and set_example_values() methods
+* added missing description of sleep parameter in README.rst
+* updated comments in example config to be more clear
+* updated README.rst example config to match the one in the package
+* added --example-config option to print and example config file and then exit
+* added --configprint option to print current config file and then exit
+* added mock as a test dependency
+* (issue #7) added --promptconfig option to interactively build configuration file
 
 0.2.2 (2013-12-07)
 ------------------

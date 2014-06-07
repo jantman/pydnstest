@@ -41,6 +41,7 @@ import pytest
 import sys
 import os
 import shutil
+import mock
 
 from pydnstest.checks import DNStestChecks
 from pydnstest.config import DnstestConfig
@@ -84,6 +85,9 @@ class OptionsObject(object):
         self.testfile = None
         self.ignorettl = False
         self.sleep = None
+        self.exampleconf = False
+        self.configprint = False
+        self.promptconfig = False
 
 
 class TestDNSTestMain:
@@ -310,7 +314,7 @@ class TestDNSTestMain:
         assert excinfo.value.code == 1
         out, err = capfd.readouterr()
         assert foo == None
-        assert out == "ERROR: no configuration file.\n"
+        assert out == "ERROR: no configuration file found. Run with --promptconfig to build one interactively, or --example-config for an example.\n"
         assert err == ""
 
     def test_testfile_noexist(self, save_user_config, capfd):
@@ -473,3 +477,83 @@ class TestDNSTestMain:
         monkeypatch.setattr(pydnstest.main, "main", mockreturn)
         sys.argv = ['pydnstest', '-c', 'configfile', '-f', 'mytestfile', '-V', '--ignore-ttl']
         x = pydnstest.main.parse_opts()
+
+    def test_options_exampleconf(self, monkeypatch):
+        """
+        Test the parse_opts option parsing method, with the --example-config option sent
+        """
+        def mockreturn(options):
+            assert options.exampleconf == True
+        monkeypatch.setattr(pydnstest.main, "main", mockreturn)
+        sys.argv = ['pydnstest', '--example-config']
+        x = pydnstest.main.parse_opts()
+
+    def test_exampleconf(self, save_user_config, capfd):
+        """
+        Test calling main() with options.exampleconf == True
+        """
+        fpath = os.path.abspath("dnstest.ini.example")
+        with open(fpath, 'r') as fh:
+            expected = fh.read()
+        opt = OptionsObject()
+        setattr(opt, "exampleconf", True)
+        pydnstest.main.sys.stdin = ["foo bar baz"]
+        with pytest.raises(SystemExit):
+            pydnstest.main.main(opt)
+        out, err = capfd.readouterr()
+        assert out.strip() == expected.strip()
+        assert err == ""
+
+    def test_options_configprint(self, monkeypatch):
+        """
+        Test the parse_opts option parsing method, with the --configprint option sent
+        """
+        def mockreturn(options):
+            assert options.configprint == True
+        monkeypatch.setattr(pydnstest.main, "main", mockreturn)
+        sys.argv = ['pydnstest', '--configprint']
+        x = pydnstest.main.parse_opts()
+
+    def test_configprint(self, save_user_config, capfd):
+        """
+        Test calling main() with options.configprint == True
+        """
+        fpath = os.path.abspath("dnstest.ini.example")
+        with open(fpath, 'r') as fh:
+            expected = fh.read()
+        expected = "# {fpath}\n".format(fpath=fpath) + expected
+        opt = OptionsObject()
+        setattr(opt, "configprint", True)
+        setattr(opt, "config_file", fpath)
+        pydnstest.main.sys.stdin = ["foo bar baz"]
+        with pytest.raises(SystemExit):
+            pydnstest.main.main(opt)
+        out, err = capfd.readouterr()
+        assert out.strip() == expected.strip()
+        assert err == ""
+
+    def test_options_promptconfig(self, monkeypatch):
+        """
+        Test the parse_opts option parsing method, with the --promptconfig option sent
+        """
+        def mockreturn(options):
+            assert options.promptconfig == True
+        monkeypatch.setattr(pydnstest.main, "main", mockreturn)
+        sys.argv = ['pydnstest', '--promptconfig']
+        x = pydnstest.main.parse_opts()
+
+    def test_promptconfig(self, save_user_config, capfd):
+        """
+        Test calling main() with options.promptconfig == True
+        """
+        opt = OptionsObject()
+        setattr(opt, "promptconfig", True)
+        prompt_config_mock = mock.MagicMock()
+        find_config_mock = mock.MagicMock()
+        find_config_mock.return_value = '/foo/bar/dnstest.ini'
+
+        with mock.patch('pydnstest.main.DnstestConfig.prompt_config', prompt_config_mock):
+            with mock.patch('pydnstest.main.DnstestConfig.find_config_file', find_config_mock):
+                with pytest.raises(SystemExit):
+                    pydnstest.main.main(opt)
+        assert prompt_config_mock.call_count == 1
