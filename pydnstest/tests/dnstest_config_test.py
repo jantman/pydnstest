@@ -432,9 +432,9 @@ blarg
                 "Production DNS Server IP": '1.2.3.4',
                 "Test/Staging DNS Server IP": '5.6.7.8',
                 "Check for reverse DNS by default? [Y|n]": True,
-                "Default domain for hostnames (blank for none)": 'example.com',
-                "Ignore difference in TTL? [y|N]": False,
-                "Sleep between queries (s)": 0.0,
+                "Default domain for to append to any input that appears to be less than a FQDN (blank for none)": 'example.com',
+                "Ignore difference in TTL when comparing responses? [y|N]": False,
+                "Sleep between DNS record tests (seconds)": 0.0,
             }
             return ret[prompt]
         prompt_input_mock = mock.MagicMock(side_effect=prompt_input_se)
@@ -458,9 +458,9 @@ blarg
             mock.call("Production DNS Server IP", validate_cb=dc.validate_ipaddr),
             mock.call("Test/Staging DNS Server IP", validate_cb=dc.validate_ipaddr),
             mock.call("Check for reverse DNS by default? [Y|n]", default=True, validate_cb=dc.validate_bool),
-            mock.call("Default domain for hostnames (blank for none)", default=''),
-            mock.call("Ignore difference in TTL? [y|N]", default=False, validate_cb=dc.validate_bool),
-            mock.call("Sleep between queries (s)", default=0.0, validate_cb=dc.validate_float),
+            mock.call("Default domain for to append to any input that appears to be less than a FQDN (blank for none)", default=''),
+            mock.call("Ignore difference in TTL when comparing responses? [y|N]", default=False, validate_cb=dc.validate_bool),
+            mock.call("Sleep between DNS record tests (seconds)", default=0.0, validate_cb=dc.validate_float),
         ]
         assert to_string_mock.call_count == 1
         assert confirm_response_mock.call_count == 1
@@ -485,9 +485,9 @@ blarg
                 "Production DNS Server IP": '1.2.3.4',
                 "Test/Staging DNS Server IP": '5.6.7.8',
                 "Check for reverse DNS by default? [Y|n]": True,
-                "Default domain for hostnames (blank for none)": '',
-                "Ignore difference in TTL? [y|N]": False,
-                "Sleep between queries (s)": 0.0,
+                "Default domain for to append to any input that appears to be less than a FQDN (blank for none)": '',
+                "Ignore difference in TTL when comparing responses? [y|N]": False,
+                "Sleep between DNS record tests (seconds)": 0.0,
             }
             return ret[prompt]
         prompt_input_mock = mock.MagicMock(side_effect=prompt_input_se)
@@ -511,9 +511,9 @@ blarg
             mock.call("Production DNS Server IP", validate_cb=dc.validate_ipaddr),
             mock.call("Test/Staging DNS Server IP", validate_cb=dc.validate_ipaddr),
             mock.call("Check for reverse DNS by default? [Y|n]", default=True, validate_cb=dc.validate_bool),
-            mock.call("Default domain for hostnames (blank for none)", default=''),
-            mock.call("Ignore difference in TTL? [y|N]", default=False, validate_cb=dc.validate_bool),
-            mock.call("Sleep between queries (s)", default=0.0, validate_cb=dc.validate_float),
+            mock.call("Default domain for to append to any input that appears to be less than a FQDN (blank for none)", default=''),
+            mock.call("Ignore difference in TTL when comparing responses? [y|N]", default=False, validate_cb=dc.validate_bool),
+            mock.call("Sleep between DNS record tests (seconds)", default=0.0, validate_cb=dc.validate_float),
         ]
         assert to_string_mock.call_count == 1
         assert confirm_response_mock.call_count == 1
@@ -537,9 +537,9 @@ blarg
                 "Production DNS Server IP": '1.2.3.4',
                 "Test/Staging DNS Server IP": '5.6.7.8',
                 "Check for reverse DNS by default? [Y|n]": True,
-                "Default domain for hostnames (blank for none)": 'example.com',
-                "Ignore difference in TTL? [y|N]": False,
-                "Sleep between queries (s)": 0.0,
+                "Default domain for to append to any input that appears to be less than a FQDN (blank for none)": 'example.com',
+                "Ignore difference in TTL when comparing responses? [y|N]": False,
+                "Sleep between DNS record tests (seconds)": 0.0,
             }
             return ret[prompt]
         prompt_input_mock = mock.MagicMock(side_effect=prompt_input_se)
@@ -565,9 +565,9 @@ blarg
             mock.call("Production DNS Server IP", validate_cb=dc.validate_ipaddr),
             mock.call("Test/Staging DNS Server IP", validate_cb=dc.validate_ipaddr),
             mock.call("Check for reverse DNS by default? [Y|n]", default=True, validate_cb=dc.validate_bool),
-            mock.call("Default domain for hostnames (blank for none)", default=''),
-            mock.call("Ignore difference in TTL? [y|N]", default=False, validate_cb=dc.validate_bool),
-            mock.call("Sleep between queries (s)", default=0.0, validate_cb=dc.validate_float),
+            mock.call("Default domain for to append to any input that appears to be less than a FQDN (blank for none)", default=''),
+            mock.call("Ignore difference in TTL when comparing responses? [y|N]", default=False, validate_cb=dc.validate_bool),
+            mock.call("Sleep between DNS record tests (seconds)", default=0.0, validate_cb=dc.validate_float),
         ]
         assert to_string_mock.call_count == 1
         assert confirm_response_mock.call_count == 1

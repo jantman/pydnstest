@@ -208,9 +208,9 @@ sleep: {sleep}
         self.server_prod = self.prompt_input("Production DNS Server IP", validate_cb=self.validate_ipaddr)
         self.server_test = self.prompt_input("Test/Staging DNS Server IP", validate_cb=self.validate_ipaddr)
         self.have_reverse_dns = self.prompt_input("Check for reverse DNS by default? [Y|n]", default=True, validate_cb=self.validate_bool)
-        self.default_domain = self.prompt_input("Default domain for hostnames (blank for none)", default='')
-        self.ignore_ttl = self.prompt_input("Ignore difference in TTL? [y|N]", default=False, validate_cb=self.validate_bool)
-        self.sleep = self.prompt_input("Sleep between queries (s)", default=0.0, validate_cb=self.validate_float)
+        self.default_domain = self.prompt_input("Default domain for to append to any input that appears to be less than a FQDN (blank for none)", default='')
+        self.ignore_ttl = self.prompt_input("Ignore difference in TTL when comparing responses? [y|N]", default=False, validate_cb=self.validate_bool)
+        self.sleep = self.prompt_input("Sleep between DNS record tests (seconds)", default=0.0, validate_cb=self.validate_float)
 
         # display the full configuration string, ask for confirmation
         print("Configuration:\n#####################\n%s\n#####################\n" % self.to_string())
