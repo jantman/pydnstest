@@ -586,8 +586,15 @@ blarg
         """ test writing the file to disk """
         dc = DnstestConfig()
         conf_str = dc.to_string()
-        with mock.patch('__builtin__.open', create=True) as mock_open:
-            mock_open.return_value = mock.MagicMock(spec=file)
+        if sys.version_info[0] == 3:
+            mock_target = 'builtins.open'
+            mock_spec = open
+        else:
+            mock_target = '__builtin__.open'
+            mock_spec = file
+
+        with mock.patch(mock_target, create=True) as mock_open:
+            mock_open.return_value = mock.MagicMock(spec=mock_spec)
             dc.write()
         assert mock_open.call_count == 1
         fh = mock_open.return_value.__enter__.return_value
