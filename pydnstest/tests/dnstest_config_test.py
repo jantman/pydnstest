@@ -178,7 +178,7 @@ blarg
         dc = DnstestConfig()
         input_mock = mock.MagicMock()
         input_mock.return_value = 'yes'
-        with mock.patch('__builtin__.raw_input', input_mock):
+        with mock.patch('pydnstest.config.DnstestConfig.input_wrapper', input_mock):
             foo = dc.confirm_response('foo')
         assert input_mock.call_count == 1
         assert input_mock.call_args == mock.call("Is 'foo' correct? [y/N] ")
@@ -188,7 +188,7 @@ blarg
         dc = DnstestConfig()
         input_mock = mock.MagicMock()
         input_mock.return_value = "no\n"
-        with mock.patch('__builtin__.raw_input', input_mock):
+        with mock.patch('pydnstest.config.DnstestConfig.input_wrapper', input_mock):
             foo = dc.confirm_response('foo')
         assert input_mock.call_count == 1
         assert input_mock.call_args == mock.call("Is 'foo' correct? [y/N] ")
@@ -198,7 +198,7 @@ blarg
         dc = DnstestConfig()
         input_mock = mock.MagicMock()
         input_mock.return_value = "\n"
-        with mock.patch('__builtin__.raw_input', input_mock):
+        with mock.patch('pydnstest.config.DnstestConfig.input_wrapper', input_mock):
             foo = dc.confirm_response('foo')
         assert input_mock.call_count == 1
         assert input_mock.call_args == mock.call("Is 'foo' correct? [y/N] ")
@@ -211,7 +211,7 @@ blarg
         confirm_mock.return_value = True
 
         dc = DnstestConfig()
-        with mock.patch('__builtin__.raw_input', input_mock):
+        with mock.patch('pydnstest.config.DnstestConfig.input_wrapper', input_mock):
             with mock.patch('pydnstest.config.DnstestConfig.confirm_response', confirm_mock):
                 foo = dc.prompt_input("foo")
         assert input_mock.call_count == 1
@@ -226,7 +226,7 @@ blarg
         confirm_mock.return_value = True
 
         dc = DnstestConfig()
-        with mock.patch('__builtin__.raw_input', input_mock):
+        with mock.patch('pydnstest.config.DnstestConfig.input_wrapper', input_mock):
             with mock.patch('pydnstest.config.DnstestConfig.confirm_response', confirm_mock):
                 foo = dc.prompt_input("foo", default='bar')
         assert input_mock.call_count == 1
@@ -243,7 +243,7 @@ blarg
         validate_mock.return_value = True
 
         dc = DnstestConfig()
-        with mock.patch('__builtin__.raw_input', input_mock):
+        with mock.patch('pydnstest.config.DnstestConfig.input_wrapper', input_mock):
             with mock.patch('pydnstest.config.DnstestConfig.confirm_response', confirm_mock):
                 foo = dc.prompt_input("foo", default=True, validate_cb=validate_mock)
         assert input_mock.call_count == 1
@@ -263,7 +263,7 @@ blarg
         validate_mock.return_value = False
 
         dc = DnstestConfig()
-        with mock.patch('__builtin__.raw_input', input_mock):
+        with mock.patch('pydnstest.config.DnstestConfig.input_wrapper', input_mock):
             with mock.patch('pydnstest.config.DnstestConfig.confirm_response', confirm_mock):
                 foo = dc.prompt_input("foo", default=False, validate_cb=validate_mock)
         assert input_mock.call_count == 1
@@ -283,7 +283,7 @@ blarg
         validate_mock.return_value = False
 
         dc = DnstestConfig()
-        with mock.patch('__builtin__.raw_input', input_mock):
+        with mock.patch('pydnstest.config.DnstestConfig.input_wrapper', input_mock):
             with mock.patch('pydnstest.config.DnstestConfig.confirm_response', confirm_mock):
                 foo = dc.prompt_input("foo", default=False, validate_cb=validate_mock)
         assert input_mock.call_count == 1
@@ -302,7 +302,7 @@ blarg
         validate_mock.return_value = 123.456
 
         dc = DnstestConfig()
-        with mock.patch('__builtin__.raw_input', input_mock):
+        with mock.patch('pydnstest.config.DnstestConfig.input_wrapper', input_mock):
             with mock.patch('pydnstest.config.DnstestConfig.confirm_response', confirm_mock):
                 foo = dc.prompt_input("foo", default=123.456, validate_cb=validate_mock)
         assert input_mock.call_count == 1
@@ -321,7 +321,7 @@ blarg
         validate_mock.return_value = 'goodbye'
 
         dc = DnstestConfig()
-        with mock.patch('__builtin__.raw_input', input_mock):
+        with mock.patch('pydnstest.config.DnstestConfig.input_wrapper', input_mock):
             with mock.patch('pydnstest.config.DnstestConfig.confirm_response', confirm_mock):
                 foo = dc.prompt_input("foo", validate_cb=validate_mock)
         assert input_mock.call_count == 1
@@ -347,7 +347,7 @@ blarg
         validate_mock = mock.MagicMock(side_effect=validate_se)
 
         dc = DnstestConfig()
-        with mock.patch('__builtin__.raw_input', input_mock):
+        with mock.patch('pydnstest.config.DnstestConfig.input_wrapper', input_mock):
             with mock.patch('pydnstest.config.DnstestConfig.confirm_response', confirm_mock):
                 foo = dc.prompt_input("foo", validate_cb=validate_mock)
         assert input_mock.call_count == 2
@@ -369,7 +369,7 @@ blarg
         confirm_mock = mock.MagicMock(side_effect=confirm_se)
 
         dc = DnstestConfig()
-        with mock.patch('__builtin__.raw_input', input_mock):
+        with mock.patch('pydnstest.config.DnstestConfig.input_wrapper', input_mock):
             with mock.patch('pydnstest.config.DnstestConfig.confirm_response', confirm_mock):
                 foo = dc.prompt_input("foo")
         assert input_mock.call_count == 2
@@ -593,3 +593,15 @@ blarg
         fh = mock_open.return_value.__enter__.return_value
         assert fh.write.call_count == 1
         assert fh.write.call_args == mock.call(conf_str)
+
+    def test_input_wrapper(self):
+        dc = DnstestConfig()
+        input_mock = mock.MagicMock()
+        if sys.version_info[0] == 3:
+            with mock.patch('builtins.input', input_mock):
+                dc.input_wrapper("foo")
+        else:
+            with mock.patch('__builtin__.raw_input', input_mock):
+                dc.input_wrapper("foo")
+        assert input_mock.call_count == 1
+        assert input_mock.call_args == mock.call('foo')

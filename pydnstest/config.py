@@ -188,6 +188,17 @@ sleep: {sleep}
         with open(self.conf_file, 'w') as fh:
             fh.write(self.to_string())
 
+    def input_wrapper(self, prompt):
+        """
+        wrapper to call the correct raw_input/input depending on python version
+
+        see https://docs.python.org/3/whatsnew/3.0.html#builtins
+        and http://legacy.python.org/dev/peps/pep-3111/
+        """
+        if sys.version_info[0] == 3:
+            return input(prompt)
+        return raw_input(prompt)
+
     def prompt_config(self):
         """
         interactively prompt the user through generating a configuration file
@@ -236,7 +247,7 @@ sleep: {sleep}
             prompt_s = "{prompt:s} (default: {default}): ".format(prompt=prompt, default=default_s)
         result = None
         while result is None:
-            response = raw_input(prompt_s).strip()
+            response = self.input_wrapper(prompt_s).strip()
             if default is not None and response == '':
                 response = default_s
             raw_response = response
@@ -252,7 +263,7 @@ sleep: {sleep}
 
     def confirm_response(self, s):
         """ yes/no confirmation of a response """
-        r = raw_input("Is '{response:s}' correct? [y/N] ".format(response=s)).strip()
+        r = self.input_wrapper("Is '{response:s}' correct? [y/N] ".format(response=s)).strip()
         if re.match(r'^(yes|y|true|t)$', r, re.IGNORECASE):
             return True
         return False
