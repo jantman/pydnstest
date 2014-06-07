@@ -140,6 +140,7 @@ def main(options):
     if options.promptconfig:
         # interactively build a configuration file
         config.prompt_config()
+        raise SystemExit(0)
 
     if options.config_file:
         conf_file = options.config_file

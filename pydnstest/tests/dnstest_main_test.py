@@ -549,9 +549,11 @@ class TestDNSTestMain:
         opt = OptionsObject()
         setattr(opt, "promptconfig", True)
         prompt_config_mock = mock.MagicMock()
+        find_config_mock = mock.MagicMock()
+        find_config_mock.return_value = '/foo/bar/dnstest.ini'
 
         with mock.patch('pydnstest.main.DnstestConfig.prompt_config', prompt_config_mock):
-            # after promptconfig runs main() will try to find the config file on disk, and error out if it doesn't exist
-            with pytest.raises(SystemExit):
-                pydnstest.main.main(opt)
+            with mock.patch('pydnstest.main.DnstestConfig.find_config_file', find_config_mock):
+                with pytest.raises(SystemExit):
+                    pydnstest.main.main(opt)
         assert prompt_config_mock.call_count == 1
