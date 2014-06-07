@@ -221,7 +221,7 @@ sleep: {sleep}
             if response is None:
                 print("ERROR: invalid response: {:s}".format(response))
                 continue
-            if not confirm_response(response):
+            if not self.confirm_response(response):
                 continue
             result = response
         return result
