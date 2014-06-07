@@ -51,7 +51,7 @@ else:
 
 class DnstestConfig():
 
-    conf_file = ''
+    conf_file = os.path.expanduser("~/.dnstest.ini")  # default value
     server_prod = ""
     server_test = ""
     have_reverse_dns = True
@@ -59,11 +59,17 @@ class DnstestConfig():
     ignore_ttl = False
     sleep = 0.0
 
+    ipaddr_re = None
+    bool_t_re = None
+    bool_f_re = None
+
     def __init__(self):
         """
         init and setup default values
         """
-        pass
+        self.ipaddr_re = re.compile(r'^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}(1[0-9]{2}|2[0-4][0-9]|25[0-5]|[1-9][0-9]|[0-9]))$')
+        self.bool_t_re = re.compile(r'^(y|yes|t|true|on|1)$', re.IGNORECASE)
+        self.bool_f_re = re.compile(r'^(n|no|f|false|off|0)$', re.IGNORECASE)
 
     def asDict(self):
         """
@@ -174,29 +180,33 @@ sleep: {sleep}
            sleep=self.sleep)
         return s
 
+    def write(self):
+        """
+        write config to file specified by self.conf_file
+        """
+        # write out the config
+        with open(self.conf_file, 'w') as fh:
+            fh.write(self.to_string())
+
     def prompt_config(self):
         """
         interactively prompt the user through generating a configuration file
         and writing it to disk
         """
         # get each of the configuration elements
-        self.server_prod = prompt_input("Production DNS Server IP", validate_cb=self.validate_ipaddr)
-        # NOTE: left off here. need to do the rest of these like the above, then write the validation functions then write all the tests and check coverage <<<<<<<<<
-        self.server_test = prompt_input_ip()
-        self.have_reverse_dns = prompt_input_bool(default=True)
-        self.default_domain = prompt_input_string(default='')
+        self.server_prod = self.prompt_input("Production DNS Server IP", validate_cb=self.validate_ipaddr)
+        self.server_test = self.prompt_input("Test/Staging DNS Server IP", validate_cb=self.validate_ipaddr)
+        self.have_reverse_dns = self.prompt_input("Check for reverse DNS by default? [Y|n]", default=True, validate_cb=self.validate_bool)
+        self.default_domain = self.prompt_input("Default domain for hostnames", default='')
         if self.default_domain == "":
             del self.default_domain
-        self.ignore_ttl = prompt_input_bool(default=False)
-        self.sleep = prompt_input_float(default=0.0)
+        self.ignore_ttl = self.prompt_input("Ignore difference in TTL? [y|N]", default=False, validate_cb=self.validate_bool)
+        self.sleep = self.prompt_input("Sleep between queries (s)", default=0.0, validate_cb=self.validate_float)
 
         # display the full configuration string, ask for confirmation
 
-        fpath = os.path.abspath(os.path.expanduser("~/.dnstest.ini"))
-        # write out the config
-        with open(fpath, 'w') as fh:
-            fh.write(self.to_string())
-        print("Configuration written to: {fpath}".format(fpath=fpath))
+        # self.write()
+        # print("Configuration written to: {fpath}".format(fpath=fpath))
 
     def prompt_input(self, prompt, default=None, validate_cb=None):
         """
@@ -243,7 +253,9 @@ sleep: {sleep}
         :param s: string to validate
         :type s: string
         """
-        pass
+        if self.ipaddr_re.match(s):
+            return s
+        return None
 
     def validate_bool(self, s):
         """
@@ -252,7 +264,11 @@ sleep: {sleep}
         :param s: string to validate
         :type s: string
         """
-        pass
+        if self.bool_t_re.match(s.strip()):
+            return True
+        if self.bool_f_re.match(s.strip()):
+            return False
+        return None
 
     def validate_float(self, s):
         """
@@ -261,4 +277,9 @@ sleep: {sleep}
         :param s: string to validate
         :type s: string
         """
-        pass
+        s = s.strip()
+        try:
+            f = float(s)
+            return f
+        except ValueError:
+            return None

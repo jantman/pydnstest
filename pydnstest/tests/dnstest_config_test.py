@@ -293,15 +293,70 @@ blarg
         assert confirm_mock.call_count == 2
         assert foo == 'hello'
 
-    def test_
+    @pytest.mark.parametrize(("input_str", "result"), [
+        ('1.2.3.4', '1.2.3.4'),
+        ('foo', None),
+        ('999.999.0.1234', None),
+        ('255.1.10.199', '255.1.10.199'),
+    ])
+    def test_validate_ipaddr(self, input_str, result):
+        dc = DnstestConfig()
+        assert dc.validate_ipaddr(input_str) == result
 
-"""
-    def test_promptconfig(self, save_user_config):
+    @pytest.mark.parametrize(("input_str", "result"), [
+        ('y', True),
+        ('Y', True),
+        ('yes', True),
+        ('t', True),
+        ('true', True),
+        ('True', True),
+        ('on', True),
+        ('1', True),
+        ('n', False),
+        ('no', False),
+        ('No', False),
+        ('N', False),
+        ('f', False),
+        ('false', False),
+        ('False', False),
+        ('0', False),
+        ('off', False),
+        ('2', None),
+        ('foo', None),
+    ])
+    def test_validate_bool(self, input_str, result):
+        dc = DnstestConfig()
+        assert dc.validate_bool(input_str) == result
+
+    @pytest.mark.parametrize(("input_str", "result"), [
+        ('hello', None),
+        ('he1.1o', None),
+        ('foo 11.0', None),
+        ('11.0 foo', None),
+        ('1.234', 1.234),
+        ('123', 123),
+    ])
+    def test_validate_float(self, input_str, result):
+        dc = DnstestConfig()
+        assert dc.validate_float(input_str) == result
+
+    def test_promptconfig(self):
         dc = DnstestConfig()
         # how do we handle interactive input in testing?
-        dc.prompt_config()
-        assert 1 == 2 # need to finish this
+        # dc.prompt_config()
+        assert 1 == 2  # need to finish this
 
     def test_promptconfig_empty_default_domain(self, save_user_config):
-        pass
-"""
+        assert 1 == 2
+
+    def test_write(self, save_user_config):
+        """ test writing the file to disk """
+        dc = DnstestConfig()
+        conf_str = dc.to_string()
+        with mock.patch('__builtin__.open', create=True) as mock_open:
+            mock_open.return_value = mock.MagicMock(spec=file)
+            dc.write()
+        assert mock_open.call_count == 1
+        fh = mock_open.return_value.__enter__.return_value
+        assert fh.call_count == 1
+        assert fh.call_args == mock.call(conf_str)
