@@ -54,45 +54,11 @@ system-wide, you can (using sudo).
 Configuration
 -------------
 
-Create a configuration file at ``~/.dnstest.ini`` (or another
-location, which you can tell dnstest about with the ``-f /path/to/dnstest.ini`` option) and open
-it in a text editor. Using the example below, change the values to the
-correct ones for your environment (this is an ini-style file, parsed with
-Python's ConfigParser module):
+Either run ``pydnstest --promptconfig`` to interactively build and write out a configuration file
+(to ``~/.dnstest.ini``) or run ``pydnstest --example-config > ~/.dnstest.ini`` and edit the
+resulting file as desired.
 
-.. code-block:: ini
-
-    [servers]
-    # the IP address of your production/live DNS server
-    prod: 1.2.3.4
-    
-    # the IP address of your test/staging DNS server
-    test: 1.2.3.5
-    
-    [defaults]
-    # True if you want to check ofr reverse DNS (for A records) by default, False otherwise
-    have_reverse_dns: True
-    
-    # the default domain (i.e. ".example.com") to append to any input which appears to be a hostname (i.e. not a FQDN or an IP address)
-    domain: .example.com
-    
-    # True if you want to ignore the 'ttl' attribute when comparing responses from prod and test servers
-    ignore_ttl: False
-    
-    # a (float) number of seconds to sleep between DNS tests; default 0.0
-    sleep: 0.0
-
-* in the ``[servers]`` section:
-
-  * ``prod``: the IP address of your production/live DNS server
-  * ``test``: the IP address of your test/staging DNS server
-
-* in the ``[defaults]`` section:
-
-  * ``have_reverse_dns``: True if you want to check for reverse DNS by default, False otherwise
-  * ``domain``: the default domain (i.e. ".example.com") to append to any input which appears to be a hostname (i.e. not a FQDN or an IP address)
-  * ``ignore_ttl``: True if you want to ignore the 'ttl' attribute when comparing responses from prod and test servers
-  * ``sleep``: A (float) number of seconds to sleep between DNS tests; default 0.0
+You can view your current configuration with the ``--configprint`` option.
 
 Usage
 -----
@@ -181,6 +147,34 @@ return the same result for a given name:
     OK: prod and test servers return same response for 'foo.example.com' 
         response: {'name': 'foo.example.com', 'data': '10.10.8.2', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
     ++++ All 1 tests passed. (pydnstest 0.1.0)
+
+Run interactively from STDIN
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can also provide test data on STDIN. This is mainly useful when pulling test data
+from another file, such as:
+
+.. code-block:: bash
+
+    jantman@phoenix:pts/12:~/tmp$ cat sample_zone.txt 
+    $ORIGIN example.com.
+    
+    ;PYDNSTEST add record foo.example.com with address 10.10.8.2
+    foo       IN     A     10.10.8.2
+    ;PYDNSTEST add record bar.example.com with address 10.10.8.3
+    bar       IN     A     10.10.8.3
+    ;PYDNSTEST add record baz.example.com with address 10.10.8.4
+    baz       IN     A     10.10.8.4
+    jantman@palantir$ cd ~/venv_dir
+    jantman@palantir$ source bin/activate
+    (venv_dir)jantman@palantir$ grep "^;PYDNSTEST" ~/tmp/sample_zone.txt | sed 's/^;PYDNSTEST //' | pydnstest
+    OK: prod and test servers return same response for 'foo.example.com' 
+        response: {'name': 'foo.example.com', 'data': '10.10.8.2', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
+    OK: prod and test servers return same response for 'bar.example.com' 
+        response: {'name': 'bar.example.com', 'data': '10.10.8.3', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
+    OK: prod and test servers return same response for 'baz.example.com' 
+        response: {'name': 'baz.example.com', 'data': '10.10.8.4', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
+    ++++ All 3 tests passed. (pydnstest 0.2.2)
 
 Bugs and Feature Requests
 -------------------------
