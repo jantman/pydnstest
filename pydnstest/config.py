@@ -203,7 +203,7 @@ sleep: {sleep}
 
         # display the full configuration string, ask for confirmation
         print("Configuration:\n#####################\n%s\n#####################\n" % self.to_string())
-        res = self.confirm_response()
+        res = self.confirm_response("Is this configuration correct?")
 
         if res:
             self.write()

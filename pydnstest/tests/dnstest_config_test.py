@@ -464,6 +464,7 @@ blarg
         ]
         assert to_string_mock.call_count == 1
         assert confirm_response_mock.call_count == 1
+        assert confirm_response_mock.call_args == mock.call("Is this configuration correct?")
         assert write_mock.call_count == 1
         out, err = capfd.readouterr()
         assert out == "Configuration:\n#####################\nfoo bar baz\n#####################\n\nConfiguration written to: /foo/bar/baz\n"
