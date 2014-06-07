@@ -180,10 +180,13 @@ sleep: {sleep}
         and writing it to disk
         """
         # get each of the configuration elements
-        self.server_prod = prompt_input_ip()
+        self.server_prod = prompt_input("Production DNS Server IP", validate_cb=self.validate_ipaddr)
+        # NOTE: left off here. need to do the rest of these like the above, then write the validation functions then write all the tests and check coverage <<<<<<<<<
         self.server_test = prompt_input_ip()
         self.have_reverse_dns = prompt_input_bool(default=True)
         self.default_domain = prompt_input_string(default='')
+        if self.default_domain == "":
+            del self.default_domain
         self.ignore_ttl = prompt_input_bool(default=False)
         self.sleep = prompt_input_float(default=0.0)
 
@@ -232,3 +235,30 @@ sleep: {sleep}
         if re.match(r'^(yes|y|true|t)$', r, re.IGNORECASE):
             return True
         return False
+
+    def validate_ipaddr(self, s):
+        """
+        validate string s as an IP address. Return s on success or None on failure
+
+        :param s: string to validate
+        :type s: string
+        """
+        pass
+
+    def validate_bool(self, s):
+        """
+        validate string s as a boolean value. Return s on success or None on failure
+
+        :param s: string to validate
+        :type s: string
+        """
+        pass
+
+    def validate_float(self, s):
+        """
+        validate string s as an IP address. Return s on success or None on failure
+
+        :param s: string to validate
+        :type s: string
+        """
+        pass

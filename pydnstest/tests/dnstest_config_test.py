@@ -275,16 +275,25 @@ blarg
         assert validate_mock.call_count == 2
         assert foo == 'eybdoog'
 
-"""
-    def test_prompt_input_invalid(self):
-        assert 1 == 2 # need to finish this
+    def test_prompt_input_no_confirm(self):
+        input_mock = mock.MagicMock()
+        input_mock.return_value = 'hello'
 
-    def test_prompt_input_novalidate(self):
-        assert 1 == 2 # need to finish this
+        def confirm_se(*args):
+            return confirm_returns.pop(0)
 
-    def test_prompt_input_default(self):
-        assert 1 == 2 # need to finish this
-"""
+        confirm_returns = [False, True]
+        confirm_mock = mock.MagicMock(side_effect=confirm_se)
+
+        dc = DnstestConfig()
+        with mock.patch('__builtin__.raw_input', input_mock):
+            with mock.patch('pydnstest.config.DnstestConfig.confirm_response', confirm_mock):
+                foo = dc.prompt_input("foo")
+        assert input_mock.call_count == 2
+        assert confirm_mock.call_count == 2
+        assert foo == 'hello'
+
+    def test_
 
 """
     def test_promptconfig(self, save_user_config):
@@ -292,4 +301,7 @@ blarg
         # how do we handle interactive input in testing?
         dc.prompt_config()
         assert 1 == 2 # need to finish this
+
+    def test_promptconfig_empty_default_domain(self, save_user_config):
+        pass
 """
