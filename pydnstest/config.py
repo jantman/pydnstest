@@ -254,7 +254,7 @@ sleep: {sleep}
             if validate_cb is not None:
                 response = validate_cb(response)
             if response is None:
-                print("ERROR: invalid response: {:s}".format(raw_response))
+                print("ERROR: invalid response: {resp:s}".format(resp=raw_response))
                 continue
             if not self.confirm_response(raw_response):
                 continue
