@@ -251,6 +251,7 @@ blarg
         assert validate_mock.call_count == 1
         assert validate_mock.call_args == mock.call('y')
         assert confirm_mock.call_count == 1
+        assert confirm_mock.call_args == mock.call('y')
         assert foo == True
 
     def test_prompt_input_default_false(self):
@@ -270,6 +271,7 @@ blarg
         assert validate_mock.call_count == 1
         assert validate_mock.call_args == mock.call('n')
         assert confirm_mock.call_count == 1
+        assert confirm_mock.call_args == mock.call('n')
         assert foo == False
 
     def test_prompt_input_default_false_validate(self):

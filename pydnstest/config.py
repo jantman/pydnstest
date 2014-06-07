@@ -236,15 +236,15 @@ sleep: {sleep}
         result = None
         while result is None:
             response = raw_input(prompt_s).strip()
-            raw_response = response
             if default is not None and response == '':
                 response = default_s
+            raw_response = response
             if validate_cb is not None:
                 response = validate_cb(response)
             if response is None:
                 print("ERROR: invalid response: {:s}".format(raw_response))
                 continue
-            if not self.confirm_response(response):
+            if not self.confirm_response(raw_response):
                 continue
             result = response
         return result
