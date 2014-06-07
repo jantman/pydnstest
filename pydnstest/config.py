@@ -227,16 +227,22 @@ sleep: {sleep}
         """
         prompt_s = "{:s}: ".format(prompt)
         if default is not None:
-            prompt_s = "{:s} (default: {:s}): ".format(prompt, default)
+            default_s = default
+            if default is True:
+                default_s = 'y'
+            elif default is False:
+                default_s = 'n'
+            prompt_s = "{:s} (default: {:s}): ".format(prompt, default_s)
         result = None
         while result is None:
             response = raw_input(prompt_s).strip()
+            raw_response = response
             if default is not None and response == '':
                 response = default
             if validate_cb is not None:
                 response = validate_cb(response)
             if response is None:
-                print("ERROR: invalid response: {:s}".format(response))
+                print("ERROR: invalid response: {:s}".format(raw_response))
                 continue
             if not self.confirm_response(response):
                 continue
