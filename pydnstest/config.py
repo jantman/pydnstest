@@ -238,7 +238,7 @@ sleep: {sleep}
             response = raw_input(prompt_s).strip()
             raw_response = response
             if default is not None and response == '':
-                response = default
+                response = default_s
             if validate_cb is not None:
                 response = validate_cb(response)
             if response is None:

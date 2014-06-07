@@ -239,13 +239,17 @@ blarg
         input_mock.return_value = ''
         confirm_mock = mock.MagicMock()
         confirm_mock.return_value = True
+        validate_mock = mock.MagicMock()
+        validate_mock.return_value = True
 
         dc = DnstestConfig()
         with mock.patch('__builtin__.raw_input', input_mock):
             with mock.patch('pydnstest.config.DnstestConfig.confirm_response', confirm_mock):
-                foo = dc.prompt_input("foo", default=True)
+                foo = dc.prompt_input("foo", default=True, validate_cb=validate_mock)
         assert input_mock.call_count == 1
         assert input_mock.call_args == mock.call("foo (default: y): ")
+        assert validate_mock.call_count == 1
+        assert validate_mock.call_args == mock.call('y')
         assert confirm_mock.call_count == 1
         assert foo == True
 
@@ -254,14 +258,37 @@ blarg
         input_mock.return_value = ''
         confirm_mock = mock.MagicMock()
         confirm_mock.return_value = True
+        validate_mock = mock.MagicMock()
+        validate_mock.return_value = False
 
         dc = DnstestConfig()
         with mock.patch('__builtin__.raw_input', input_mock):
             with mock.patch('pydnstest.config.DnstestConfig.confirm_response', confirm_mock):
-                foo = dc.prompt_input("foo", default=False)
+                foo = dc.prompt_input("foo", default=False, validate_cb=validate_mock)
+        assert input_mock.call_count == 1
+        assert input_mock.call_args == mock.call("foo (default: n): ")
+        assert validate_mock.call_count == 1
+        assert validate_mock.call_args == mock.call('n')
+        assert confirm_mock.call_count == 1
+        assert foo == False
+
+    def test_prompt_input_default_false_validate(self):
+        input_mock = mock.MagicMock()
+        input_mock.return_value = ''
+        confirm_mock = mock.MagicMock()
+        confirm_mock.return_value = True
+        validate_mock = mock.MagicMock()
+        validate_mock.return_value = False
+
+        dc = DnstestConfig()
+        with mock.patch('__builtin__.raw_input', input_mock):
+            with mock.patch('pydnstest.config.DnstestConfig.confirm_response', confirm_mock):
+                foo = dc.prompt_input("foo", default=False, validate_cb=validate_mock)
         assert input_mock.call_count == 1
         assert input_mock.call_args == mock.call("foo (default: n): ")
         assert confirm_mock.call_count == 1
+        assert validate_mock.call_count == 1
+        assert validate_mock.call_args == mock.call('n')
         assert foo == False
 
     def test_prompt_input_validate_success(self):
