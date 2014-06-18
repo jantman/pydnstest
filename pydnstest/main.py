@@ -174,6 +174,7 @@ def main(options):
         fh = open(options.testfile, 'r')
     else:
         # read from stdin
+        sys.stderr.write("WARNING: reading from STDIN. Run with '-f filename' to read tests from a file.\n")
         fh = sys.stdin
 
     # read input line by line, handle each line as we're given it
