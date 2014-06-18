@@ -581,3 +581,17 @@ class TestDNSTestMain:
                 with pytest.raises(SystemExit):
                     pydnstest.main.main(opt)
         assert prompt_config_mock.call_count == 1
+
+    def test_options_help(self, save_user_config, capfd):
+        """
+        test --help output
+        """
+        grammar_mock = mock.MagicMock()
+        grammar_mock.return_value = ["outputhere"]
+        with mock.patch('pydnstest.main.DnstestParser.get_grammar', grammar_mock):
+            with mock.patch('pydnstest.main.sys.argv', ['pydnstest', '--help']):
+                with pytest.raises(SystemExit):
+                    pydnstest.main.parse_opts()
+        out, err = capfd.readouterr()
+        assert "Grammar:\n\noutputhere\n" in out
+        assert err == ""
