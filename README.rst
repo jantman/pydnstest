@@ -22,13 +22,6 @@ or confirming that a record returns the same result in both environments.
 
 pydnstest is licensed under the GNU Affero General Public License version 3.
 
-**Note - while the code is 100% covered by tests, this is a young project, and
-I'm not sure that every code path has been executed in a live environment. As
-such, until I can confirm that, I'd recommend repeating the same tests
-manually for critical applications (like... say... everything in DNS...)** I
-expect this to change quite soon, and am happy to receive both bug reports and
-confirmations that everything works.
-
 Requirements
 ------------
 
