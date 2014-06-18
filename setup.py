@@ -16,6 +16,9 @@ else:
 with open('README.rst') as file:
     long_description = file.read()
 
+with open('CHANGES.rst') as file:
+    long_description += '\n' + file.read()
+
 classifiers = [
     'Development Status :: 4 - Beta',
     'Environment :: Console',
