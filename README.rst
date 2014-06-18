@@ -247,10 +247,10 @@ Release Checklist
 -----------------
 
 1. Open an issue for the release; cut a branch off master for that issue.
-2. Confirm that there are CHANGES.txt entries for all major changes.
+2. Confirm that there are CHANGES.rst entries for all major changes.
 3. Ensure that Travis tests passing in all environments.
 4. Ensure that test coverage is no less than the last release (ideally, 100%).
-5. Increment the version number in pydnstest/version.py and add version and release date to CHANGES.txt, then push to GitHub.
+5. Increment the version number in pydnstest/version.py and add version and release date to CHANGES.rst, then push to GitHub.
 6. Confirm that README.rst renders correctly on GitHub.
 7. Upload package to testpypi, confirm that README.rst renders correctly.
 
