@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.2.3 ()
+0.3.0 ()
 --------
 
 * (issue #6) add grammar to --help usage output
@@ -21,6 +21,8 @@ Changelog
 * added --configprint option to print current config file and then exit
 * added mock as a test dependency
 * (issue #7) added --promptconfig option to interactively build configuration file
+* (issue #20) add warning when reading from stdin
+* (`issue #19 <https://github.com/jantman/pydnstest/issues/19>`_) make grammar in usage message come from parser class
 
 0.2.2 (2013-12-07)
 ------------------
