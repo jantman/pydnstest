@@ -246,7 +246,7 @@ fail, as is the case with any live network tests.
 Release Checklist
 -----------------
 
-1. Cut a release branch (release_X.Y.Z) off master.
+1. Open an issue for the release; cut a branch off master for that issue.
 2. Confirm that there are CHANGES.txt entries for all major changes.
 3. Ensure that Travis tests passing in all environments.
 4. Ensure that test coverage is no less than the last release (ideally, 100%).
