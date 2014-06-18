@@ -135,3 +135,14 @@ class TestLanguageParsing:
         with pytest.raises(ParseException):
             p = DnstestParser()
             p.parse_line(line)
+
+    def test_get_grammar(self):
+        p = DnstestParser()
+        expected = ['add (record|name|entry)? <hostname_or_fqdn> (with ?)(value|address|target)? <hostname_fqdn_or_ip>',
+                    'remove (record|name|entry)? <hostname_or_fqdn>',
+                    'rename (record|name|entry)? <hostname_or_fqdn> (with ?)(value ?) <value> to <hostname_or_fqdn>',
+                    'change (record|name|entry)? <hostname_or_fqdn> to <hostname_fqdn_or_ip>',
+                    'confirm (record|name|entry)? <hostname_or_fqdn>',
+                    ]
+        result = p.get_grammar()
+        assert result == expected

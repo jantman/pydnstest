@@ -43,13 +43,9 @@ from pyparsing import Word, alphas, alphanums, Suppress, Optional, Or, Regex, Li
 class DnstestParser:
     """
     Parses natural-language-like grammar describing DNS changes
-
-    'add (record|name|entry)? <hostname_or_fqdn> (with ?)(value|address|target)? <hostname_fqdn_or_ip>'
-    'remove (record|name|entry)? <hostname_or_fqdn>'
-    'rename (record|name|entry)? <hostname_or_fqdn> (with ?)(value ?) <value> to <hostname_or_fqdn>'
-    'change (record|name|entry)? <hostname_or_fqdn> to <hostname_fqdn_or_ip>'
-    'confirm (record|name|entry)? <hostname_or_fqdn>'
     """
+
+    grammar_strings = []
 
     # implement my grammar
     word = Word(alphas)
@@ -68,10 +64,19 @@ class DnstestParser:
     hostname_or_fqdn = And([NotAny(ipaddr), MatchFirst([fqdn, hostname])])
     hostname_fqdn_or_ip = MatchFirst([ipaddr, fqdn, hostname])
 
+    grammar_strings.append('add (record|name|entry)? <hostname_or_fqdn> (with ?)(value|address|target)? <hostname_fqdn_or_ip>')
     cmd_add = add_op + Optional(rec_op) + hostname_or_fqdn.setResultsName("hostname") + Suppress(val_op) + hostname_fqdn_or_ip.setResultsName('value')
+
+    grammar_strings.append('remove (record|name|entry)? <hostname_or_fqdn>')
     cmd_remove = rm_op + Optional(rec_op) + hostname_fqdn_or_ip.setResultsName("hostname")
+
+    grammar_strings.append('rename (record|name|entry)? <hostname_or_fqdn> (with ?)(value ?) <value> to <hostname_or_fqdn>')
     cmd_rename = rename_op + Suppress(Optional(rec_op)) + hostname_or_fqdn.setResultsName("hostname") + Suppress(Optional(val_op)) + hostname_fqdn_or_ip.setResultsName('value') + Suppress(Keyword("to")) + hostname_or_fqdn.setResultsName('newname')
+
+    grammar_strings.append('change (record|name|entry)? <hostname_or_fqdn> to <hostname_fqdn_or_ip>')
     cmd_change = change_op + Suppress(Optional(rec_op)) + hostname_or_fqdn.setResultsName("hostname") + Suppress(Keyword("to")) + hostname_fqdn_or_ip.setResultsName('value')
+
+    grammar_strings.append('confirm (record|name|entry)? <hostname_or_fqdn>')
     cmd_confirm = confirm_op + Suppress(Optional(rec_op)) + hostname_or_fqdn.setResultsName("hostname")
 
     line_parser = Or([cmd_confirm, cmd_add, cmd_remove, cmd_rename, cmd_change])
@@ -88,3 +93,7 @@ class DnstestParser:
             if isinstance(d[i], ParseResults):
                 d[i] = d[i][0]
         return d
+
+    def get_grammar(self):
+        """ return a list of possible grammar options """
+        return self.grammar_strings
