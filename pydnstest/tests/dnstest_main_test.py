@@ -278,7 +278,7 @@ class TestDNSTestMain:
         out, err = capfd.readouterr()
         assert foo == None
         assert out == "ERROR: could not parse input line, SKIPPING: foo bar baz\n++++ All 0 tests passed. (pydnstest %s)\n" % pydnstest_version
-        assert err == ""
+        assert err == "WARNING: reading from STDIN. Run with '-f filename' to read tests from a file.\n"
 
     def test_discovered_config_file(self, save_user_config, capfd):
         """
@@ -298,7 +298,7 @@ class TestDNSTestMain:
         out, err = capfd.readouterr()
         assert foo == None
         assert out == "ERROR: could not parse input line, SKIPPING: foo bar baz\n++++ All 0 tests passed. (pydnstest %s)\n" % pydnstest_version
-        assert err == ""
+        assert err == "WARNING: reading from STDIN. Run with '-f filename' to read tests from a file.\n"
 
     def test_no_config_file(self, save_user_config, capfd):
         """
@@ -316,6 +316,30 @@ class TestDNSTestMain:
         assert foo == None
         assert out == "ERROR: no configuration file found. Run with --promptconfig to build one interactively, or --example-config for an example.\n"
         assert err == ""
+
+    def test_stdin(self, save_user_config, capfd, monkeypatch):
+        """
+        Test main() reading from stdin
+        """
+        opt = OptionsObject()
+
+        pydnstest.main.sys.stdin = ["foo bar baz"]
+        foo = None
+
+        def mockreturn(foo, bar, baz):
+            return {'result': True, 'message': 'foobarbaz', 'secondary': [], 'warnings': []}
+        monkeypatch.setattr(pydnstest.main, "run_check_line", mockreturn)
+
+        # write out an example config file
+        # this will be cleaned up by restore_user_config()
+        fpath = os.path.abspath("dnstest.ini")
+        self.write_conf_file(fpath, "[servers]\nprod: 1.2.3.4\ntest: 1.2.3.5\n[defaults]\nhave_reverse_dns: True\ndomain: .example.com\nignore_ttl: False\n")
+
+        foo = pydnstest.main.main(opt)
+        out, err = capfd.readouterr()
+        assert foo == None
+        assert out == "OK: foobarbaz\n++++ All 1 tests passed. (pydnstest %s)\n" % pydnstest_version
+        assert err == "WARNING: reading from STDIN. Run with '-f filename' to read tests from a file.\n"
 
     def test_testfile_noexist(self, save_user_config, capfd):
         """
