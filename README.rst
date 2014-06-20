@@ -210,7 +210,10 @@ Guidelines
 ----------
 
 * pep8 compliant with some exceptions (see pytest.ini)
-* 100% test coverage with pytest (with valid tests)
+* 100% test coverage with pytest (with valid tests) (note that until
+  https://github.com/lemurheavy/coveralls-public/issues/31 is fixed, you
+  need to check the ``cov`` output for branch coverage, coveralls can't
+  be relied on).
 
 Testing
 -------
