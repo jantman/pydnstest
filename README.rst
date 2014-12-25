@@ -16,6 +16,10 @@ pydnstest
    :target: https://coveralls.io/r/jantman/pydnstest?branch=master
    :alt: coverage report for master branch
 
+.. image:: http://www.repostatus.org/badges/0.1.0/active.svg
+   :alt: Project Status: Active - The project has reached a stable, usable state and is being actively developed.
+   :target: http://www.repostatus.org/#active
+
 Python tool for testing DNS changes (add, remove, rename, change records)
 against a staging DNS server, verifying the same changes against production,
 or confirming that a record returns the same result in both environments.
