@@ -133,7 +133,7 @@ class TestDNS:
         """
 
         query = "96.126.107.19"
-        server = "NS-480.AWSDNS-60.COM"
+        server = "ns1.linode.com"
         result = {'answer': {'class': 1, 'classstr': 'IN', 'data': 'linode2.jasonantman.com', 'name': '19.107.126.96.in-addr.arpa', 'rdlength': 25, 'ttl': 86400, 'type': 12, 'typename': 'PTR'}}
 
         foo = test_DNS.lookup_reverse(query, server)
@@ -147,7 +147,7 @@ class TestDNS:
         """
 
         query = "66.6.152.59"
-        server = "NS-480.AWSDNS-60.COM"
+        server = "ns1.linode.com"
         result = {'status': 'REFUSED'}
 
         foo = test_DNS.lookup_reverse(query, server)
