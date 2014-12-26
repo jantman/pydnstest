@@ -97,7 +97,7 @@ class TestDNS:
         """
 
         query = "linode2.jasonantman.com"
-        server = "ns1.linode.com"
+        server = "NS-480.AWSDNS-60.COM"
         result = {'answer': {'class': 1, 'classstr': 'IN', 'data': '96.126.107.19', 'name': 'linode2.jasonantman.com', 'rdlength': 4, 'ttl': 3600, 'type': 1, 'typename': 'A'}}
 
         foo = test_DNS.resolve_name(query, server)
@@ -109,7 +109,7 @@ class TestDNS:
         """
 
         query = "pydnstest1.jasonantman.com"
-        server = "ns1.linode.com"
+        server = "NS-480.AWSDNS-60.COM"
         result = {'answer': {'class': 1, 'classstr': 'IN', 'data': 'github.com', 'name': 'pydnstest1.jasonantman.com', 'rdlength': 9, 'ttl': 3600, 'type': 5, 'typename': 'CNAME'}}
 
         foo = test_DNS.resolve_name(query, server)
@@ -121,7 +121,7 @@ class TestDNS:
         """
 
         query = "notaname.jasonantman.com"
-        server = "ns1.linode.com"
+        server = "NS-480.AWSDNS-60.COM"
         result = {'status': 'NXDOMAIN'}
 
         foo = test_DNS.resolve_name(query, server)
@@ -133,7 +133,7 @@ class TestDNS:
         """
 
         query = "96.126.107.19"
-        server = "ns1.linode.com"
+        server = "NS-480.AWSDNS-60.COM"
         result = {'answer': {'class': 1, 'classstr': 'IN', 'data': 'linode2.jasonantman.com', 'name': '19.107.126.96.in-addr.arpa', 'rdlength': 25, 'ttl': 86400, 'type': 12, 'typename': 'PTR'}}
 
         foo = test_DNS.lookup_reverse(query, server)
@@ -147,7 +147,7 @@ class TestDNS:
         """
 
         query = "66.6.152.59"
-        server = "ns1.linode.com"
+        server = "NS-480.AWSDNS-60.COM"
         result = {'status': 'REFUSED'}
 
         foo = test_DNS.lookup_reverse(query, server)
