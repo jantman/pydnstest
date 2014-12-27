@@ -13,13 +13,13 @@ install:
   - git config --global user.email "travisci@jasonantman.com"
   - git config --global user.name "pydnstest-travis"
   - pip install tox
-  - pip install coveralls
+  - pip install codecov
 
 script:
   - tox
 
 after_success:
-  - coveralls
+  - codecov
 
 notifications:
   email:
