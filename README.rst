@@ -12,8 +12,8 @@ pydnstest
    :target: http://travis-ci.org/jantman/pydnstest
    :alt: travis-ci for master branch
 
-.. image:: https://coveralls.io/repos/jantman/pydnstest/badge.png?branch=master
-   :target: https://coveralls.io/r/jantman/pydnstest?branch=master
+.. image:: https://codecov.io/github/jantman/pydnstest/coverage.svg?branch=master
+   :target: https://codecov.io/github/jantman/pydnstest?branch=master
    :alt: coverage report for master branch
 
 .. image:: http://www.repostatus.org/badges/0.1.0/active.svg
