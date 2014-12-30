@@ -29,7 +29,7 @@ pydnstest is licensed under the GNU Affero General Public License version 3.
 Requirements
 ------------
 
-* Python 2.6+ (currently tested with 2.6, 2.7, 3.2, 3.3)
+* Python 2.6+ (currently tested with 2.6, 2.7, 3.2, 3.3, 3.4)
 * Python `VirtualEnv <http://www.virtualenv.org/>`_ and ``pip`` (recommended installation method; your OS/distribution should have packages for these)
 * *or* the following packages:
 

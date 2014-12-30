@@ -5,8 +5,10 @@ env:
   - TOXENV=py27
   - TOXENV=py32
   - TOXENV=py33
+  - TOXENV=py34
   - TOXENV=docs
   - TOXENV=pypy
+  - TOXENV=pypy3
   - TOXENV=cov
 
 install:
