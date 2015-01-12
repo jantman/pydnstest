@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3.1 (2015-01-12)
+------------------
+
+* (`issue #34 <https://github.com/jantman/pydnstest/issues/34>`_) Fix edge case where we have two A records, a valid PTR pointing to one of them, and we remove the other. ``pydnstest.checks.check_removed_name()`` was only checking for the *existence* of a PTR, it wasn't confirming that the PTR actually pointed back to the removed name. Added a warning for this specific case.
+
 0.3.0 (2014-06-17)
 ------------------
 

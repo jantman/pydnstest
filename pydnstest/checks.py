@@ -103,7 +103,10 @@ class DNStestChecks:
             if is_ip is False:
                 rev = self.DNS.lookup_reverse(qp['answer']['data'], self.config.server_test)
                 if 'answer' in rev:
-                    res['warnings'].append("REVERSE NG: %s appears to still have reverse DNS set to %s (TEST)" % (qp['answer']['data'], name))
+                    if rev['answer']['data'] == name:
+                        res['warnings'].append("REVERSE NG: %s appears to still have reverse DNS set to %s (TEST)" % (qp['answer']['data'], rev['answer']['data']))
+                    else:
+                        res['warnings'].append("REVERSE UNKNOWN: %s appears to still have reverse DNS set, but set to %s (TEST)" % (qp['answer']['data'], rev['answer']['data']))
         elif 'status' in qt:
             res['result'] = False
             res['message'] = "%s returned status %s (TEST)" % (n, qt['status'])
