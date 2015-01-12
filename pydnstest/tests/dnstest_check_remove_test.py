@@ -148,8 +148,9 @@ known_dns['ver']['test']['fwd']['test11b.example.com'] = ['1.2.3.11', 'A']
 known_dns['ver']['test']['rev']['1.2.3.11'] = 'test11b.example.com'
 known_dns['ver']['prod']['fwd']['test11b.example.com'] = ['1.2.3.11', 'A']
 known_dns['ver']['prod']['rev']['1.2.3.11'] = 'test11b.example.com'
-TESTS[11]['result_chk'] = {'message': 'test11a removed, got status NXDOMAIN (TEST)', 'result': True, 'secondary': ['PROD value was 1.2.3.11 (PROD)'], 'warnings': []}
+TESTS[11]['result_chk'] = {'message': 'test11a removed, got status NXDOMAIN (TEST)', 'result': True, 'secondary': ['PROD value was 1.2.3.11 (PROD)'], 'warnings': ['REVERSE UNKNOWN: 1.2.3.11 appears to still have reverse DNS set, but set to test11b.example.com (TEST)']}
 TESTS[11]['result_ver'] = {'message': 'test11a removed, got status NXDOMAIN (PROD)', 'result': True, 'secondary': [], 'warnings': []}
+
 
 class TestDNSCheckRemove:
     """
