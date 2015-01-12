@@ -137,6 +137,19 @@ TESTS[9]['result_chk'] = {'message': '1.2.3.9 removed, got status NXDOMAIN (TEST
 TESTS[10] = {'hostname': "1.2.3.10"}
 TESTS[10]['result_ver'] = {'message': '1.2.3.10 removed, got status NXDOMAIN (PROD)', 'result': True, 'secondary': [], 'warnings': []}
 
+# test 11 - remove name but reverse DNS points to valid A
+TESTS[11] = {'hostname': 'test11a'}
+known_dns['chk']['test']['fwd']['test11b.example.com'] = ['1.2.3.11', 'A']
+known_dns['chk']['test']['rev']['1.2.3.11'] = 'test11b.example.com'
+known_dns['chk']['prod']['fwd']['test11a.example.com'] = ['1.2.3.11', 'A']
+known_dns['chk']['prod']['fwd']['test11b.example.com'] = ['1.2.3.11', 'A']
+known_dns['chk']['prod']['rev']['1.2.3.11'] = 'test11b.example.com'
+known_dns['ver']['test']['fwd']['test11b.example.com'] = ['1.2.3.11', 'A']
+known_dns['ver']['test']['rev']['1.2.3.11'] = 'test11b.example.com'
+known_dns['ver']['prod']['fwd']['test11b.example.com'] = ['1.2.3.11', 'A']
+known_dns['ver']['prod']['rev']['1.2.3.11'] = 'test11b.example.com'
+TESTS[11]['result_chk'] = {'message': 'test11a removed, got status NXDOMAIN (TEST)', 'result': True, 'secondary': ['PROD value was 1.2.3.11 (PROD)'], 'warnings': []}
+TESTS[11]['result_ver'] = {'message': 'test11a removed, got status NXDOMAIN (PROD)', 'result': True, 'secondary': [], 'warnings': []}
 
 class TestDNSCheckRemove:
     """
