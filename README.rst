@@ -7,8 +7,8 @@ pydnstest
 .. image:: https://pypip.in/d/pydnstest/badge.png
    :target: https://crate.io/packages/pydnstest
 
-.. image:: https://landscape.io/github/jantman/pydnstest/landscape/landscape.svg
-   :target: https://landscape.io/github/jantman/pydnstest/landscape
+.. image:: https://landscape.io/github/jantman/pydnstest/master/landscape.svg
+   :target: https://landscape.io/github/jantman/pydnstest/master
    :alt: Code Health
 
 .. image:: https://secure.travis-ci.org/jantman/pydnstest.png?branch=master
