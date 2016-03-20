@@ -40,8 +40,6 @@ Jason Antman <jason@jasonantman.com> <http://www.jasonantman.com>
 import pytest
 import sys
 import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../')
-
 from pydnstest.checks import DNStestChecks
 from pydnstest.config import DnstestConfig
 

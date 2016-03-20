@@ -44,6 +44,7 @@ import shutil
 import os.path
 import os
 import mock
+from pydnstest.config import DnstestConfig
 
 # conditional imports for packages with different names in python 2 and 3
 if sys.version_info[0] == 3:
@@ -52,8 +53,6 @@ if sys.version_info[0] == 3:
 else:
     import ConfigParser
     from ConfigParser import ParsingError
-
-from pydnstest.config import DnstestConfig
 
 
 class TestConfigMethods:
