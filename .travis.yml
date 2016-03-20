@@ -8,7 +8,6 @@ cache:
 env:
   - TOXENV=py26 PIP_DOWNLOAD_CACHE=$HOME/.pip-cache
   - TOXENV=py27 PIP_DOWNLOAD_CACHE=$HOME/.pip-cache
-  - TOXENV=py32 PIP_DOWNLOAD_CACHE=$HOME/.pip-cache
   - TOXENV=py33 PIP_DOWNLOAD_CACHE=$HOME/.pip-cache
   - TOXENV=py34 PIP_DOWNLOAD_CACHE=$HOME/.pip-cache
   - TOXENV=docs PIP_DOWNLOAD_CACHE=$HOME/.pip-cache
