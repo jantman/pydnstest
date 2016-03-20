@@ -96,9 +96,9 @@ class TestDNS:
         Test that a should-be-correct A record is resolved correctly.
         """
 
-        query = "linode2.jasonantman.com"
+        query = "pydnstest2.jasonantman.com"
         server = "NS-480.AWSDNS-60.COM"
-        result = {'answer': {'class': 1, 'classstr': 'IN', 'data': '96.126.107.19', 'name': 'linode2.jasonantman.com', 'rdlength': 4, 'ttl': 3600, 'type': 1, 'typename': 'A'}}
+        result = {'answer': {'class': 1, 'classstr': 'IN', 'data': '1.2.3.4', 'name': 'pydnstest2.jasonantman.com', 'rdlength': 4, 'ttl': 3600, 'type': 1, 'typename': 'A'}}
 
         foo = test_DNS.resolve_name(query, server)
         assert foo == result
@@ -125,18 +125,6 @@ class TestDNS:
         result = {'status': 'NXDOMAIN'}
 
         foo = test_DNS.resolve_name(query, server)
-        assert foo == result
-
-    def test_lookup_reverse(self, test_DNS):
-        """
-        Test that a given reverse DNS lookup is correct.
-        """
-
-        query = "96.126.107.19"
-        server = "ns1.linode.com"
-        result = {'answer': {'class': 1, 'classstr': 'IN', 'data': 'linode2.jasonantman.com', 'name': '19.107.126.96.in-addr.arpa', 'rdlength': 25, 'ttl': 86400, 'type': 12, 'typename': 'PTR'}}
-
-        foo = test_DNS.lookup_reverse(query, server)
         assert foo == result
 
     def test_lookup_reverse_nxdomain(self, test_DNS):
