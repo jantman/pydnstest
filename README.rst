@@ -19,9 +19,9 @@ pydnstest
    :target: https://codecov.io/github/jantman/pydnstest?branch=master
    :alt: coverage report for master branch
 
-.. image:: http://www.repostatus.org/badges/0.1.0/active.svg
-   :alt: Project Status: Active - The project has reached a stable, usable state and is being actively developed.
-   :target: http://www.repostatus.org/#active
+.. image:: http://www.repostatus.org/badges/latest/inactive.svg
+   :alt: Project Status: Inactive – The project has reached a stable, usable state but is no longer being actively developed; support/maintenance will be provided as time allows.
+   :target: http://www.repostatus.org/#inactive
 
 Python tool for testing DNS changes (add, remove, rename, change records)
 against a staging DNS server, verifying the same changes against production,
