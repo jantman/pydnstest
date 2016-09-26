@@ -4,8 +4,9 @@ pydnstest
 .. image:: https://pypip.in/v/pydnstest/badge.png
    :target: https://crate.io/packages/pydnstest
 
-.. image:: https://pypip.in/d/pydnstest/badge.png
-   :target: https://crate.io/packages/pydnstest
+.. image:: http://jantman-personal-public.s3-website-us-east-1.amazonaws.com/pypi-stats/pydnstest/per-month.svg
+   :target: http://jantman-personal-public.s3-website-us-east-1.amazonaws.com/pypi-stats/pydnstest/index.html
+   :alt: PyPi downloads
 
 .. image:: https://landscape.io/github/jantman/pydnstest/master/landscape.svg
    :target: https://landscape.io/github/jantman/pydnstest/master
