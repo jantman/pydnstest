@@ -274,3 +274,4 @@ Release Checklist
     * ``python setup.py sdist upload``
 
 10. make sure any GH issues fixed in the release were closed.
+foo
