@@ -1,8 +1,8 @@
 pydnstest
 =========
 
-.. image:: https://pypip.in/v/pydnstest/badge.png
-   :target: https://crate.io/packages/pydnstest
+.. image:: https://img.shields.io/pypi/v/pydnstest.svg
+   :target: https://pypi.python.org/pypi/pydnstest
 
 .. image:: http://jantman-personal-public.s3-website-us-east-1.amazonaws.com/pypi-stats/pydnstest/per-month.svg
    :target: http://jantman-personal-public.s3-website-us-east-1.amazonaws.com/pypi-stats/pydnstest/index.html
