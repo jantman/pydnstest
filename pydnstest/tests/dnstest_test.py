@@ -6,7 +6,7 @@ The latest version of this package is available at:
 <https://github.com/jantman/pydnstest>
 
 ##################################################################################
-Copyright 2013 Jason Antman <jason@jasonantman.com> <http://www.jasonantman.com>
+Copyright 2013-2017 Jason Antman <jason@jasonantman.com>
 
     This file is part of pydnstest.
 

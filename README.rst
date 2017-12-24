@@ -8,10 +8,6 @@ pydnstest
    :target: http://jantman-personal-public.s3-website-us-east-1.amazonaws.com/pypi-stats/pydnstest/index.html
    :alt: PyPi downloads
 
-.. image:: https://landscape.io/github/jantman/pydnstest/master/landscape.svg
-   :target: https://landscape.io/github/jantman/pydnstest/master
-   :alt: Code Health
-
 .. image:: https://secure.travis-ci.org/jantman/pydnstest.png?branch=master
    :target: http://travis-ci.org/jantman/pydnstest
    :alt: travis-ci for master branch
@@ -33,7 +29,7 @@ pydnstest is licensed under the GNU Affero General Public License version 3.
 Requirements
 ------------
 
-* Python 2.6+ (currently tested with 2.6, 2.7, 3.2, 3.3, 3.4)
+* Python 2.7 or 3.4+ (currently tested with 2.7, 3.4, 3.5, 3.6)
 * Python `VirtualEnv <http://www.virtualenv.org/>`_ and ``pip`` (recommended installation method; your OS/distribution should have packages for these)
 * *or* the following packages:
 
@@ -145,7 +141,7 @@ return the same result for a given name:
     jantman@phoenix$ cd ~/venv_dir
     jantman@phoenix$ source bin/activate
     (venv_dir)jantman@phoenix$ echo "confirm foo.example.com" | pydnstest
-    OK: prod and test servers return same response for 'foo.example.com' 
+    OK: prod and test servers return same response for 'foo.example.com'
         response: {'name': 'foo.example.com', 'data': '10.10.8.2', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
     ++++ All 1 tests passed. (pydnstest 0.1.0)
 
@@ -157,9 +153,9 @@ from another file, such as:
 
 .. code-block:: bash
 
-    jantman@phoenix:pts/12:~/tmp$ cat sample_zone.txt 
+    jantman@phoenix:pts/12:~/tmp$ cat sample_zone.txt
     $ORIGIN example.com.
-    
+
     ;PYDNSTEST add record foo.example.com with address 10.10.8.2
     foo       IN     A     10.10.8.2
     ;PYDNSTEST add record bar.example.com with address 10.10.8.3
@@ -169,11 +165,11 @@ from another file, such as:
     jantman@phoenix$ cd ~/venv_dir
     jantman@phoenix$ source bin/activate
     (venv_dir)jantman@phoenix$ grep "^;PYDNSTEST" ~/tmp/sample_zone.txt | sed 's/^;PYDNSTEST //' | pydnstest
-    OK: prod and test servers return same response for 'foo.example.com' 
+    OK: prod and test servers return same response for 'foo.example.com'
         response: {'name': 'foo.example.com', 'data': '10.10.8.2', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
-    OK: prod and test servers return same response for 'bar.example.com' 
+    OK: prod and test servers return same response for 'bar.example.com'
         response: {'name': 'bar.example.com', 'data': '10.10.8.3', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
-    OK: prod and test servers return same response for 'baz.example.com' 
+    OK: prod and test servers return same response for 'baz.example.com'
         response: {'name': 'baz.example.com', 'data': '10.10.8.4', 'typename': 'A', 'classstr': 'IN', 'ttl': 360, 'type': 1, 'class': 1, 'rdlength': 4}
     ++++ All 3 tests passed. (pydnstest 0.2.2)
 
@@ -229,7 +225,7 @@ Testing
 Testing is done via `pytest <http://pytest.org/latest/>`_, driven by `tox <http://tox.testrun.org/>`_
 and currently encompasses testing for both the input language parsing, and the
 DNS testing logic (via stubbing the DNS lookup methods and returning known
-results). 
+results).
 
 Be aware that the tests also run a few live DNS queries (dnstest_dns_test.py /
 TestDNS class) against domains that I control, mostly as a sanity check for
