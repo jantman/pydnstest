@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.4.0 (2017-12-24)
+------------------
+
+* Drop support for Python 2.6 and Python3 < 3.4
+* Add testing for Python 3.5 and 3.6
+* Stop testing Python 2.6, 3.3 and pypy
+
 0.3.1 (2015-01-12)
 ------------------
 
