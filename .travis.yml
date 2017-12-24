@@ -1,17 +1,22 @@
 language: python
 sudo: false
 
-cache:
-  directories:
-    - $HOME/.pip-cache/
+cache: pip
 
-env:
-  - TOXENV=py27 PIP_DOWNLOAD_CACHE=$HOME/.pip-cache
-  - TOXENV=py34 PIP_DOWNLOAD_CACHE=$HOME/.pip-cache
-  - TOXENV=py35 PIP_DOWNLOAD_CACHE=$HOME/.pip-cache
-  - TOXENV=py36 PIP_DOWNLOAD_CACHE=$HOME/.pip-cache
-  - TOXENV=docs PIP_DOWNLOAD_CACHE=$HOME/.pip-cache
-  - TOXENV=cov PIP_DOWNLOAD_CACHE=$HOME/.pip-cache
+matrix:
+  include:
+    - python: "2.7"
+      env: TOXENV=py27
+    - python: "3.4"
+      env: TOXENV=py34
+    - python: "3.5"
+      env: TOXENV=py35
+    - python: "3.6"
+      env: TOXENV=py36
+    - python: "2.7"
+      env: TOXENV=docs
+    - python: "2.7"
+      env: TOXENV=cov
 
 install:
   - git config --global user.email "travisci@jasonantman.com"
