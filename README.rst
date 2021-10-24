@@ -4,8 +4,8 @@ pydnstest
 .. image:: https://img.shields.io/pypi/v/pydnstest.svg
    :target: https://pypi.python.org/pypi/pydnstest
 
-.. image:: http://jantman-personal-public.s3-website-us-east-1.amazonaws.com/pypi-stats/pydnstest/per-month.svg
-   :target: http://jantman-personal-public.s3-website-us-east-1.amazonaws.com/pypi-stats/pydnstest/index.html
+.. image:: https://pepy.tech/badge/pydnstest/month
+   :target: https://pypistats.org/packages/pydnstest
    :alt: PyPi downloads
 
 .. image:: https://secure.travis-ci.org/jantman/pydnstest.png?branch=master
